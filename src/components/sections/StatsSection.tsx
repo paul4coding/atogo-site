@@ -89,7 +89,7 @@ export default function StatsSection() {
 
                 {/* Chiffre animé */}
                 <p style={{
-                  fontSize: "clamp(2.2rem, 4vw, 3.2rem)", fontWeight: 800,
+                  fontSize: "clamp(1.6rem, 4vw, 3.2rem)", fontWeight: 800,
                   color: "#fff", margin: "0 0 6px", lineHeight: 1,
                   letterSpacing: "-0.02em",
                 }}>
