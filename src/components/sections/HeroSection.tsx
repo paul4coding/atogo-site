@@ -165,7 +165,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          style={{ height: "min(520px, calc(100vh - 160px))", position: "relative", overflow: "hidden" }}
+          style={{ height: "min(560px, calc(100vh - 140px))", position: "relative" }}
         >
           <GlobeAfrica />
         </motion.div>
