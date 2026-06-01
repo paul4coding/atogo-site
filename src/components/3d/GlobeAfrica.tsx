@@ -17,9 +17,9 @@ function latLngToVec3(lat: number, lng: number, r: number): THREE.Vector3 {
   )
 }
 
-// Offset initial pour centrer sur l'Afrique de l'Ouest (lng ≈ -2°)
-// À rotation.y=0 → lng=-90 face caméra. On compense : -((-2)-(-90))×π/180
-const AFRICA_OFFSET = -(88 * Math.PI / 180)  // ≈ -1.536 rad
+// Offset initial pour centrer sur l'Afrique de l'Ouest
+// À rotation.y=0 → lng=-90 face caméra. Pour lng≈0 (Afrique) : +π/2
+const AFRICA_OFFSET = Math.PI / 2  // ≈ +1.5708 rad
 
 // ── Arc animé avec tête lumineuse ──────────────────────────────────────────
 function TransferArc({
@@ -224,7 +224,7 @@ function EarthGlobe() {
 export default function GlobeAfrica() {
   return (
     <Canvas
-      camera={{ position: [0, 0.4, 7.5], fov: 36 }}
+      camera={{ position: [0, 0.3, 9.5], fov: 32 }}
       gl={{ antialias: true, alpha: true }}
       style={{ background: "transparent" }}
     >
