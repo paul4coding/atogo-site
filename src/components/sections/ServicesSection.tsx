@@ -65,9 +65,8 @@ export default function ServicesSection() {
         {/* ── Grille des cards ─────────────────────────────────────────────── */}
         <div className="services-grid">
           {SERVICES.map((service, i) => {
-            const Icon    = ICON_MAP[service.icon as keyof typeof ICON_MAP]
-            const s       = SERVICE_STYLES[service.id] ?? SERVICE_STYLES.it
-            const isLast  = i === SERVICES.length - 1   // Développement de Contenus → pleine largeur
+            const Icon = ICON_MAP[service.icon as keyof typeof ICON_MAP]
+            const s    = SERVICE_STYLES[service.id] ?? SERVICE_STYLES.it
 
             return (
               <motion.div
@@ -78,7 +77,6 @@ export default function ServicesSection() {
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 style={{
-                  gridColumn: isLast ? "3 / 4" : "auto",
                   position: "relative",
                   background: "#fff",
                   borderRadius: "16px",
