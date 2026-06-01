@@ -57,9 +57,9 @@ export default function HeroSection() {
             custom={0} variants={fadeUp} initial="hidden" animate="visible"
             style={{
               display: "inline-block", alignSelf: "flex-start",
-              fontSize: "11px", fontWeight: 600,
-              letterSpacing: "0.12em", textTransform: "uppercase",
-              padding: "6px 14px", borderRadius: "999px",
+              fontSize: "12px", fontWeight: 700,
+              letterSpacing: "0.14em", textTransform: "uppercase",
+              padding: "8px 18px", borderRadius: "999px",
               background: "var(--color-brand-light)",
               color: "var(--color-brand-dark)",
             }}
@@ -71,9 +71,9 @@ export default function HeroSection() {
           <motion.h1
             custom={1} variants={fadeUp} initial="hidden" animate="visible"
             style={{
-              fontSize: "clamp(2.4rem, 4.5vw, 3.8rem)",
+              fontSize: "clamp(2.6rem, 5vw, 3.75rem)",
               fontWeight: 600,
-              lineHeight: 1.12,
+              lineHeight: 1.1,
               color: "var(--color-brand-dark)",
               margin: 0,
             }}
@@ -94,7 +94,7 @@ export default function HeroSection() {
           <motion.p
             custom={2} variants={fadeUp} initial="hidden" animate="visible"
             style={{
-              fontSize: "1.1rem", lineHeight: 1.75, maxWidth: "480px",
+              fontSize: "1.2rem", lineHeight: 1.8, maxWidth: "500px",
               color: "var(--color-text-body)", margin: 0,
             }}
           >
@@ -110,9 +110,9 @@ export default function HeroSection() {
             <Link
               href="/danayacash"
               style={{
-                padding: "14px 28px", borderRadius: "10px",
+                padding: "15px 32px", borderRadius: "10px",
                 background: "linear-gradient(135deg, #0D7A4E 0%, #10B981 100%)",
-                color: "#fff", fontWeight: 600, fontSize: "0.95rem",
+                color: "#fff", fontWeight: 600, fontSize: "1rem",
                 textDecoration: "none", boxShadow: "0 4px 20px rgba(13,122,78,0.3)",
                 transition: "transform 0.2s, box-shadow 0.2s",
                 display: "inline-flex", alignItems: "center",
@@ -125,9 +125,9 @@ export default function HeroSection() {
             <Link
               href="/services"
               style={{
-                padding: "14px 28px", borderRadius: "10px",
+                padding: "15px 32px", borderRadius: "10px",
                 border: "2px solid var(--color-brand-primary)",
-                color: "var(--color-brand-primary)", fontWeight: 600, fontSize: "0.95rem",
+                color: "var(--color-brand-primary)", fontWeight: 600, fontSize: "1rem",
                 textDecoration: "none", background: "transparent",
                 transition: "background 0.2s, color 0.2s",
                 display: "inline-flex", alignItems: "center",
@@ -151,10 +151,10 @@ export default function HeroSection() {
             ].map(({ val, label }) => (
               <div key={label} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <span style={{
-                  fontSize: "1rem", fontWeight: 700,
+                  fontSize: "1.15rem", fontWeight: 700,
                   color: "var(--color-brand-primary)",
                 }}>{val}</span>
-                <span style={{ fontSize: "0.78rem", color: "var(--color-text-muted)" }}>{label}</span>
+                <span style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>{label}</span>
               </div>
             ))}
           </motion.div>
