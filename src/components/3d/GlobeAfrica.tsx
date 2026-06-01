@@ -168,9 +168,9 @@ function EarthGlobe() {
     { from: 1, to: 7, color: "#818CF8", head: "#C4B5FD", speed: 0.48, delay: 0.8  },
   ], [])
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = AFRICA_OFFSET
+      groupRef.current.rotation.y = AFRICA_OFFSET + clock.getElapsedTime() * 0.06
     }
   })
 
@@ -242,7 +242,9 @@ export default function GlobeAfrica() {
       <OrbitControls
         enableZoom={false}
         enablePan={false}
-        enableRotate={false}
+        rotateSpeed={0.35}
+        minPolarAngle={Math.PI / 3.5}
+        maxPolarAngle={Math.PI * 2 / 3}
       />
     </Canvas>
   )
