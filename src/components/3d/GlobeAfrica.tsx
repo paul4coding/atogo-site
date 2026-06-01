@@ -6,24 +6,35 @@ import { OrbitControls, Stars } from "@react-three/drei"
 import * as THREE from "three"
 import { DANAYACASH_COUNTRIES } from "@/constants/data"
 
-function EarthGlobe() {
-  const meshRef = useRef<THREE.Mesh>(null)
+// Convertit lat/lng en coordonnées 3D sur la sphère
+function latLngToVec3(lat: number, lng: number, r: number): [number, number, number] {
+  const phi   = (90 - lat)  * (Math.PI / 180)  // colatitude (nord=0)
+  const theta = (lng + 180) * (Math.PI / 180)  // longitude (dateline=0)
+  const x =  -r * Math.sin(phi) * Math.cos(theta)
+  const y =   r * Math.cos(phi)
+  const z =   r * Math.sin(phi) * Math.sin(theta)
+  return [x, y, z]
+}
 
-  // Textures NASA via CDN JPEG uniquement
+function EarthGlobe() {
+  const groupRef = useRef<THREE.Group>(null)
+
   const [colorMap, bumpMap] = useLoader(THREE.TextureLoader, [
     "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg",
     "https://unpkg.com/three-globe/example/img/earth-topology.png",
   ])
 
+  // Toute la Terre + les points tournent ensemble
   useFrame(({ clock }) => {
-    const t = clock.getElapsedTime()
-    if (meshRef.current) meshRef.current.rotation.y = t * 0.08
+    if (groupRef.current) {
+      groupRef.current.rotation.y = clock.getElapsedTime() * 0.08
+    }
   })
 
   return (
-    <group>
-      {/* Terre */}
-      <mesh ref={meshRef}>
+    <group ref={groupRef}>
+      {/* Sphère terrestre */}
+      <mesh>
         <sphereGeometry args={[2, 64, 64]} />
         <meshStandardMaterial
           map={colorMap}
@@ -34,32 +45,41 @@ function EarthGlobe() {
         />
       </mesh>
 
-      {/* Points pays DanayaCash */}
+      {/* Points pays DanayaCash — ancrés sur la surface */}
       {DANAYACASH_COUNTRIES.map((country) => {
-        const phi   = (90 - country.lat) * (Math.PI / 180)
-        const theta = (country.lng + 180) * (Math.PI / 180)
-        const r = 2.06
-        const x = -(r * Math.sin(phi) * Math.cos(theta))
-        const z =   r * Math.sin(phi) * Math.sin(theta)
-        const y =   r * Math.cos(phi)
-
+        const pos = latLngToVec3(country.lat, country.lng, 2.07)
         return (
-          <mesh key={country.code} position={[x, y, z]}>
-            <sphereGeometry args={[0.045, 12, 12]} />
-            <meshStandardMaterial
-              color="#1E9FE8"
-              emissive="#1E9FE8"
-              emissiveIntensity={1.2}
-              roughness={0}
-              metalness={0.3}
-            />
-          </mesh>
+          <group key={country.code} position={pos}>
+            {/* Point central */}
+            <mesh>
+              <sphereGeometry args={[0.045, 12, 12]} />
+              <meshStandardMaterial
+                color="#1E9FE8"
+                emissive="#1E9FE8"
+                emissiveIntensity={2}
+                roughness={0}
+                metalness={0.3}
+              />
+            </mesh>
+            {/* Halo extérieur */}
+            <mesh>
+              <sphereGeometry args={[0.085, 12, 12]} />
+              <meshStandardMaterial
+                color="#1E9FE8"
+                emissive="#1E9FE8"
+                emissiveIntensity={0.6}
+                transparent
+                opacity={0.35}
+                roughness={1}
+              />
+            </mesh>
+          </group>
         )
       })}
 
       {/* Halo atmosphérique */}
       <mesh>
-        <sphereGeometry args={[2.15, 64, 64]} />
+        <sphereGeometry args={[2.18, 64, 64]} />
         <meshPhongMaterial
           color="#1E9FE8"
           transparent
@@ -78,10 +98,8 @@ export default function GlobeAfrica() {
       gl={{ antialias: true, alpha: true }}
       style={{ background: "transparent" }}
     >
-      {/* Étoiles en fond */}
       <Stars radius={100} depth={50} count={4000} factor={4} saturation={0} fade />
 
-      {/* Lumières — éclairage uniforme pour voir toute la Terre */}
       <ambientLight intensity={2.5} />
       <directionalLight position={[5, 3, 5]}   intensity={1.5} color="#ffffff" />
       <directionalLight position={[-5, -3, -5]} intensity={1.0} color="#c8e0ff" />
@@ -94,9 +112,8 @@ export default function GlobeAfrica() {
       <OrbitControls
         enableZoom={false}
         enablePan={false}
-        autoRotate={false}
         rotateSpeed={0.4}
-        minPolarAngle={Math.PI / 3}
+        minPolarAngle={Math.PI / 3.5}
         maxPolarAngle={Math.PI * 2 / 3}
       />
     </Canvas>
