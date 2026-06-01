@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
 import { NAV_ITEMS } from "@/constants/data"
@@ -27,8 +28,16 @@ export default function Navbar() {
     >
       <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="font-bold text-xl" style={{ color: "var(--color-brand-dark)" }}>
-          @TOGO
+        <Link href="/" style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
+          <Image
+            src="/images/logo.png"
+            alt="@TOGO"
+            width={140}
+            height={46}
+            priority
+            unoptimized
+            style={{ height: "40px", width: "auto" }}
+          />
         </Link>
 
         {/* Desktop links */}

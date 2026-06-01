@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { NAV_ITEMS } from "@/constants/data"
 
 export default function Footer() {
@@ -6,7 +7,14 @@ export default function Footer() {
     <footer className="bg-[var(--color-brand-dark)] text-white mt-auto">
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <p className="font-bold text-xl mb-2">@TOGO</p>
+          <Image
+            src="/images/logo.png"
+            alt="@TOGO"
+            width={130}
+            height={43}
+            unoptimized
+            style={{ height: "40px", width: "auto", filter: "brightness(0) invert(1)", marginBottom: "12px" }}
+          />
           <p className="text-sm text-white/70">
             Fintech & Solutions Digitales<br />Lomé, Togo
           </p>
