@@ -41,7 +41,7 @@ export default function HeroSection() {
       <div style={{
         maxWidth: "1400px",
         margin: "0 auto",
-        padding: "0 5%",
+        padding: "0 5% 0 2%",
         minHeight: "calc(100vh - 64px)",
         display: "grid",
         gridTemplateColumns: "1fr 1.1fr",
