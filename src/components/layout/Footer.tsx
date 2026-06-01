@@ -130,29 +130,39 @@ export default function Footer() {
             La référence Fintech & Solutions Digitales au Togo. Nous accompagnons entreprises et particuliers vers l&apos;avenir numérique.
           </p>
           {/* Réseaux sociaux */}
-          <div style={{ display: "flex", gap: "10px" }}>
+          <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
             {SOCIALS.map((s, i) => (
-              <motion.a
+              <motion.div
                 key={s.label}
-                href={s.href}
-                aria-label={s.label}
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: 0.5 + i * 0.1 }}
-                whileHover={{ scale: 1.18, rotate: 6, backgroundColor: "#1E9FE8" }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.2, rotate: 8, y: -4 }}
+                whileTap={{ scale: 0.88 }}
                 style={{
-                  width: "36px", height: "36px",
-                  borderRadius: "8px",
+                  width: "38px", height: "38px", flexShrink: 0,
+                  borderRadius: "10px",
+                  background: "rgba(255,255,255,0.08)",
                   border: "1px solid rgba(255,255,255,0.15)",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "0.8rem", fontWeight: 700, color: "rgba(255,255,255,0.75)",
-                  textDecoration: "none", cursor: "pointer",
+                  cursor: "pointer",
                 }}
               >
-                {s.icon}
-              </motion.a>
+                <a
+                  href={s.href}
+                  aria-label={s.label}
+                  style={{
+                    width: "100%", height: "100%",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: "0.82rem", fontWeight: 800,
+                    color: "rgba(255,255,255,0.8)",
+                    textDecoration: "none",
+                  }}
+                >
+                  {s.icon}
+                </a>
+              </motion.div>
             ))}
           </div>
         </div>
