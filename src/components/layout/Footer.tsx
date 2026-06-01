@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
+import { motion } from "framer-motion"
 import { NAV_ITEMS } from "@/constants/data"
 import { Mail, MapPin, Phone, ArrowUpRight, Zap, Shield, Globe } from "lucide-react"
 
@@ -125,18 +126,28 @@ export default function Footer() {
           </p>
           {/* Réseaux sociaux */}
           <div style={{ display: "flex", gap: "10px" }}>
-            {SOCIALS.map(s => (
-              <Link key={s.label} href={s.href} aria-label={s.label} style={{
-                width: "36px", height: "36px",
-                borderRadius: "8px",
-                border: "1px solid rgba(255,255,255,0.12)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: "0.8rem", fontWeight: 700, color: "rgba(255,255,255,0.7)",
-                textDecoration: "none", transition: "background 0.2s, color 0.2s",
-              }}
-                onMouseEnter={e => { e.currentTarget.style.background = "#1E9FE8"; e.currentTarget.style.color = "#fff" }}
-                onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "rgba(255,255,255,0.7)" }}
-              >{s.icon}</Link>
+            {SOCIALS.map((s, i) => (
+              <motion.a
+                key={s.label}
+                href={s.href}
+                aria-label={s.label}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: 0.5 + i * 0.1 }}
+                whileHover={{ scale: 1.18, rotate: 6, backgroundColor: "#1E9FE8" }}
+                whileTap={{ scale: 0.9 }}
+                style={{
+                  width: "36px", height: "36px",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(255,255,255,0.15)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: "0.8rem", fontWeight: 700, color: "rgba(255,255,255,0.75)",
+                  textDecoration: "none", cursor: "pointer",
+                }}
+              >
+                {s.icon}
+              </motion.a>
             ))}
           </div>
         </div>
