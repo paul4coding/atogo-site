@@ -5,7 +5,6 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
 import { NAV_ITEMS } from "@/constants/data"
-import { cn } from "@/lib/utils"
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -18,15 +17,19 @@ export default function Navbar() {
   }, [])
 
   return (
-    <header
-      className={cn(
-        "fixed top-0 w-full z-50 transition-all duration-300",
-        scrolled
-          ? "bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm"
-          : "bg-transparent"
-      )}
-    >
-      <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <header style={{
+      position: "fixed", top: 0, width: "100%", zIndex: 50,
+      transition: "all 0.3s ease",
+      background: scrolled ? "rgba(255,255,255,0.85)" : "transparent",
+      backdropFilter: scrolled ? "blur(12px)" : "none",
+      borderBottom: scrolled ? "1px solid rgba(0,0,0,0.06)" : "none",
+      boxShadow: scrolled ? "0 1px 20px rgba(0,0,0,0.06)" : "none",
+    }}>
+      <nav style={{
+        maxWidth: "1280px", margin: "0 auto",
+        padding: "0 24px", height: "64px",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+      }}>
         {/* Logo */}
         <Link href="/" style={{ display: "flex", alignItems: "center", flexShrink: 0 }}>
           <Image
@@ -36,17 +39,26 @@ export default function Navbar() {
             height={46}
             priority
             unoptimized
-            style={{ height: "40px", width: "auto" }}
+            style={{ height: "38px", width: "auto" }}
           />
         </Link>
 
         {/* Desktop links */}
-        <ul className="hidden md:flex items-center gap-8">
+        <ul style={{
+          display: "flex", alignItems: "center", gap: "32px",
+          listStyle: "none", margin: 0, padding: 0,
+        }}
+          className="nav-desktop"
+        >
           {NAV_ITEMS.map((item) => (
             <li key={item.href}>
-              <Link
-                href={item.href}
-                className="text-sm font-medium text-slate-600 hover:text-[var(--color-brand-primary)] transition-colors"
+              <Link href={item.href} style={{
+                fontSize: "0.9rem", fontWeight: 500,
+                color: "#475569", textDecoration: "none",
+                transition: "color 0.2s",
+              }}
+                onMouseEnter={e => (e.currentTarget.style.color = "var(--color-brand-primary)")}
+                onMouseLeave={e => (e.currentTarget.style.color = "#475569")}
               >
                 {item.label}
               </Link>
@@ -54,12 +66,17 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* CTA */}
-        <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="/contact"
-            className="text-sm font-medium px-4 py-2 rounded-lg text-white transition-colors"
-            style={{ backgroundColor: "var(--color-brand-primary)" }}
+        {/* CTA desktop */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }} className="nav-cta">
+          <Link href="/contact" style={{
+            fontSize: "0.88rem", fontWeight: 600,
+            padding: "9px 20px", borderRadius: "8px",
+            background: "var(--color-brand-primary)",
+            color: "#fff", textDecoration: "none",
+            transition: "background 0.2s",
+          }}
+            onMouseEnter={e => (e.currentTarget.style.background = "var(--color-brand-hover)")}
+            onMouseLeave={e => (e.currentTarget.style.background = "var(--color-brand-primary)")}
           >
             Contact
           </Link>
@@ -67,27 +84,43 @@ export default function Navbar() {
 
         {/* Mobile toggle */}
         <button
-          className="md:hidden p-2"
+          style={{
+            display: "none", padding: "8px",
+            background: "none", border: "none", cursor: "pointer",
+          }}
+          className="nav-mobile-btn"
           onClick={() => setOpen(!open)}
           aria-label="Menu"
         >
-          {open ? <X size={20} /> : <Menu size={20} />}
+          {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </nav>
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden bg-white border-t border-slate-100 px-6 py-4 flex flex-col gap-4">
+        <div style={{
+          background: "#fff",
+          borderTop: "1px solid rgba(0,0,0,0.06)",
+          padding: "16px 24px",
+          display: "flex", flexDirection: "column", gap: "16px",
+        }}>
           {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-slate-700"
+            <Link key={item.href} href={item.href}
+              style={{ fontSize: "0.95rem", fontWeight: 500, color: "#334155", textDecoration: "none" }}
               onClick={() => setOpen(false)}
             >
               {item.label}
             </Link>
           ))}
+          <Link href="/contact" style={{
+            padding: "10px 20px", borderRadius: "8px", textAlign: "center",
+            background: "var(--color-brand-primary)", color: "#fff",
+            fontWeight: 600, textDecoration: "none",
+          }}
+            onClick={() => setOpen(false)}
+          >
+            Contact
+          </Link>
         </div>
       )}
     </header>

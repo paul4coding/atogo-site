@@ -1,19 +1,55 @@
 "use client"
 
-import { useRef, Suspense } from "react"
+import { useRef, Suspense, useMemo } from "react"
 import { Canvas, useFrame, useLoader } from "@react-three/fiber"
 import { OrbitControls, Stars } from "@react-three/drei"
 import * as THREE from "three"
 import { DANAYACASH_COUNTRIES } from "@/constants/data"
 
-// Convertit lat/lng en coordonnées 3D sur la sphère
-function latLngToVec3(lat: number, lng: number, r: number): [number, number, number] {
-  const phi   = (90 - lat)  * (Math.PI / 180)  // colatitude (nord=0)
-  const theta = (lng + 180) * (Math.PI / 180)  // longitude (dateline=0)
-  const x =  -r * Math.sin(phi) * Math.cos(theta)
-  const y =   r * Math.cos(phi)
-  const z =   r * Math.sin(phi) * Math.sin(theta)
-  return [x, y, z]
+function latLngToVec3(lat: number, lng: number, r: number): THREE.Vector3 {
+  const phi   = (90 - lat)  * (Math.PI / 180)
+  const theta = (lng + 180) * (Math.PI / 180)
+  return new THREE.Vector3(
+    -r * Math.sin(phi) * Math.cos(theta),
+     r * Math.cos(phi),
+     r * Math.sin(phi) * Math.sin(theta)
+  )
+}
+
+// Arc animé entre deux points
+function Arc({ from, to, color = "#1E9FE8", speed = 1 }: {
+  from: THREE.Vector3; to: THREE.Vector3; color?: string; speed?: number
+}) {
+  const ref = useRef<THREE.Line>(null)
+  const progressRef = useRef(0)
+
+  const points = useMemo(() => {
+    const mid = from.clone().add(to).multiplyScalar(0.5).normalize().multiplyScalar(2.6)
+    const curve = new THREE.QuadraticBezierCurve3(from, mid, to)
+    return curve.getPoints(60)
+  }, [from, to])
+
+  const geometry = useMemo(() => {
+    const geo = new THREE.BufferGeometry()
+    const positions = new Float32Array(points.length * 3)
+    points.forEach((p, i) => { positions[i*3]=p.x; positions[i*3+1]=p.y; positions[i*3+2]=p.z })
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3))
+    geo.setDrawRange(0, 0)
+    return geo
+  }, [points])
+
+  useFrame((_, delta) => {
+    progressRef.current = (progressRef.current + delta * speed * 0.4) % 1
+    const visible = Math.floor(progressRef.current * points.length)
+    geometry.setDrawRange(0, visible)
+    geometry.attributes.position.needsUpdate = true
+  })
+
+  return (
+    <line ref={ref} geometry={geometry}>
+      <lineBasicMaterial color={color} transparent opacity={0.7} linewidth={1} />
+    </line>
+  )
 }
 
 function EarthGlobe() {
@@ -24,12 +60,21 @@ function EarthGlobe() {
     "https://unpkg.com/three-globe/example/img/earth-topology.png",
   ])
 
-  // Toute la Terre + les points tournent ensemble
   useFrame(({ clock }) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = clock.getElapsedTime() * 0.08
-    }
+    if (groupRef.current) groupRef.current.rotation.y = clock.getElapsedTime() * 0.08
   })
+
+  // Paires de pays connectés par des arcs
+  const arcs = useMemo(() => [
+    [0, 1], [0, 2], [0, 3], [1, 3], [2, 3],  // Togo → voisins
+    [4, 0], [5, 0], [6, 0], [7, 0],            // Sénégal/Burkina/Mali/Niger → Togo
+    [4, 2], [5, 6], [3, 7],                     // autres connexions
+  ], [])
+
+  const positions = useMemo(
+    () => DANAYACASH_COUNTRIES.map(c => latLngToVec3(c.lat, c.lng, 2.07)),
+    []
+  )
 
   return (
     <group ref={groupRef}>
@@ -45,47 +90,35 @@ function EarthGlobe() {
         />
       </mesh>
 
-      {/* Points pays DanayaCash — ancrés sur la surface */}
-      {DANAYACASH_COUNTRIES.map((country) => {
-        const pos = latLngToVec3(country.lat, country.lng, 2.07)
-        return (
-          <group key={country.code} position={pos}>
-            {/* Point central */}
-            <mesh>
-              <sphereGeometry args={[0.045, 12, 12]} />
-              <meshStandardMaterial
-                color="#1E9FE8"
-                emissive="#1E9FE8"
-                emissiveIntensity={2}
-                roughness={0}
-                metalness={0.3}
-              />
-            </mesh>
-            {/* Halo extérieur */}
-            <mesh>
-              <sphereGeometry args={[0.085, 12, 12]} />
-              <meshStandardMaterial
-                color="#1E9FE8"
-                emissive="#1E9FE8"
-                emissiveIntensity={0.6}
-                transparent
-                opacity={0.35}
-                roughness={1}
-              />
-            </mesh>
-          </group>
-        )
-      })}
+      {/* Points pays */}
+      {positions.map((pos, i) => (
+        <group key={DANAYACASH_COUNTRIES[i].code} position={[pos.x, pos.y, pos.z]}>
+          <mesh>
+            <sphereGeometry args={[0.045, 12, 12]} />
+            <meshStandardMaterial color="#1E9FE8" emissive="#1E9FE8" emissiveIntensity={2} roughness={0} />
+          </mesh>
+          <mesh>
+            <sphereGeometry args={[0.085, 12, 12]} />
+            <meshStandardMaterial color="#1E9FE8" emissive="#1E9FE8" emissiveIntensity={0.6} transparent opacity={0.3} />
+          </mesh>
+        </group>
+      ))}
+
+      {/* Arcs de transfert animés */}
+      {arcs.map(([a, b], i) => (
+        <Arc
+          key={i}
+          from={positions[a]}
+          to={positions[b]}
+          color={i % 3 === 0 ? "#1E9FE8" : i % 3 === 1 ? "#10B981" : "#60C8FF"}
+          speed={0.6 + (i % 4) * 0.2}
+        />
+      ))}
 
       {/* Halo atmosphérique */}
       <mesh>
         <sphereGeometry args={[2.18, 64, 64]} />
-        <meshPhongMaterial
-          color="#1E9FE8"
-          transparent
-          opacity={0.06}
-          side={THREE.BackSide}
-        />
+        <meshPhongMaterial color="#1E9FE8" transparent opacity={0.055} side={THREE.BackSide} />
       </mesh>
     </group>
   )
