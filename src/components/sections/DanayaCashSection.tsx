@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
 import { ArrowUpRight, Zap, ShieldCheck, Clock, Smartphone, CheckCircle2 } from "lucide-react"
 import { DANAYACASH_COUNTRIES, DANAYACASH_STEPS } from "@/constants/data"
@@ -41,32 +42,32 @@ export default function DanayaCashSection() {
 
       <div style={{ padding: "0 5%", position: "relative", zIndex: 1 }}>
 
-        {/* ── En-tête ──────────────────────────────────────────────────────── */}
+        {/* ── En-tête avec logo ────────────────────────────────────────────── */}
         <div style={{ textAlign: "center", marginBottom: "64px" }}>
-          <motion.span
-            initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.5 }}
-            style={{
-              display: "inline-block",
-              fontSize: "11px", fontWeight: 700, letterSpacing: "0.14em",
-              textTransform: "uppercase", padding: "7px 18px", borderRadius: "999px",
-              background: "rgba(16,185,129,0.15)", color: "#34D399",
-              border: "1px solid rgba(16,185,129,0.3)", marginBottom: "20px",
-            }}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.6 }}
+            style={{ marginBottom: "24px" }}
           >
-            Produit phare
-          </motion.span>
+            <Image
+              src="/images/danayacash-logo.png"
+              alt="DanayaCash"
+              width={320} height={110}
+              unoptimized
+              style={{ height: "90px", width: "auto", display: "inline-block" }}
+            />
+          </motion.div>
 
           <motion.h2
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.55, delay: 0.1 }}
             style={{
-              fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 700,
-              color: "#fff", margin: "0 0 16px", lineHeight: 1.15,
+              fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)", fontWeight: 700,
+              color: "#fff", margin: "0 0 16px", lineHeight: 1.2,
             }}
           >
             Transférez de l&apos;argent{" "}
-            <span style={{ color: "#34D399" }}>en secondes</span>
+            <span style={{ color: "#FBBF24" }}>en secondes</span>
           </motion.h2>
 
           <motion.p
@@ -175,83 +176,87 @@ export default function DanayaCashSection() {
             </motion.div>
           </div>
 
-          {/* Colonne droite — avantages + pays */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+          {/* Colonne droite — visuel + avantages */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
 
-            {/* Avantages clés */}
-            <div>
-              <p style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.12em",
-                textTransform: "uppercase", color: "rgba(255,255,255,0.35)", margin: "0 0 20px" }}>
-                Pourquoi DanayaCash ?
-              </p>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
-                {[
-                  { Icon: Zap,        title: "Instantané",    desc: "Transfert en quelques secondes" },
-                  { Icon: ShieldCheck, title: "100% sécurisé", desc: "Chiffrement de bout en bout" },
-                  { Icon: Clock,      title: "24h/7j",        desc: "Disponible à toute heure" },
-                  { Icon: Smartphone, title: "Mobile first",  desc: "Application iOS & Android" },
-                ].map(({ Icon, title, desc }) => (
-                  <motion.div
-                    key={title}
-                    initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }} transition={{ duration: 0.4 }}
-                    style={{
-                      background: "rgba(255,255,255,0.05)",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      borderRadius: "14px", padding: "20px 18px",
-                    }}
-                  >
-                    <Icon size={20} color="#34D399" style={{ marginBottom: "10px" }} />
-                    <p style={{ fontSize: "0.9rem", fontWeight: 700, color: "#fff", margin: "0 0 4px" }}>{title}</p>
-                    <p style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.5)", margin: 0 }}>{desc}</p>
-                  </motion.div>
-                ))}
-              </div>
+            {/* Visuel photo DanayaCash */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.93 }} whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }} transition={{ duration: 0.7 }}
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <Image
+                src="/images/danayacash-visual.png"
+                alt="DanayaCash — transfert d'argent en Afrique"
+                width={380} height={420}
+                unoptimized
+                style={{
+                  width: "min(340px, 100%)", height: "auto",
+                  filter: "drop-shadow(0 20px 60px rgba(0,0,0,0.5))",
+                }}
+              />
+            </motion.div>
+
+            {/* 4 avantages en 2×2 */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+              {[
+                { Icon: Zap,         title: "Instantané",    desc: "Transfert en secondes" },
+                { Icon: ShieldCheck, title: "Sécurisé",      desc: "Chiffrement bout en bout" },
+                { Icon: Clock,       title: "24h/7j",        desc: "Disponible à toute heure" },
+                { Icon: Smartphone,  title: "Mobile first",  desc: "iOS & Android" },
+              ].map(({ Icon, title, desc }, i) => (
+                <motion.div
+                  key={title}
+                  initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.08 }}
+                  style={{
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    borderRadius: "12px", padding: "16px",
+                  }}
+                >
+                  <Icon size={18} color="#FBBF24" style={{ marginBottom: "8px" }} />
+                  <p style={{ fontSize: "0.88rem", fontWeight: 700, color: "#fff", margin: "0 0 3px" }}>{title}</p>
+                  <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.45)", margin: 0 }}>{desc}</p>
+                </motion.div>
+              ))}
             </div>
 
             {/* Pays couverts */}
             <div style={{
               background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(16,185,129,0.2)",
-              borderRadius: "16px", padding: "24px",
+              border: "1px solid rgba(251,191,36,0.2)",
+              borderRadius: "14px", padding: "20px",
             }}>
-              <p style={{ fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.12em",
-                textTransform: "uppercase", color: "rgba(255,255,255,0.35)", margin: "0 0 16px" }}>
-                Réseau de couverture — {DANAYACASH_COUNTRIES.length} pays
+              <p style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.12em",
+                textTransform: "uppercase", color: "rgba(255,255,255,0.35)", margin: "0 0 12px" }}>
+                {DANAYACASH_COUNTRIES.length} pays couverts
               </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                 {DANAYACASH_COUNTRIES.map(c => (
-                  <motion.div
-                    key={c.code}
-                    initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    style={{
-                      display: "inline-flex", alignItems: "center", gap: "6px",
-                      background: "rgba(16,185,129,0.1)",
-                      border: "1px solid rgba(16,185,129,0.2)",
-                      borderRadius: "999px", padding: "6px 14px",
-                      fontSize: "0.82rem", fontWeight: 600, color: "#fff",
-                    }}
-                  >
-                    <span style={{ fontSize: "0.7rem", color: "#34D399", fontWeight: 700 }}>{c.code}</span>
+                  <span key={c.code} style={{
+                    display: "inline-flex", alignItems: "center", gap: "5px",
+                    background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.2)",
+                    borderRadius: "999px", padding: "4px 12px",
+                    fontSize: "0.78rem", fontWeight: 600, color: "#fff",
+                  }}>
+                    <span style={{ fontSize: "0.65rem", color: "#FBBF24", fontWeight: 800 }}>{c.code}</span>
                     {c.name}
-                  </motion.div>
+                  </span>
                 ))}
               </div>
-
-              {/* Mini stats */}
               <div style={{
-                display: "flex", gap: "32px", marginTop: "20px",
-                paddingTop: "20px", borderTop: "1px solid rgba(255,255,255,0.08)",
+                display: "flex", gap: "24px", marginTop: "16px",
+                paddingTop: "16px", borderTop: "1px solid rgba(255,255,255,0.07)",
               }}>
                 {[
                   { val: "2M+",  label: "transactions/mois" },
-                  { val: "< 5s", label: "délai de transfert" },
+                  { val: "< 5s", label: "délai transfert" },
                   { val: "0%",   label: "frais cachés" },
                 ].map(({ val, label }) => (
                   <div key={label}>
-                    <p style={{ fontSize: "1.3rem", fontWeight: 800, color: "#34D399", margin: 0 }}>{val}</p>
-                    <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.45)", margin: 0 }}>{label}</p>
+                    <p style={{ fontSize: "1.2rem", fontWeight: 800, color: "#FBBF24", margin: 0 }}>{val}</p>
+                    <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.4)", margin: 0 }}>{label}</p>
                   </div>
                 ))}
               </div>
