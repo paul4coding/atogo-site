@@ -114,13 +114,18 @@ export default function Footer() {
 
         {/* Colonne 1 — Marque */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "flex-start" }}>
-          <Image
-            src="/images/logo.png"
-            alt="@TOGO"
-            width={300} height={100}
-            unoptimized
-            style={{ height: "48px", width: "auto", objectFit: "contain", filter: "brightness(0) invert(1)", display: "block", marginLeft: 0 }}
-          />
+          <motion.div
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Image
+              src="/images/logo.png"
+              alt="@TOGO"
+              width={300} height={100}
+              unoptimized
+              style={{ height: "48px", width: "auto", objectFit: "contain", filter: "brightness(0) invert(1)", display: "block", marginLeft: 0 }}
+            />
+          </motion.div>
           <p style={{ fontSize: "0.9rem", lineHeight: 1.7, color: "rgba(255,255,255,0.6)", maxWidth: "260px", margin: 0 }}>
             La référence Fintech & Solutions Digitales au Togo. Nous accompagnons entreprises et particuliers vers l&apos;avenir numérique.
           </p>
