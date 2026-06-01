@@ -27,7 +27,7 @@ export default function Navbar() {
     }}>
       <nav style={{
         maxWidth: "1400px", margin: "0 auto",
-        padding: "0 5%", height: "68px",
+        padding: "0 5% 0 3%", height: "68px",
         display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
         {/* Logo */}
