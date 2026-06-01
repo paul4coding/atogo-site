@@ -176,22 +176,27 @@ export default function DanayaCashSection() {
           {/* Colonne droite — visuel + avantages */}
           <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
 
-            {/* Visuel photo DanayaCash */}
+            {/* Visuel photo DanayaCash — effet floating */}
             <motion.div
               initial={{ opacity: 0, scale: 0.93 }} whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }} transition={{ duration: 0.7 }}
               style={{ display: "flex", justifyContent: "center" }}
             >
-              <Image
-                src="/images/danayacash-visual.png"
-                alt="DanayaCash — transfert d'argent en Afrique"
-                width={380} height={420}
-                unoptimized
-                style={{
-                  width: "min(340px, 100%)", height: "auto",
-                  filter: "drop-shadow(0 20px 60px rgba(0,0,0,0.5))",
-                }}
-              />
+              <motion.div
+                animate={{ y: [0, -14, 0] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Image
+                  src="/images/danayacash-visual.png"
+                  alt="DanayaCash — transfert d'argent en Afrique"
+                  width={380} height={420}
+                  unoptimized
+                  style={{
+                    width: "min(340px, 100%)", height: "auto",
+                    filter: "drop-shadow(0 24px 48px rgba(0,0,0,0.5))",
+                  }}
+                />
+              </motion.div>
             </motion.div>
 
             {/* 4 avantages en 2×2 */}
