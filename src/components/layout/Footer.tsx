@@ -68,9 +68,9 @@ export default function Footer() {
           <Image
             src="/images/logo.png"
             alt="@TOGO"
-            width={130} height={43}
+            width={300} height={100}
             unoptimized
-            style={{ height: "44px", width: "auto", filter: "brightness(0) invert(1)" }}
+            style={{ height: "48px", width: "auto", objectFit: "contain", filter: "brightness(0) invert(1)" }}
           />
           <p style={{ fontSize: "0.9rem", lineHeight: 1.7, color: "rgba(255,255,255,0.6)", maxWidth: "260px", margin: 0 }}>
             La référence Fintech & Solutions Digitales au Togo. Nous accompagnons entreprises et particuliers vers l&apos;avenir numérique.
