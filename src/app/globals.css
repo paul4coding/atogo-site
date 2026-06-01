@@ -147,16 +147,21 @@ main {
   .hero-globe { display: none; }
 }
 
-/* Stats — 2×2 glassmorphism */
+/* Stats — 4 colonnes → 2 colonnes */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
 }
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .stats-grid {
-    grid-template-columns: 1fr !important;
-    gap: 14px;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1px;
+  }
+  .stats-grid > div {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 28px 16px !important;
   }
 }
 
