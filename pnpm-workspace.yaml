@@ -1,3 +1,12 @@
-ignoredBuiltDependencies:
+allowBuilds:
+  '@parcel/watcher': true
+  '@swc/core': true
+  '@tsparticles/engine': true
+  sharp: true
+  unrs-resolver: true
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - '@swc/core'
+  - '@tsparticles/engine'
   - sharp
   - unrs-resolver
