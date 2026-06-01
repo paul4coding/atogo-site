@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { NAV_ITEMS } from "@/constants/data"
-import { Mail, MapPin, Phone, ArrowUpRight } from "lucide-react"
+import { Mail, MapPin, Phone, ArrowUpRight, Zap, Shield, Globe } from "lucide-react"
 
 const SERVICES = [
   { label: "Fintech & DanayaCash", href: "/danayacash" },
@@ -22,37 +22,85 @@ export default function Footer() {
   return (
     <footer style={{ background: "#0F1E4A", color: "#fff" }}>
 
-      {/* ── Bande supérieure CTA ───────────────────────────────────────── */}
+      {/* ── Bande CTA ─────────────────────────────────────────────────── */}
       <div style={{
-        background: "linear-gradient(135deg, #1E9FE8 0%, #1A3A8F 100%)",
-        padding: "48px 5%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        flexWrap: "wrap",
-        gap: "24px",
+        position: "relative",
+        background: "linear-gradient(135deg, #1565C0 0%, #1E9FE8 50%, #0D7A4E 100%)",
+        padding: "56px 5%",
+        overflow: "hidden",
       }}>
-        <div>
-          <p style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>
-            Prêt à transformer votre entreprise ?
-          </p>
-          <p style={{ fontSize: "1rem", opacity: 0.85, margin: "6px 0 0" }}>
-            Contactez-nous et obtenez une réponse sous 24h.
-          </p>
+        {/* Cercles décoratifs en arrière-plan */}
+        <div style={{
+          position: "absolute", top: "-60px", right: "10%",
+          width: "280px", height: "280px", borderRadius: "50%",
+          background: "rgba(255,255,255,0.05)", pointerEvents: "none",
+        }} />
+        <div style={{
+          position: "absolute", bottom: "-80px", right: "25%",
+          width: "200px", height: "200px", borderRadius: "50%",
+          background: "rgba(255,255,255,0.04)", pointerEvents: "none",
+        }} />
+
+        <div style={{
+          display: "flex", alignItems: "center",
+          justifyContent: "space-between", flexWrap: "wrap", gap: "32px",
+          position: "relative", zIndex: 1,
+        }}>
+          {/* Texte gauche */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            <p style={{ fontSize: "clamp(1.4rem, 2.5vw, 1.9rem)", fontWeight: 800, margin: 0, lineHeight: 1.2 }}>
+              Prêt à transformer<br />votre entreprise ?
+            </p>
+            <p style={{ fontSize: "1rem", opacity: 0.85, margin: 0 }}>
+              Notre équipe vous répond rapidement et vous accompagne.
+            </p>
+
+            {/* Badges de réassurance */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginTop: "4px" }}>
+              {[
+                { Icon: Zap,    text: "Réponse sous 24h" },
+                { Icon: Shield, text: "100% confidentiel" },
+                { Icon: Globe,  text: "8 pays couverts"  },
+              ].map(({ Icon, text }) => (
+                <div key={text} style={{
+                  display: "inline-flex", alignItems: "center", gap: "6px",
+                  background: "rgba(255,255,255,0.12)",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                  borderRadius: "999px", padding: "6px 14px",
+                  fontSize: "0.82rem", fontWeight: 600,
+                }}>
+                  <Icon size={13} />
+                  {text}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bouton CTA */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+            <Link href="/contact" style={{
+              display: "inline-flex", alignItems: "center", gap: "10px",
+              background: "#fff", color: "#1A3A8F",
+              fontWeight: 800, fontSize: "1rem",
+              padding: "16px 36px", borderRadius: "12px",
+              textDecoration: "none", whiteSpace: "nowrap",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+              transition: "transform 0.2s, box-shadow 0.2s",
+            }}
+              onMouseEnter={e => {
+                e.currentTarget.style.transform = "translateY(-3px)"
+                e.currentTarget.style.boxShadow = "0 14px 40px rgba(0,0,0,0.3)"
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.transform = "translateY(0)"
+                e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.2)"
+              }}
+            >
+              Nous contacter <ArrowUpRight size={18} />
+            </Link>
+            <span style={{ fontSize: "0.78rem", opacity: 0.7 }}>Gratuit · Sans engagement</span>
+          </div>
         </div>
-        <Link href="/contact" style={{
-          display: "inline-flex", alignItems: "center", gap: "8px",
-          background: "#fff", color: "#1A3A8F",
-          fontWeight: 700, fontSize: "0.95rem",
-          padding: "14px 28px", borderRadius: "10px",
-          textDecoration: "none", whiteSpace: "nowrap",
-          transition: "transform 0.2s",
-        }}
-          onMouseEnter={e => (e.currentTarget.style.transform = "translateY(-2px)")}
-          onMouseLeave={e => (e.currentTarget.style.transform = "translateY(0)")}
-        >
-          Nous contacter <ArrowUpRight size={16} />
-        </Link>
       </div>
 
       {/* ── Corps du footer ────────────────────────────────────────────── */}
