@@ -22,7 +22,6 @@ export default function HeroSection() {
       style={{
         position: "relative",
         minHeight: "100vh",
-        overflow: "hidden",
         paddingTop: "68px",
         background: "linear-gradient(135deg, #f0f7ff 0%, #ffffff 45%, #f8faff 100%)",
       }}
@@ -39,13 +38,12 @@ export default function HeroSection() {
 
       {/* Grid 2 colonnes (inline car Tailwind v4 JIT) */}
       <div style={{
-        maxWidth: "1400px",
-        margin: "0 auto",
-        padding: "0 5% 0 3%",
-        minHeight: "calc(100vh - 64px)",
+        width: "100%",
+        padding: "0 4% 0 4%",
+        minHeight: "calc(100vh - 68px)",
         display: "grid",
-        gridTemplateColumns: "1fr 1.1fr",
-        gap: "40px",
+        gridTemplateColumns: "1fr 1.15fr",
+        gap: "0px",
         alignItems: "center",
       }}>
 
@@ -165,7 +163,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          style={{ height: "min(560px, calc(100vh - 140px))", position: "relative" }}
+          style={{ height: "calc(100vh - 68px)", position: "relative" }}
         >
           <GlobeAfrica />
         </motion.div>

@@ -26,8 +26,8 @@ export default function Navbar() {
       boxShadow: scrolled ? "0 1px 20px rgba(0,0,0,0.06)" : "none",
     }}>
       <nav style={{
-        maxWidth: "1400px", margin: "0 auto",
-        padding: "0 5% 0 3%", height: "68px",
+        width: "100%",
+        padding: "0 4% 0 4%", height: "68px",
         display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
         {/* Logo */}
