@@ -18,7 +18,7 @@ export default function Navbar() {
 
   return (
     <header style={{
-      position: "fixed", top: 0, width: "100%", zIndex: 50,
+      position: "fixed", top: 0, width: "100%", zIndex: 50, height: "68px",
       transition: "all 0.3s ease",
       background: scrolled ? "rgba(255,255,255,0.85)" : "transparent",
       backdropFilter: scrolled ? "blur(12px)" : "none",
@@ -26,8 +26,8 @@ export default function Navbar() {
       boxShadow: scrolled ? "0 1px 20px rgba(0,0,0,0.06)" : "none",
     }}>
       <nav style={{
-        maxWidth: "1280px", margin: "0 auto",
-        padding: "0 24px", height: "64px",
+        maxWidth: "1400px", margin: "0 auto",
+        padding: "0 5%", height: "68px",
         display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
         {/* Logo */}
@@ -39,7 +39,7 @@ export default function Navbar() {
             height={46}
             priority
             unoptimized
-            style={{ height: "38px", width: "auto" }}
+            style={{ height: "52px", width: "auto" }}
           />
         </Link>
 

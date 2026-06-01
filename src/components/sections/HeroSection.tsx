@@ -23,7 +23,7 @@ export default function HeroSection() {
         position: "relative",
         minHeight: "100vh",
         overflow: "hidden",
-        paddingTop: "64px",
+        paddingTop: "68px",
         background: "linear-gradient(135deg, #f0f7ff 0%, #ffffff 45%, #f8faff 100%)",
       }}
     >
@@ -39,13 +39,13 @@ export default function HeroSection() {
 
       {/* Grid 2 colonnes (inline car Tailwind v4 JIT) */}
       <div style={{
-        maxWidth: "1280px",
+        maxWidth: "1400px",
         margin: "0 auto",
-        padding: "0 24px",
+        padding: "0 5%",
         minHeight: "calc(100vh - 64px)",
         display: "grid",
-        gridTemplateColumns: "repeat(2, 1fr)",
-        gap: "48px",
+        gridTemplateColumns: "1fr 1.1fr",
+        gap: "40px",
         alignItems: "center",
       }}>
 
