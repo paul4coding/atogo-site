@@ -48,11 +48,13 @@ function TransferArc({
     return new THREE.QuadraticBezierCurve3(from, mid, to)
   }, [from, to])
 
-  // Géométrie ligne complète — trajet discret
-  const trailGeo = useMemo(() => {
+  // Ligne complète — trajet discret
+  const trailLine = useMemo(() => {
     const pts = curve.getPoints(80)
-    return new THREE.BufferGeometry().setFromPoints(pts)
-  }, [curve])
+    const geo = new THREE.BufferGeometry().setFromPoints(pts)
+    const mat = new THREE.LineBasicMaterial({ color: arcColor, transparent: true, opacity: 0.12 })
+    return new THREE.Line(geo, mat)
+  }, [curve, arcColor])
 
   // Géométrie partielle animée
   const arcGeo = useMemo(() => {
@@ -62,10 +64,17 @@ function TransferArc({
     return geo
   }, [curve])
 
+  const arcMat = useMemo(
+    () => new THREE.LineBasicMaterial({ color: arcColor, transparent: true, opacity: 0.9 }),
+    [arcColor]
+  )
+
+  const arcLine = useMemo(() => new THREE.Line(arcGeo, arcMat), [arcGeo, arcMat])
+
   useFrame((_, delta) => {
     tRef.current = (tRef.current + delta * speed * 0.35) % 1
-    arcGeo.setDrawRange(0, Math.floor(tRef.current * 80) + 1)
-    arcGeo.attributes.position.needsUpdate = true
+    arcLine.geometry.setDrawRange(0, Math.floor(tRef.current * 80) + 1)
+    arcLine.geometry.attributes.position.needsUpdate = true
 
     if (headRef.current && haloRef.current) {
       const pt = curve.getPoint(tRef.current)
@@ -80,13 +89,9 @@ function TransferArc({
   return (
     <group>
       {/* Trajet complet très discret */}
-      <line geometry={trailGeo}>
-        <lineBasicMaterial color={arcColor} transparent opacity={0.12} />
-      </line>
+      <primitive object={trailLine} />
       {/* Arc animé lumineux */}
-      <line geometry={arcGeo}>
-        <lineBasicMaterial color={arcColor} transparent opacity={0.9} />
-      </line>
+      <primitive object={arcLine} />
       {/* Tête de transfert */}
       <mesh ref={headRef}>
         <sphereGeometry args={[0.036, 8, 8]} />

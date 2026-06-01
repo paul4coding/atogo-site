@@ -12,7 +12,8 @@ const fadeUp = {
   hidden:  { opacity: 0, y: 28 },
   visible: (i: number) => ({
     opacity: 1, y: 0,
-    transition: { duration: 0.6, delay: i * 0.13, ease: [0.22, 1, 0.36, 1] },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    transition: { duration: 0.6, delay: i * 0.13, ease: [0.22, 1, 0.36, 1] as any },
   }),
 }
 
