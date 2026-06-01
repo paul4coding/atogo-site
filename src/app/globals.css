@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand @TOGO */
+  --color-brand-primary: #1E9FE8;
+  --color-brand-dark: #1A3A8F;
+  --color-brand-hover: #0A76C0;
+  --color-brand-light: #E3F4FD;
+
+  /* DanayaCash */
+  --color-danaya-primary: #0D7A4E;
+  --color-danaya-light: #10B981;
+  --color-danaya-bg: #D1FAE5;
+
+  /* Neutrals */
+  --color-neutral-50: #F8FAFC;
+  --color-neutral-400: #94A3B8;
+  --color-neutral-600: #64748B;
+  --color-neutral-900: #0A0A0A;
+
+  /* Fonts */
+  --font-sans: 'Inter', var(--font-geist-sans), sans-serif;
+  --font-mono: 'Geist Mono', var(--font-geist-mono), monospace;
+
+  /* Animations */
+  --animate-fade-up: fadeUp 0.6s ease-out forwards;
+  --animate-fade-in: fadeIn 0.4s ease-out forwards;
+  --animate-float: float 3s ease-in-out infinite;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #1A3A8F;
+
+  --color-primary: #1E9FE8;
+  --color-primary-dark: #1A3A8F;
+  --color-primary-hover: #0A76C0;
+  --color-primary-light: #E3F4FD;
+
+  --color-danaya: #0D7A4E;
+  --color-danaya-light: #10B981;
+  --color-danaya-bg: #D1FAE5;
+
+  --color-text-body: #64748B;
+  --color-text-heading: #1A3A8F;
+  --color-text-muted: #94A3B8;
+
+  --color-bg-main: #FFFFFF;
+  --color-bg-alt: #F8FAFC;
+  --color-bg-dark: #0A0A0A;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+}
+
+.dark {
+  --background: #0A0A0A;
+  --foreground: #ededed;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
