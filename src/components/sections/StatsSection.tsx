@@ -59,11 +59,7 @@ export default function StatsSection() {
         </motion.div>
 
         {/* Grid stats */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "2px",
-        }}>
+        <div className="stats-grid">
           {STATS.map((stat, i) => {
             const { Icon, color, bg } = STAT_META[i]
             return (

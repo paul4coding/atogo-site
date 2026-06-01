@@ -84,10 +84,7 @@ export default function DanayaCashSection() {
         </div>
 
         {/* ── Grid principal : étapes + avantages ──────────────────────────── */}
-        <div style={{
-          display: "grid", gridTemplateColumns: "1fr 1fr",
-          gap: "48px", alignItems: "start", marginBottom: "80px",
-        }}>
+        <div className="danaya-grid">
 
           {/* Colonne gauche — 3 étapes */}
           <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>

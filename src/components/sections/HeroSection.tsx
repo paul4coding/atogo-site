@@ -38,15 +38,7 @@ export default function HeroSection() {
       }} />
 
       {/* Grid 2 colonnes (inline car Tailwind v4 JIT) */}
-      <div style={{
-        width: "100%",
-        padding: "0 4% 0 4%",
-        minHeight: "calc(100vh - 68px)",
-        display: "grid",
-        gridTemplateColumns: "1fr 1.15fr",
-        gap: "0px",
-        alignItems: "center",
-      }}>
+      <div className="hero-grid">
 
         {/* ── Colonne gauche : texte ── */}
         <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
@@ -164,6 +156,7 @@ export default function HeroSection() {
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="hero-globe"
           style={{ height: "calc(100vh - 68px)", position: "relative" }}
         >
           <GlobeAfrica />

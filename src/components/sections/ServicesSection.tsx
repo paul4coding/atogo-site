@@ -63,11 +63,7 @@ export default function ServicesSection() {
         </div>
 
         {/* ── Grille des cards ─────────────────────────────────────────────── */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "24px",
-        }}>
+        <div className="services-grid">
           {SERVICES.map((service, i) => {
             const Icon    = ICON_MAP[service.icon as keyof typeof ICON_MAP]
             const s       = SERVICE_STYLES[service.id] ?? SERVICE_STYLES.it

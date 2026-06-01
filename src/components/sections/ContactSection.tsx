@@ -87,11 +87,7 @@ export default function ContactSection() {
         </div>
 
         {/* ── Layout 2 colonnes ──────────────────────────────────────────── */}
-        <div style={{
-          display: "grid", gridTemplateColumns: "1fr 1.5fr",
-          gap: "48px", alignItems: "start",
-          maxWidth: "1100px", margin: "0 auto",
-        }}>
+        <div className="contact-grid">
 
           {/* ── Colonne gauche — infos de contact ─────────────────────────── */}
           <motion.div
@@ -196,7 +192,7 @@ export default function ContactSection() {
             ) : (
               /* ── Formulaire ── */
               <form onSubmit={handleSubmit(onSubmit)} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
+                <div className="contact-form-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
                   <div>
                     <input
                       {...register("name")}

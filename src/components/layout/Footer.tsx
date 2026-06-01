@@ -42,11 +42,7 @@ export default function Footer() {
           background: "rgba(255,255,255,0.04)", pointerEvents: "none",
         }} />
 
-        <div style={{
-          display: "flex", alignItems: "center",
-          justifyContent: "space-between", flexWrap: "wrap", gap: "32px",
-          position: "relative", zIndex: 1,
-        }}>
+        <div className="footer-cta">
           {/* Texte gauche */}
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <p style={{ fontSize: "clamp(1.4rem, 2.5vw, 1.9rem)", fontWeight: 800, margin: 0, lineHeight: 1.2 }}>
@@ -105,12 +101,7 @@ export default function Footer() {
       </div>
 
       {/* ── Corps du footer ────────────────────────────────────────────── */}
-      <div style={{
-        padding: "64px 5% 48px",
-        display: "grid",
-        gridTemplateColumns: "2fr 1fr 1fr 1.4fr",
-        gap: "48px",
-      }}>
+      <div className="footer-grid">
 
         {/* Colonne 1 — Marque */}
         <div style={{ display: "flex", flexDirection: "column", gap: "20px", alignItems: "flex-start" }}>
