@@ -224,7 +224,7 @@ function EarthGlobe() {
 export default function GlobeAfrica() {
   return (
     <Canvas
-      camera={{ position: [0, 0.4, 5.2], fov: 40 }}
+      camera={{ position: [0, 0.4, 7.5], fov: 36 }}
       gl={{ antialias: true, alpha: true }}
       style={{ background: "transparent" }}
     >
