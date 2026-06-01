@@ -1,6 +1,7 @@
 import HeroSection from "@/components/sections/HeroSection"
 import StatsSection from "@/components/sections/StatsSection"
 import ServicesSection from "@/components/sections/ServicesSection"
+import DanayaCashSection from "@/components/sections/DanayaCashSection"
 import ContactSection from "@/components/sections/ContactSection"
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
@@ -13,7 +14,7 @@ export default function HomePage() {
         <HeroSection />
         <StatsSection />
         <ServicesSection />
-        {/* TODO: DanayaCashSection */}
+        <DanayaCashSection />
         {/* TODO: CyberSecSection */}
         <ContactSection />
       </main>
