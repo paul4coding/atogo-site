@@ -280,6 +280,13 @@ main {
   .about-hero-grid { grid-template-columns: 1fr !important; }
   .mvv-grid        { grid-template-columns: 1fr !important; }
   .values-grid     { grid-template-columns: repeat(2,1fr) !important; }
+  .timeline-row    { grid-template-columns: 1fr !important; }
+  .timeline-center-line { left: 24px !important; transform: none !important; }
+}
+@media (max-width: 900px) {
+  .timeline-row > div:first-child  { display: none; }
+  .timeline-row > div:last-child   { padding-left: 16px !important; grid-column: 1; }
+  .timeline-row > div:nth-child(2) { justify-content: flex-start; }
 }
 @media (max-width: 480px) {
   .values-grid          { grid-template-columns: 1fr !important; }
