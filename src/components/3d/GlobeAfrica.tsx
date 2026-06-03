@@ -4,7 +4,7 @@ import { useRef, Suspense, useMemo } from "react"
 import { Canvas, useFrame, useLoader } from "@react-three/fiber"
 import { OrbitControls, Stars } from "@react-three/drei"
 import * as THREE from "three"
-import { DANAYACASH_COUNTRIES } from "@/constants/data"
+import { GLOBE_POINTS } from "@/constants/data"
 
 // ── Coordonnées sphériques ──────────────────────────────────────────────────
 function latLngToVec3(lat: number, lng: number, r: number): THREE.Vector3 {
@@ -154,23 +154,26 @@ function EarthGlobe() {
   ])
 
   const positions = useMemo(
-    () => DANAYACASH_COUNTRIES.map(c => latLngToVec3(c.lat, c.lng, 2.05)),
+    () => GLOBE_POINTS.map(c => latLngToVec3(c.lat, c.lng, 2.05)),
     []
   )
 
-  // Tous les arcs rayonnent depuis Togo (index 0)
+  // index 0 = Togo (hub)
+  // index 0-5 = Afrique de l'Ouest (nationaux, bleu)
+  // index 6-10 = Europe/USA (internationaux, or/violet)
   const arcs = useMemo(() => [
+    // Nationaux depuis Togo (bleu @TOGO)
     { from: 0, to: 1, color: "#1E9FE8", head: "#7DD3FC", speed: 0.90, delay: 0.0  },
-    { from: 0, to: 2, color: "#10B981", head: "#6EE7B7", speed: 0.75, delay: 0.15 },
-    { from: 0, to: 3, color: "#1E9FE8", head: "#7DD3FC", speed: 1.05, delay: 0.3  },
-    { from: 0, to: 4, color: "#10B981", head: "#6EE7B7", speed: 0.65, delay: 0.45 },
-    { from: 0, to: 5, color: "#1E9FE8", head: "#7DD3FC", speed: 0.85, delay: 0.6  },
-    { from: 0, to: 6, color: "#10B981", head: "#6EE7B7", speed: 0.70, delay: 0.75 },
-    { from: 0, to: 7, color: "#1E9FE8", head: "#7DD3FC", speed: 0.95, delay: 0.9  },
-    // Liaisons régionales secondaires
-    { from: 3, to: 2, color: "#818CF8", head: "#C4B5FD", speed: 0.55, delay: 0.2  },
-    { from: 5, to: 6, color: "#818CF8", head: "#C4B5FD", speed: 0.50, delay: 0.5  },
-    { from: 1, to: 7, color: "#818CF8", head: "#C4B5FD", speed: 0.48, delay: 0.8  },
+    { from: 0, to: 2, color: "#1E9FE8", head: "#7DD3FC", speed: 0.80, delay: 0.15 },
+    { from: 0, to: 3, color: "#1E9FE8", head: "#7DD3FC", speed: 0.70, delay: 0.3  },
+    { from: 0, to: 4, color: "#1E9FE8", head: "#7DD3FC", speed: 0.85, delay: 0.45 },
+    { from: 0, to: 5, color: "#1E9FE8", head: "#7DD3FC", speed: 0.75, delay: 0.6  },
+    // Internationaux depuis Togo (or — Western Union, MoneyGram, RIA)
+    { from: 0, to: 6,  color: "#FBBF24", head: "#FDE68A", speed: 0.45, delay: 0.2  },
+    { from: 0, to: 7,  color: "#FBBF24", head: "#FDE68A", speed: 0.38, delay: 0.5  },
+    { from: 0, to: 8,  color: "#F59E0B", head: "#FDE68A", speed: 0.42, delay: 0.8  },
+    { from: 0, to: 9,  color: "#FBBF24", head: "#FDE68A", speed: 0.35, delay: 1.1  },
+    { from: 0, to: 10, color: "#F59E0B", head: "#FDE68A", speed: 0.40, delay: 1.4  },
   ], [])
 
   useFrame(({ clock }) => {
@@ -199,12 +202,12 @@ function EarthGlobe() {
         <meshPhongMaterial color="#1E9FE8" transparent opacity={0.045} side={THREE.BackSide} />
       </mesh>
 
-      {/* Points pays — Togo en or (hub), autres en bleu */}
+      {/* Points pays — Togo en or (hub), Afrique en bleu, international en or clair */}
       {positions.map((pos, i) => (
         <CountryDot
-          key={DANAYACASH_COUNTRIES[i].code}
+          key={GLOBE_POINTS[i].code}
           position={pos}
-          color={i === 0 ? "#FBBF24" : "#1E9FE8"}
+          color={i === 0 ? "#FBBF24" : GLOBE_POINTS[i].type === "intl" ? "#F59E0B" : "#1E9FE8"}
           isHub={i === 0}
         />
       ))}

@@ -1,33 +1,40 @@
-import type { NavItem, Service, Stat, Country } from "@/types"
+import type { NavItem, Service, Stat } from "@/types"
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: "Accueil",    href: "/" },
-  { label: "Services",   href: "/services" },
-  { label: "DanayaCash", href: "/danayacash" },
-  { label: "À propos",   href: "/about" },
-  { label: "Contact",    href: "/contact" },
+  { label: "Accueil",    href: "/"          },
+  { label: "Services",   href: "/services"  },
+  { label: "Transferts", href: "/transferts" },
+  { label: "À propos",   href: "/about"     },
+  { label: "Contact",    href: "/contact"   },
 ]
 
 export const STATS: Stat[] = [
-  { value: 50000, suffix: "+",    label: "Clients actifs" },
-  { value: 2,     suffix: "M+",   label: "Transactions / mois" },
-  { value: 8,     suffix: "",     label: "Pays couverts" },
-  { value: 5,     suffix: " ans", label: "D'expérience" },
+  { value: 50000, suffix: "+",    label: "Clients actifs"       },
+  { value: 6,     suffix: "+",    label: "Services disponibles" },
+  { value: 3,     suffix: "",     label: "Marques de téléphones"},
+  { value: 5,     suffix: " ans", label: "D'expérience"         },
 ]
 
 export const SERVICES: Service[] = [
   {
-    id: "fintech",
-    title: "Fintech & DanayaCash",
-    description: "Transfert d'argent mobile rapide, sécurisé et accessible partout en Afrique de l'Ouest.",
-    icon: "Wallet",
-    color: "danaya",
+    id: "transferts",
+    title: "Transferts d'argent",
+    description: "National (Flooz, Yas, MixBy) et international (Western Union, MoneyGram, RIA) — envoyez et recevez de l'argent en toute simplicité.",
+    icon: "ArrowLeftRight",
+    color: "brand",
   },
   {
     id: "it",
     title: "Solutions Informatiques",
     description: "Intégration de systèmes, infrastructure IT et développement sur mesure pour les entreprises.",
     icon: "Server",
+    color: "brand",
+  },
+  {
+    id: "phones",
+    title: "Vente de Téléphones",
+    description: "Revendeur agréé Blackview, Oukitel et Doogee — smartphones robustes, fiables et adaptés au marché africain.",
+    icon: "Smartphone",
     color: "brand",
   },
   {
@@ -53,31 +60,53 @@ export const SERVICES: Service[] = [
   },
 ]
 
-export const DANAYACASH_COUNTRIES: Country[] = [
-  { name: "Togo",           code: "TG", lat:  8.6195,  lng:  0.8248 },
-  { name: "Bénin",          code: "BJ", lat:  9.3077,  lng:  2.3158 },
-  { name: "Côte d'Ivoire",  code: "CI", lat:  7.5399, lng: -5.5471 },
-  { name: "Ghana",          code: "GH", lat:  7.9465, lng: -1.0232 },
-  { name: "Sénégal",        code: "SN", lat: 14.4974, lng: -14.4524 },
-  { name: "Burkina Faso",   code: "BF", lat: 12.3640, lng: -1.5330 },
-  { name: "Mali",           code: "ML", lat: 17.5707, lng: -3.9962 },
-  { name: "Niger",          code: "NE", lat: 17.6078, lng:  8.0817 },
+// Points pour le globe — Togo + destinations transferts internationaux
+export interface GlobePoint {
+  name: string
+  code: string
+  lat: number
+  lng: number
+  type: "local" | "intl"
+}
+
+export const GLOBE_POINTS: GlobePoint[] = [
+  // Afrique de l'Ouest (transferts nationaux)
+  { name: "Togo",          code: "TG", lat:  8.6195,  lng:  0.8248,  type: "local" },
+  { name: "Bénin",         code: "BJ", lat:  9.3077,  lng:  2.3158,  type: "local" },
+  { name: "Ghana",         code: "GH", lat:  7.9465,  lng: -1.0232,  type: "local" },
+  { name: "Côte d'Ivoire", code: "CI", lat:  7.5399,  lng: -5.5471,  type: "local" },
+  { name: "Sénégal",       code: "SN", lat: 14.4974,  lng:-14.4524,  type: "local" },
+  { name: "Nigeria",       code: "NG", lat:  9.0820,  lng:  8.6753,  type: "local" },
+  // Destinations internationales
+  { name: "France",        code: "FR", lat: 46.2276,  lng:  2.2137,  type: "intl"  },
+  { name: "États-Unis",    code: "US", lat: 37.0902,  lng:-95.7129,  type: "intl"  },
+  { name: "Royaume-Uni",   code: "UK", lat: 55.3781,  lng: -3.4360,  type: "intl"  },
+  { name: "Italie",        code: "IT", lat: 41.8719,  lng: 12.5674,  type: "intl"  },
+  { name: "Allemagne",     code: "DE", lat: 51.1657,  lng: 10.4515,  type: "intl"  },
 ]
 
-export const DANAYACASH_STEPS = [
-  {
-    step: 1,
-    title: "Créez votre compte",
-    description: "Téléchargez l'app DanayaCash et inscrivez-vous en quelques minutes avec votre numéro de téléphone.",
-  },
-  {
-    step: 2,
-    title: "Rechargez votre portefeuille",
-    description: "Alimentez votre compte via Mobile Money, carte bancaire ou en agence partenaire.",
-  },
-  {
-    step: 3,
-    title: "Envoyez de l'argent",
-    description: "Saisissez le numéro du destinataire, le montant et validez. L'argent arrive en secondes.",
-  },
+// Services nationaux de transfert
+export const TRANSFER_NATIONAL = [
+  { name: "Flooz",       logo: "/images/flooz.png",     desc: "MOOV Money"  },
+  { name: "MixBy Yas",   logo: "/images/yas-agent.png", desc: "Yas Agent"   },
+]
+
+// Services internationaux de transfert
+export const TRANSFER_INTERNATIONAL = [
+  { name: "Western Union", logo: "/images/western-union.webp",  desc: "Worldwide" },
+  { name: "MoneyGram",     logo: "/images/moneygram.webp",      desc: "Global"    },
+  { name: "RIA",           logo: "/images/ria.png",             desc: "Money Transfer" },
+]
+
+// Marques téléphones
+export const PHONE_BRANDS = [
+  { name: "Blackview", logo: "/images/blackview.png",  desc: "Smartphones robustes" },
+  { name: "Oukitel",   logo: "/images/oukitel.png",    desc: "Grande batterie"      },
+  { name: "Doogee",    logo: "/images/doogee.jpg",     desc: "Résistants & abordables" },
+]
+
+export const TRANSFER_STEPS = [
+  { step: 1, title: "Venez en agence", description: "Rendez-vous dans notre agence à Lomé avec votre pièce d'identité et le montant à envoyer." },
+  { step: 2, title: "Choisissez le service", description: "Sélectionnez le service adapté : Flooz, Yas ou MixBy pour le national, Western Union, MoneyGram ou RIA pour l'international." },
+  { step: 3, title: "L'argent est envoyé", description: "La transaction est traitée immédiatement. Le destinataire reçoit l'argent en quelques minutes." },
 ]

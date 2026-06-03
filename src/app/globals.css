@@ -249,11 +249,17 @@ main {
 
 /* Services page */
 @media (max-width: 768px) {
-  .service-card-grid { grid-template-columns: 1fr !important; }
-  .why-grid { grid-template-columns: repeat(2,1fr) !important; }
+  .service-card-grid  { grid-template-columns: 1fr !important; }
+  .why-grid           { grid-template-columns: repeat(2,1fr) !important; }
+  .phones-grid        { grid-template-columns: 1fr !important; }
+  .transfers-grid     { grid-template-columns: 1fr !important; }
+  .transfers-detail-grid { grid-template-columns: 1fr !important; }
+  .steps-detail-grid  { grid-template-columns: 1fr !important; }
+  .steps-grid         { grid-template-columns: 1fr !important; }
 }
 @media (max-width: 480px) {
   .why-grid { grid-template-columns: 1fr !important; }
+  .phones-grid { grid-template-columns: 1fr !important; }
 }
 
 /* DanayaCash page */

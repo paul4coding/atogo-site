@@ -55,7 +55,7 @@ export default function HeroSection() {
               color: "var(--color-brand-dark)",
             }}
           >
-            Fintech · IT · Digital · Sécurité
+            Transferts · IT · Digital · Cybersécurité
           </motion.span>
 
           {/* Titre H1 */}
@@ -72,7 +72,7 @@ export default function HeroSection() {
             L&apos;avenir digital<br />
             du Togo,{" "}
             <span style={{
-              background: "linear-gradient(135deg, var(--color-brand-primary) 0%, #0D7A4E 100%)",
+              background: "linear-gradient(135deg, var(--color-brand-primary) 0%, #1A3A8F 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
@@ -89,8 +89,8 @@ export default function HeroSection() {
               color: "var(--color-text-body)", margin: 0,
             }}
           >
-            Solutions fintech, informatiques, cybersécurité et marketing digital
-            pour les entreprises et particuliers en Afrique de l&apos;Ouest.
+            Transferts d&apos;argent, solutions IT, cybersécurité, marketing digital
+            et vente de téléphones — tout pour les entreprises et particuliers au Togo.
           </motion.p>
 
           {/* CTAs */}
@@ -99,7 +99,7 @@ export default function HeroSection() {
             style={{ display: "flex", flexWrap: "wrap", gap: "14px", paddingTop: "8px", alignItems: "center" }}
           >
             <Link
-              href="/danayacash"
+              href="/transferts"
               style={{
                 padding: "15px 32px", borderRadius: "10px",
                 background: "linear-gradient(135deg, #0D7A4E 0%, #10B981 100%)",
@@ -111,7 +111,7 @@ export default function HeroSection() {
               onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 8px 28px rgba(13,122,78,0.4)" }}
               onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(13,122,78,0.3)" }}
             >
-              Découvrir DanayaCash
+              Nos transferts
             </Link>
             <Link
               href="/services"
@@ -136,8 +136,8 @@ export default function HeroSection() {
             style={{ display: "flex", gap: "20px", paddingTop: "4px", flexWrap: "wrap" }}
           >
             {[
-              { val: "8", label: "pays couverts" },
-              { val: "2M+", label: "transactions/mois" },
+              { val: "6",    label: "services" },
+              { val: "3",    label: "marques téléphones" },
               { val: "5 ans", label: "d'expérience" },
             ].map(({ val, label }) => (
               <div key={label} style={{ display: "flex", alignItems: "center", gap: "8px" }}>

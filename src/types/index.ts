@@ -22,6 +22,7 @@ export interface Country {
   code: string
   lat: number
   lng: number
+  type?: "local" | "intl"
 }
 
 export interface ContactFormData {
