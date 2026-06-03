@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic"
 import Link from "next/link"
+import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { ArrowDown } from "lucide-react"
 
@@ -18,6 +19,36 @@ const fadeUp = {
 }
 
 export default function HeroSection() {
+  const h1Ref = useRef<HTMLHeadingElement>(null)
+
+  useEffect(() => {
+    if (!h1Ref.current) return
+    let cleanup: (() => void) | undefined
+
+    import("animejs/text").then(({ splitText }) => {
+      import("animejs").then(({ animate, stagger }) => {
+        if (!h1Ref.current) return
+
+        const { words } = splitText(h1Ref.current, {
+          words: { wrap: "clip" },
+        })
+
+        const anim = animate(words, {
+          y: ["110%", "0%"],
+          opacity: [0, 1],
+          duration: 700,
+          delay: stagger(80),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ease: "outExpo" as any,
+        })
+
+        cleanup = () => anim.cancel()
+      })
+    })
+
+    return () => cleanup?.()
+  }, [])
+
   return (
     <section
       style={{
@@ -58,28 +89,29 @@ export default function HeroSection() {
             Transferts · IT · Digital · Cybersécurité
           </motion.span>
 
-          {/* Titre H1 */}
-          <motion.h1
-            custom={1} variants={fadeUp} initial="hidden" animate="visible"
+          {/* Titre H1 — animé via AnimeJS splitText */}
+          <h1
+            ref={h1Ref}
             style={{
               fontSize: "clamp(2.6rem, 5vw, 3.75rem)",
               fontWeight: 600,
-              lineHeight: 1.1,
+              lineHeight: 1.25,
               color: "var(--color-brand-dark)",
               margin: 0,
+              overflow: "hidden",
             }}
           >
-            L&apos;avenir digital<br />
-            du Togo,{" "}
+            L&apos;avenir digital du Togo,{" "}
             <span style={{
               background: "linear-gradient(135deg, var(--color-brand-primary) 0%, #1A3A8F 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
+              display: "inline-block",
             }}>
               aujourd&apos;hui.
             </span>
-          </motion.h1>
+          </h1>
 
           {/* Sous-titre */}
           <motion.p
