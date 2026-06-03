@@ -273,55 +273,63 @@ export default function ServicesPage() {
           </AnimatePresence>
         </div>
 
-        {/* ── Marques téléphones — bandeau défilant ────────────────────── */}
-        <div style={{ background:"#0F1E4A", padding:"56px 0", overflow:"hidden", position:"relative" }}>
-          {/* Dégradés sur les bords pour l'effet fade */}
-          <div style={{ position:"absolute", left:0, top:0, bottom:0, width:"120px", background:"linear-gradient(to right,#0F1E4A,transparent)", zIndex:2, pointerEvents:"none" }} />
-          <div style={{ position:"absolute", right:0, top:0, bottom:0, width:"120px", background:"linear-gradient(to left,#0F1E4A,transparent)", zIndex:2, pointerEvents:"none" }} />
+        {/* ── Marques téléphones — 3 cards premium ─────────────────────── */}
+        <div style={{ background:"#0F1E4A", padding:"72px 5%", position:"relative", overflow:"hidden" }}>
+          {/* Déco */}
+          <div style={{ position:"absolute", top:"-60px", left:"50%", transform:"translateX(-50%)", width:"700px", height:"350px", background:"radial-gradient(ellipse,rgba(30,159,232,0.07) 0%,transparent 70%)", pointerEvents:"none" }} />
 
           {/* En-tête */}
-          <div style={{ textAlign:"center", marginBottom:"36px", position:"relative", zIndex:3 }}>
-            <span style={{ display:"inline-block", fontSize:"11px", fontWeight:700, letterSpacing:"0.14em", textTransform:"uppercase", padding:"6px 16px", borderRadius:"999px", background:"rgba(30,159,232,0.15)", color:"#60C8FF", border:"1px solid rgba(30,159,232,0.25)", marginBottom:"14px" }}>
-              Revendeur agréé
-            </span>
-            <h2 style={{ fontSize:"clamp(1.4rem,2.5vw,1.9rem)", fontWeight:700, color:"#fff", margin:0 }}>
-              Nos marques de téléphones
-            </h2>
-            <p style={{ fontSize:"0.88rem", color:"rgba(255,255,255,0.5)", margin:"8px 0 0" }}>
-              Smartphones robustes, grandes batteries, adaptés aux conditions africaines
-            </p>
+          <div style={{ textAlign:"center", marginBottom:"48px", position:"relative", zIndex:1 }}>
+            <motion.span initial={{ opacity:0, y:12 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.4 }}
+              style={{ display:"inline-block", fontSize:"11px", fontWeight:700, letterSpacing:"0.14em", textTransform:"uppercase", padding:"7px 18px", borderRadius:"999px", background:"rgba(30,159,232,0.15)", color:"#60C8FF", border:"1px solid rgba(30,159,232,0.25)", marginBottom:"16px" }}
+            >Revendeur agréé</motion.span>
+            <motion.h2 initial={{ opacity:0, y:16 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.5, delay:0.1 }}
+              style={{ fontSize:"clamp(1.6rem,3vw,2.2rem)", fontWeight:700, color:"#fff", margin:"0 0 12px" }}
+            >Nos marques de téléphones</motion.h2>
+            <motion.p initial={{ opacity:0, y:10 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.4, delay:0.2 }}
+              style={{ fontSize:"0.95rem", color:"rgba(255,255,255,0.5)", margin:0 }}
+            >Smartphones robustes, grandes batteries, adaptés aux conditions africaines</motion.p>
           </div>
 
-          {/* Bandeau défilant */}
-          <div style={{ overflow:"hidden" }}>
-            <motion.div
-              animate={{ x: ["0%", "-50%"] }}
-              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
-              style={{ display:"flex", gap:"24px", width:"max-content" }}
-            >
-              {/* On duplique 2× pour le loop infini */}
-              {[...PHONE_BRANDS, ...PHONE_BRANDS, ...PHONE_BRANDS, ...PHONE_BRANDS].map((b, i) => (
-                <div key={`${b.name}-${i}`} style={{
-                  background:"rgba(255,255,255,0.06)",
+          {/* 3 cards côte à côte */}
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"24px", maxWidth:"900px", margin:"0 auto", position:"relative", zIndex:1 }} className="phones-grid">
+            {PHONE_BRANDS.map((b, i) => (
+              <motion.div key={b.name}
+                initial={{ opacity:0, y:32 }} whileInView={{ opacity:1, y:0 }}
+                viewport={{ once:true }} transition={{ duration:0.55, delay:i*0.12 }}
+                whileHover={{ y:-8, transition:{ duration:0.2 } }}
+                style={{
+                  background:"rgba(255,255,255,0.05)",
                   border:"1px solid rgba(255,255,255,0.1)",
-                  borderRadius:"16px",
-                  padding:"20px 32px",
-                  display:"flex", flexDirection:"column", alignItems:"center", gap:"14px",
-                  flexShrink:0, minWidth:"200px",
-                  transition:"background 0.2s",
-                }}>
-                  <div style={{ background:"#fff", borderRadius:"10px", padding:"12px 20px", display:"flex", alignItems:"center", justifyContent:"center", width:"140px", height:"52px" }}>
-                    <Image src={b.logo} alt={b.name} width={120} height={44} unoptimized
-                      style={{ maxHeight:"36px", width:"auto", objectFit:"contain" }}
-                    />
-                  </div>
-                  <div style={{ textAlign:"center" }}>
-                    <p style={{ fontSize:"0.82rem", fontWeight:700, color:"#fff", margin:"0 0 2px" }}>{b.name}</p>
-                    <p style={{ fontSize:"0.72rem", color:"rgba(255,255,255,0.45)", margin:0 }}>{b.desc}</p>
-                  </div>
+                  borderRadius:"20px", padding:"40px 28px",
+                  textAlign:"center", cursor:"default",
+                  backdropFilter:"blur(8px)",
+                  position:"relative", overflow:"hidden",
+                  transition:"box-shadow 0.2s",
+                }}
+                onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "0 20px 60px rgba(30,159,232,0.2)"}
+                onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "none"}
+              >
+                {/* Numéro déco */}
+                <span style={{ position:"absolute", top:"-12px", right:"16px", fontSize:"5rem", fontWeight:900, color:"rgba(255,255,255,0.04)", lineHeight:1, userSelect:"none" }}>0{i+1}</span>
+
+                {/* Logo sur fond blanc */}
+                <div style={{ background:"#fff", borderRadius:"14px", padding:"16px 24px", display:"inline-flex", alignItems:"center", justifyContent:"center", marginBottom:"24px", boxShadow:"0 4px 20px rgba(0,0,0,0.2)", minWidth:"140px", height:"64px" }}>
+                  <Image src={b.logo} alt={b.name} width={130} height={48} unoptimized
+                    style={{ maxHeight:"42px", width:"auto", objectFit:"contain" }}
+                  />
                 </div>
-              ))}
-            </motion.div>
+
+                {/* Nom + desc */}
+                <p style={{ fontSize:"1rem", fontWeight:700, color:"#fff", margin:"0 0 8px" }}>{b.name}</p>
+                <p style={{ fontSize:"0.82rem", color:"rgba(255,255,255,0.5)", margin:"0 0 20px", lineHeight:1.5 }}>{b.desc}</p>
+
+                {/* Badge "Agréé" */}
+                <span style={{ display:"inline-flex", alignItems:"center", gap:"6px", fontSize:"0.72rem", fontWeight:700, color:"#60C8FF", background:"rgba(30,159,232,0.12)", border:"1px solid rgba(30,159,232,0.2)", padding:"5px 12px", borderRadius:"999px" }}>
+                  ✓ Revendeur agréé
+                </span>
+              </motion.div>
+            ))}
           </div>
         </div>
 
