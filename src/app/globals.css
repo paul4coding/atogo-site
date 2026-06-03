@@ -247,3 +247,25 @@ main {
 @media (max-width: 768px) {
   section { padding-top: 64px !important; padding-bottom: 64px !important; }
 }
+
+/* Services page — cards alternées */
+@media (max-width: 768px) {
+  .service-card-grid { grid-template-columns: 1fr !important; }
+}
+
+/* DanayaCash page */
+@media (max-width: 768px) {
+  .danaya-steps-grid     { grid-template-columns: 1fr !important; }
+  .danaya-advantages-grid{ grid-template-columns: repeat(2,1fr) !important; }
+}
+
+/* About page */
+@media (max-width: 900px) {
+  .about-hero-grid { grid-template-columns: 1fr !important; }
+  .mvv-grid        { grid-template-columns: 1fr !important; }
+  .values-grid     { grid-template-columns: repeat(2,1fr) !important; }
+}
+@media (max-width: 480px) {
+  .values-grid          { grid-template-columns: 1fr !important; }
+  .danaya-advantages-grid{ grid-template-columns: 1fr !important; }
+}
