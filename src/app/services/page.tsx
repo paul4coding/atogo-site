@@ -386,28 +386,95 @@ export default function ServicesPage() {
 
         {/* ── CTA ───────────────────────────────────────────────────────── */}
         <div style={{
-          background: "linear-gradient(135deg,#1A3A8F,#1E9FE8)",
-          padding: "80px 5%",
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          flexWrap: "wrap", gap: "28px",
+          background: "#070F2B",
+          padding: "96px 5%",
+          textAlign: "center",
+          position: "relative",
+          overflow: "hidden",
         }}>
-          <div>
-            <p style={{ fontSize: "clamp(1.4rem, 3vw, 2rem)", fontWeight: 700, color: "#fff", margin: "0 0 8px" }}>
-              Prêt à passer à l&apos;action ?
-            </p>
-            <p style={{ fontSize: "1rem", color: "rgba(255,255,255,0.75)", margin: 0 }}>
-              Parlez-nous de votre projet. Réponse sous 24h.
-            </p>
+          {/* Cercle lumineux centre */}
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%,-50%)",
+            width: "600px", height: "300px",
+            background: "radial-gradient(ellipse, rgba(30,159,232,0.08) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }} />
+
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }} transition={{ duration: 0.5 }}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "8px",
+                background: "rgba(30,159,232,0.12)", border: "1px solid rgba(30,159,232,0.2)",
+                color: "#60C8FF", fontSize: "11px", fontWeight: 700,
+                letterSpacing: "0.14em", textTransform: "uppercase",
+                padding: "7px 18px", borderRadius: "999px", marginBottom: "28px",
+              }}
+            >
+              ✦ Démarrons ensemble
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.55, delay: 0.1 }}
+              style={{
+                fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800,
+                color: "#fff", margin: "0 0 16px", lineHeight: 1.15,
+              }}
+            >
+              Votre projet mérite<br />
+              <span style={{
+                background: "linear-gradient(135deg, #1E9FE8, #10B981)",
+                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}>la meilleure équipe.</span>
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.2 }}
+              style={{
+                fontSize: "1.05rem", color: "rgba(255,255,255,0.55)",
+                margin: "0 auto 40px", maxWidth: "440px", lineHeight: 1.7,
+              }}
+            >
+              Discutons de vos besoins et construisons ensemble la solution idéale.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.4, delay: 0.3 }}
+              style={{ display: "flex", gap: "14px", justifyContent: "center", flexWrap: "wrap" }}
+            >
+              <Link href="/contact" style={{
+                display: "inline-flex", alignItems: "center", gap: "10px",
+                background: "linear-gradient(135deg,#1E9FE8,#0D7A4E)",
+                color: "#fff", fontWeight: 800, fontSize: "1rem",
+                padding: "16px 36px", borderRadius: "12px", textDecoration: "none",
+                boxShadow: "0 8px 32px rgba(30,159,232,0.3)",
+                transition: "transform 0.2s, box-shadow 0.2s",
+              }}
+                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 14px 40px rgba(30,159,232,0.4)" }}
+                onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 8px 32px rgba(30,159,232,0.3)" }}
+              >
+                Nous contacter <ArrowRight size={18} />
+              </Link>
+              <Link href="/about" style={{
+                display: "inline-flex", alignItems: "center", gap: "8px",
+                background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)",
+                color: "rgba(255,255,255,0.8)", fontWeight: 600, fontSize: "1rem",
+                padding: "16px 32px", borderRadius: "12px", textDecoration: "none",
+                transition: "background 0.2s",
+              }}
+                onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.12)")}
+                onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.07)")}
+              >
+                En savoir plus sur nous
+              </Link>
+            </motion.div>
           </div>
-          <Link href="/contact" style={{
-            display: "inline-flex", alignItems: "center", gap: "10px",
-            background: "#fff", color: "#1A3A8F",
-            fontWeight: 800, fontSize: "1rem",
-            padding: "16px 36px", borderRadius: "12px", textDecoration: "none",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.2)", whiteSpace: "nowrap",
-          }}>
-            Nous contacter <ArrowRight size={18} />
-          </Link>
         </div>
 
       </main>
