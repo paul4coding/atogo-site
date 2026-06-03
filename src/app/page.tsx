@@ -1,5 +1,5 @@
 import HeroSection from "@/components/sections/HeroSection"
-import StatsSection from "@/components/sections/StatsSection"
+import PartnersSection from "@/components/sections/PartnersSection"
 import ServicesSection from "@/components/sections/ServicesSection"
 import TransfersSection from "@/components/sections/TransfersSection"
 import ContactSection from "@/components/sections/ContactSection"
@@ -12,7 +12,7 @@ export default function HomePage() {
       <Navbar />
       <main>
         <HeroSection />
-        <StatsSection />
+        <PartnersSection />
         <ServicesSection />
         <TransfersSection />
         {/* TODO: CyberSecSection */}
