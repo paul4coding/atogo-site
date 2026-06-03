@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { ArrowDown } from "lucide-react"
 
@@ -18,36 +17,62 @@ const fadeUp = {
   }),
 }
 
+// Animation clip-reveal mot par mot (même effet que AnimeJS splitText)
+const TITLE_WORDS = ["L'avenir", "digital", "du", "Togo,"]
+const HIGHLIGHT   = "aujourd'hui."
+
+function SplitTitle() {
+  return (
+    <h1 style={{
+      fontSize: "clamp(2.6rem, 5vw, 3.75rem)",
+      fontWeight: 600, lineHeight: 1.3,
+      color: "var(--color-brand-dark)",
+      margin: 0, display: "flex", flexWrap: "wrap",
+      columnGap: "0.3em", rowGap: "0.1em",
+    }}>
+      {TITLE_WORDS.map((word, i) => (
+        /* Chaque mot est enveloppé dans un "clip" */
+        <span key={word} style={{ overflow: "hidden", display: "inline-block", lineHeight: 1.3 }}>
+          <motion.span
+            initial={{ y: "110%", opacity: 0 }}
+            animate={{ y: "0%", opacity: 1 }}
+            transition={{
+              duration: 0.65, delay: 0.1 + i * 0.1,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              ease: [0.16, 1, 0.3, 1] as any,
+            }}
+            style={{ display: "inline-block" }}
+          >
+            {word}
+          </motion.span>
+        </span>
+      ))}
+      {/* Mot gradient */}
+      <span style={{ overflow: "hidden", display: "inline-block", lineHeight: 1.3 }}>
+        <motion.span
+          initial={{ y: "110%", opacity: 0 }}
+          animate={{ y: "0%", opacity: 1 }}
+          transition={{
+            duration: 0.65, delay: 0.1 + TITLE_WORDS.length * 0.1,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            ease: [0.16, 1, 0.3, 1] as any,
+          }}
+          style={{
+            display: "inline-block",
+            background: "linear-gradient(135deg, var(--color-brand-primary) 0%, #1A3A8F 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
+        >
+          {HIGHLIGHT}
+        </motion.span>
+      </span>
+    </h1>
+  )
+}
+
 export default function HeroSection() {
-  const h1Ref = useRef<HTMLHeadingElement>(null)
-
-  useEffect(() => {
-    if (!h1Ref.current) return
-    let cleanup: (() => void) | undefined
-
-    import("animejs/text").then(({ splitText }) => {
-      import("animejs").then(({ animate, stagger }) => {
-        if (!h1Ref.current) return
-
-        const { words } = splitText(h1Ref.current, {
-          words: { wrap: "clip" },
-        })
-
-        const anim = animate(words, {
-          y: ["110%", "0%"],
-          opacity: [0, 1],
-          duration: 700,
-          delay: stagger(80),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ease: "outExpo" as any,
-        })
-
-        cleanup = () => anim.cancel()
-      })
-    })
-
-    return () => cleanup?.()
-  }, [])
 
   return (
     <section
@@ -89,29 +114,8 @@ export default function HeroSection() {
             Transferts · IT · Digital · Cybersécurité
           </motion.span>
 
-          {/* Titre H1 — animé via AnimeJS splitText */}
-          <h1
-            ref={h1Ref}
-            style={{
-              fontSize: "clamp(2.6rem, 5vw, 3.75rem)",
-              fontWeight: 600,
-              lineHeight: 1.25,
-              color: "var(--color-brand-dark)",
-              margin: 0,
-              overflow: "hidden",
-            }}
-          >
-            L&apos;avenir digital du Togo,{" "}
-            <span style={{
-              background: "linear-gradient(135deg, var(--color-brand-primary) 0%, #1A3A8F 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              display: "inline-block",
-            }}>
-              aujourd&apos;hui.
-            </span>
-          </h1>
+          {/* Titre H1 — clip-reveal mot par mot */}
+          <SplitTitle />
 
           {/* Sous-titre */}
           <motion.p
