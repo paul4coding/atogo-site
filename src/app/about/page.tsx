@@ -15,11 +15,11 @@ const VALUES = [
 ]
 
 const TIMELINE = [
-  { year: "2019", title: "Fondation de @TOGO", desc: "Création de la société à Lomé avec une vision claire : digitaliser les services financiers en Afrique de l'Ouest." },
-  { year: "2020", title: "Lancement DanayaCash", desc: "Première version de l'application de transfert d'argent mobile, disponible au Togo et au Bénin." },
-  { year: "2021", title: "Expansion régionale", desc: "Extension du réseau DanayaCash à 5 pays : Ghana, Côte d'Ivoire, Sénégal rejoignent le réseau." },
-  { year: "2023", title: "8 pays couverts", desc: "Couverture complète de l'Afrique de l'Ouest avec 8 pays et plus de 2 millions de transactions par mois." },
-  { year: "2024", title: "Solutions IT & Cyber", desc: "Lancement officiel des divisions Solutions Informatiques, Cybersécurité et Marketing Digital." },
+  { year: "2019", title: "Fondation de @TOGO", desc: "Création de la société à Lomé avec une vision claire : accompagner les entreprises et particuliers vers l'avenir numérique." },
+  { year: "2020", title: "Services de transferts", desc: "Lancement des services de transferts d'argent nationaux (Flooz, MixBy Yas) et partenariats avec Western Union et MoneyGram." },
+  { year: "2021", title: "Expansion des partenariats", desc: "Extension du réseau de transferts internationaux avec RIA et renforcement de la présence locale à Lomé." },
+  { year: "2023", title: "Solutions IT & Marketing", desc: "Lancement officiel des divisions Solutions Informatiques, Cybersécurité et Marketing Digital pour les entreprises." },
+  { year: "2024", title: "Vente de téléphones", desc: "Devenir revendeur agréé Blackview, Oukitel et Doogee — smartphones robustes adaptés au marché africain." },
 ]
 
 export default function AboutPage() {
@@ -67,8 +67,8 @@ export default function AboutPage() {
                   }}
                 >
                   Fondée à Lomé en 2019, @TOGO accompagne entreprises et particuliers
-                  vers l&apos;avenir numérique avec des solutions Fintech, IT, Cybersécurité
-                  et Marketing Digital.
+                  avec des services de transferts d&apos;argent, solutions IT, cybersécurité,
+                  marketing digital et vente de téléphones.
                 </motion.p>
                 <motion.div
                   initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
@@ -77,8 +77,8 @@ export default function AboutPage() {
                 >
                   {[
                     { val: "5 ans", label: "d'expérience" },
-                    { val: "8",    label: "pays couverts" },
-                    { val: "50k+", label: "clients actifs" },
+                    { val: "6",    label: "services proposés" },
+                    { val: "50k+", label: "clients satisfaits" },
                   ].map(({ val, label }) => (
                     <div key={label}>
                       <p style={{ fontSize: "1.6rem", fontWeight: 800, color: "var(--color-brand-primary)", margin: 0 }}>{val}</p>
@@ -117,8 +117,8 @@ export default function AboutPage() {
         <div style={{ background: "#f8fafc", padding: "80px 5%" }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "24px", maxWidth: "1100px", margin: "0 auto" }} className="mvv-grid">
             {[
-              { Icon: Target, color: "#1E9FE8", bg: "linear-gradient(135deg,#1A3A8F,#1E9FE8)", title: "Notre mission", text: "Rendre les services digitaux accessibles à tous en Afrique de l'Ouest, des transferts d'argent aux solutions IT avancées." },
-              { Icon: Eye,    color: "#0D7A4E", bg: "linear-gradient(135deg,#0D7A4E,#10B981)", title: "Notre vision",  text: "Devenir le leader panafricain des solutions Fintech et digitales, en construisant des ponts numériques entre les communautés." },
+              { Icon: Target, color: "#1E9FE8", bg: "linear-gradient(135deg,#1A3A8F,#1E9FE8)", title: "Notre mission", text: "Rendre les services digitaux et financiers accessibles à tous au Togo — transferts d'argent, IT, cybersécurité, marketing et téléphones." },
+              { Icon: Eye,    color: "#0D7A4E", bg: "linear-gradient(135deg,#0D7A4E,#10B981)", title: "Notre vision",  text: "Devenir la référence des services numériques et financiers en Afrique de l'Ouest, en plaçant le client au centre de chaque solution." },
               { Icon: Heart,  color: "#7C3AED", bg: "linear-gradient(135deg,#7C3AED,#A78BFA)", title: "Nos valeurs",  text: "Innovation, confiance, proximité et impact social. Chaque décision est guidée par notre engagement envers l'Afrique." },
             ].map(({ Icon, bg, title, text }) => (
               <motion.div key={title}
