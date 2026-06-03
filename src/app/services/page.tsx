@@ -273,33 +273,55 @@ export default function ServicesPage() {
           </AnimatePresence>
         </div>
 
-        {/* ── Marques téléphones ────────────────────────────────────────── */}
-        <div style={{ background:"#fff", padding:"72px 5%" }}>
-          <div style={{ textAlign:"center", marginBottom:"48px" }}>
-            <h2 style={{ fontSize:"clamp(1.6rem,3vw,2.2rem)", fontWeight:700, color:"var(--color-text-heading)", margin:"0 0 12px" }}>
+        {/* ── Marques téléphones — bandeau défilant ────────────────────── */}
+        <div style={{ background:"#0F1E4A", padding:"56px 0", overflow:"hidden", position:"relative" }}>
+          {/* Dégradés sur les bords pour l'effet fade */}
+          <div style={{ position:"absolute", left:0, top:0, bottom:0, width:"120px", background:"linear-gradient(to right,#0F1E4A,transparent)", zIndex:2, pointerEvents:"none" }} />
+          <div style={{ position:"absolute", right:0, top:0, bottom:0, width:"120px", background:"linear-gradient(to left,#0F1E4A,transparent)", zIndex:2, pointerEvents:"none" }} />
+
+          {/* En-tête */}
+          <div style={{ textAlign:"center", marginBottom:"36px", position:"relative", zIndex:3 }}>
+            <span style={{ display:"inline-block", fontSize:"11px", fontWeight:700, letterSpacing:"0.14em", textTransform:"uppercase", padding:"6px 16px", borderRadius:"999px", background:"rgba(30,159,232,0.15)", color:"#60C8FF", border:"1px solid rgba(30,159,232,0.25)", marginBottom:"14px" }}>
+              Revendeur agréé
+            </span>
+            <h2 style={{ fontSize:"clamp(1.4rem,2.5vw,1.9rem)", fontWeight:700, color:"#fff", margin:0 }}>
               Nos marques de téléphones
             </h2>
-            <p style={{ fontSize:"1rem", color:"var(--color-text-body)", margin:0 }}>
-              Revendeur agréé — smartphones robustes adaptés à l&apos;Afrique
+            <p style={{ fontSize:"0.88rem", color:"rgba(255,255,255,0.5)", margin:"8px 0 0" }}>
+              Smartphones robustes, grandes batteries, adaptés aux conditions africaines
             </p>
           </div>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"24px", maxWidth:"800px", margin:"0 auto" }} className="phones-grid">
-            {PHONE_BRANDS.map((b, i) => (
-              <motion.div key={b.name}
-                initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }}
-                viewport={{ once:true }} transition={{ duration:0.4, delay:i*0.1 }}
-                whileHover={{ y:-4, boxShadow:"0 16px 48px rgba(0,0,0,0.1)" }}
-                style={{ background:"#f8fafc", borderRadius:"20px", padding:"40px 24px", textAlign:"center", border:"1.5px solid #E2E8F0", transition:"box-shadow 0.2s" }}
-              >
-                <div style={{ height:"60px", display:"flex", alignItems:"center", justifyContent:"center", marginBottom:"20px" }}>
-                  <Image src={b.logo} alt={b.name} width={160} height={60} unoptimized
-                    style={{ maxHeight:"50px", width:"auto", objectFit:"contain" }}
-                  />
+
+          {/* Bandeau défilant */}
+          <div style={{ overflow:"hidden" }}>
+            <motion.div
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+              style={{ display:"flex", gap:"24px", width:"max-content" }}
+            >
+              {/* On duplique 2× pour le loop infini */}
+              {[...PHONE_BRANDS, ...PHONE_BRANDS, ...PHONE_BRANDS, ...PHONE_BRANDS].map((b, i) => (
+                <div key={`${b.name}-${i}`} style={{
+                  background:"rgba(255,255,255,0.06)",
+                  border:"1px solid rgba(255,255,255,0.1)",
+                  borderRadius:"16px",
+                  padding:"20px 32px",
+                  display:"flex", flexDirection:"column", alignItems:"center", gap:"14px",
+                  flexShrink:0, minWidth:"200px",
+                  transition:"background 0.2s",
+                }}>
+                  <div style={{ background:"#fff", borderRadius:"10px", padding:"12px 20px", display:"flex", alignItems:"center", justifyContent:"center", width:"140px", height:"52px" }}>
+                    <Image src={b.logo} alt={b.name} width={120} height={44} unoptimized
+                      style={{ maxHeight:"36px", width:"auto", objectFit:"contain" }}
+                    />
+                  </div>
+                  <div style={{ textAlign:"center" }}>
+                    <p style={{ fontSize:"0.82rem", fontWeight:700, color:"#fff", margin:"0 0 2px" }}>{b.name}</p>
+                    <p style={{ fontSize:"0.72rem", color:"rgba(255,255,255,0.45)", margin:0 }}>{b.desc}</p>
+                  </div>
                 </div>
-                <p style={{ fontSize:"0.9rem", fontWeight:700, color:"var(--color-text-heading)", margin:"0 0 6px" }}>{b.name}</p>
-                <p style={{ fontSize:"0.8rem", color:"var(--color-text-muted)", margin:0 }}>{b.desc}</p>
-              </motion.div>
-            ))}
+              ))}
+            </motion.div>
           </div>
         </div>
 
