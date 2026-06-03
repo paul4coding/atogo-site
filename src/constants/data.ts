@@ -102,7 +102,7 @@ export const TRANSFER_INTERNATIONAL = [
 export const PHONE_BRANDS = [
   { name: "Blackview", logo: "/images/blackview.png",  desc: "Smartphones robustes" },
   { name: "Oukitel",   logo: "/images/oukitel2.jpg",   desc: "Grande batterie"      },
-  { name: "Doogee",    logo: "/images/doogee.jpg",     desc: "Résistants & abordables" },
+  { name: "Doogee",    logo: "/images/doogee2.png",    desc: "Résistants & abordables" },
 ]
 
 export const TRANSFER_STEPS = [
