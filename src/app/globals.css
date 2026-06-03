@@ -165,17 +165,16 @@ main {
   }
 }
 
-/* Services — 3 colonnes → 2 → 1 colonne */
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
+/* Services — layout principal */
+.services-main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.services-sub-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
 @media (max-width: 900px) {
-  .services-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+  .services-main-grid { grid-template-columns: 1fr !important; }
+  .services-sub-grid  { grid-template-columns: 1fr 1fr !important; }
 }
-@media (max-width: 640px) {
-  .services-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+@media (max-width: 500px) {
+  .services-sub-grid { grid-template-columns: 1fr !important; }
 }
 
 /* DanayaCash — 2 colonnes → 1 colonne */
