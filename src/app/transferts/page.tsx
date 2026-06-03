@@ -110,9 +110,9 @@ export default function TransfertsPage() {
                 style={{ display:"flex", gap:"12px", justifyContent:"center", flexWrap:"wrap", marginBottom:"48px" }}
               >
                 {[...NATIONAL_DETAIL, ...INTERNATIONAL_DETAIL].map(p => (
-                  <div key={p.name} style={{ background:"rgba(255,255,255,0.1)", backdropFilter:"blur(8px)", border:"1px solid rgba(255,255,255,0.15)", borderRadius:"12px", padding:"10px 16px", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                  <div key={p.name} style={{ background:"#fff", borderRadius:"12px", padding:"10px 18px", display:"flex", alignItems:"center", justifyContent:"center", boxShadow:"0 2px 12px rgba(0,0,0,0.15)" }}>
                     <Image src={p.logo} alt={p.name} width={80} height={32} unoptimized
-                      style={{ height:"26px", width:"auto", objectFit:"contain", filter:"brightness(0) invert(1)" }}
+                      style={{ height:"28px", width:"auto", objectFit:"contain" }}
                     />
                   </div>
                 ))}
