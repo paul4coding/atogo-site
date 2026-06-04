@@ -80,16 +80,29 @@ export default function HeroSection() {
         position: "relative",
         minHeight: "100vh",
         paddingTop: "68px",
-        background: "linear-gradient(135deg, #f0f7ff 0%, #ffffff 45%, #f8faff 100%)",
+        background: "linear-gradient(150deg, #EBF5FF 0%, #ffffff 40%, #F8FAFF 100%)",
       }}
     >
       <ParticlesBg />
 
+      {/* Grille décorative subtile */}
+      <div style={{
+        position: "absolute", inset: 0,
+        backgroundImage: "linear-gradient(rgba(30,159,232,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(30,159,232,0.04) 1px,transparent 1px)",
+        backgroundSize: "60px 60px", pointerEvents: "none",
+      }} />
+
       {/* Blob décoratif haut-droite */}
       <div style={{
         position: "absolute", top: "-120px", right: "-120px",
-        width: "500px", height: "500px", borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(30,159,232,0.08) 0%, transparent 70%)",
+        width: "560px", height: "560px", borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(30,159,232,0.1) 0%, transparent 65%)",
+        pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute", bottom: "10%", left: "-80px",
+        width: "360px", height: "360px", borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(26,58,143,0.05) 0%, transparent 70%)",
         pointerEvents: "none",
       }} />
 
@@ -103,15 +116,17 @@ export default function HeroSection() {
           <motion.span
             custom={0} variants={fadeUp} initial="hidden" animate="visible"
             style={{
-              display: "inline-block", alignSelf: "flex-start",
-              fontSize: "12px", fontWeight: 700,
+              display: "inline-flex", alignItems: "center", gap: "6px", alignSelf: "flex-start",
+              fontSize: "11px", fontWeight: 700,
               letterSpacing: "0.14em", textTransform: "uppercase",
               padding: "8px 18px", borderRadius: "999px",
               background: "var(--color-brand-light)",
               color: "var(--color-brand-dark)",
+              border: "1px solid rgba(26,58,143,0.14)",
             }}
           >
-            Transferts · IT · Digital · Cybersécurité
+            <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#1E9FE8", display: "inline-block", animation: "pulse 2s infinite" }} />
+            Lomé, Togo · Depuis 2019
           </motion.span>
 
           {/* Titre H1 — clip-reveal mot par mot */}
@@ -121,67 +136,66 @@ export default function HeroSection() {
           <motion.p
             custom={2} variants={fadeUp} initial="hidden" animate="visible"
             style={{
-              fontSize: "1.2rem", lineHeight: 1.8, maxWidth: "500px",
+              fontSize: "1.15rem", lineHeight: 1.82, maxWidth: "480px",
               color: "var(--color-text-body)", margin: 0,
             }}
           >
             Transferts d&apos;argent, solutions IT, cybersécurité, marketing digital
-            et vente de téléphones — tout pour les entreprises et particuliers au Togo.
+            et vente de téléphones — pour les entreprises et particuliers au Togo.
           </motion.p>
 
           {/* CTAs */}
           <motion.div
             custom={3} variants={fadeUp} initial="hidden" animate="visible"
-            style={{ display: "flex", flexWrap: "wrap", gap: "14px", paddingTop: "8px", alignItems: "center" }}
+            style={{ display: "flex", flexWrap: "wrap", gap: "12px", paddingTop: "8px", alignItems: "center" }}
           >
+            <Link
+              href="/services"
+              style={{
+                padding: "15px 34px", borderRadius: "10px",
+                background: "linear-gradient(135deg, #1A3A8F, #1E9FE8)",
+                color: "#fff", fontWeight: 700, fontSize: "1rem",
+                textDecoration: "none", boxShadow: "0 4px 20px rgba(30,159,232,0.35)",
+                transition: "transform 0.2s, box-shadow 0.2s",
+                display: "inline-flex", alignItems: "center", gap: "8px",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 8px 32px rgba(30,159,232,0.45)" }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(30,159,232,0.35)" }}
+            >
+              Nos services
+            </Link>
             <Link
               href="/transferts"
               style={{
                 padding: "15px 32px", borderRadius: "10px",
-                background: "linear-gradient(135deg, #0D7A4E 0%, #10B981 100%)",
-                color: "#fff", fontWeight: 600, fontSize: "1rem",
-                textDecoration: "none", boxShadow: "0 4px 20px rgba(13,122,78,0.3)",
-                transition: "transform 0.2s, box-shadow 0.2s",
-                display: "inline-flex", alignItems: "center",
+                border: "1.5px solid #CBD5E1",
+                color: "var(--color-brand-dark)", fontWeight: 600, fontSize: "1rem",
+                textDecoration: "none", background: "#fff",
+                transition: "border-color 0.2s, box-shadow 0.2s",
+                display: "inline-flex", alignItems: "center", gap: "8px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
               }}
-              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 8px 28px rgba(13,122,78,0.4)" }}
-              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(0)"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(13,122,78,0.3)" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "#1E9FE8"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 16px rgba(30,159,232,0.15)" }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.borderColor = "#CBD5E1"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 2px 8px rgba(0,0,0,0.06)" }}
             >
-              Nos transferts
-            </Link>
-            <Link
-              href="/services"
-              style={{
-                padding: "15px 32px", borderRadius: "10px",
-                border: "2px solid var(--color-brand-primary)",
-                color: "var(--color-brand-primary)", fontWeight: 600, fontSize: "1rem",
-                textDecoration: "none", background: "transparent",
-                transition: "background 0.2s, color 0.2s",
-                display: "inline-flex", alignItems: "center",
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = "var(--color-brand-light)" }}
-              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = "transparent" }}
-            >
-              Nos services
+              Transferts d&apos;argent
             </Link>
           </motion.div>
 
-          {/* Badges de confiance */}
+          {/* Stats — 4 métriques clés */}
           <motion.div
             custom={4} variants={fadeUp} initial="hidden" animate="visible"
-            style={{ display: "flex", gap: "20px", paddingTop: "4px", flexWrap: "wrap" }}
+            style={{ display: "flex", gap: "0", paddingTop: "8px", flexWrap: "wrap", border: "1px solid #E2E8F0", borderRadius: "14px", background: "#fff", overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", alignSelf: "flex-start" }}
           >
             {[
-              { val: "6",    label: "services" },
-              { val: "3",    label: "marques téléphones" },
-              { val: "5 ans", label: "d'expérience" },
-            ].map(({ val, label }) => (
-              <div key={label} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                <span style={{
-                  fontSize: "1.15rem", fontWeight: 700,
-                  color: "var(--color-brand-primary)",
-                }}>{val}</span>
-                <span style={{ fontSize: "0.85rem", color: "var(--color-text-muted)" }}>{label}</span>
+              { val: "50 000+", label: "Clients" },
+              { val: "200+",    label: "Pays couverts" },
+              { val: "5 ans",   label: "Expérience" },
+              { val: "6",       label: "Services" },
+            ].map(({ val, label }, i) => (
+              <div key={label} style={{ padding: "16px 22px", borderRight: i < 3 ? "1px solid #E2E8F0" : "none", textAlign: "center", minWidth: "90px" }}>
+                <p style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--color-brand-dark)", margin: "0 0 2px", letterSpacing: "-0.02em" }}>{val}</p>
+                <p style={{ fontSize: "0.7rem", color: "var(--color-text-muted)", margin: 0, fontWeight: 500 }}>{label}</p>
               </div>
             ))}
           </motion.div>
@@ -215,7 +229,7 @@ export default function HeroSection() {
       {/* Vague de séparation */}
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, lineHeight: 0 }}>
         <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" style={{ display: "block", width: "100%" }}>
-          <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#f8fafc" />
+          <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#ffffff" />
         </svg>
       </div>
     </section>

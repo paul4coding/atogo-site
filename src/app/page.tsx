@@ -2,7 +2,8 @@ import HeroSection from "@/components/sections/HeroSection"
 import PartnersSection from "@/components/sections/PartnersSection"
 import ServicesSection from "@/components/sections/ServicesSection"
 import TransfersSection from "@/components/sections/TransfersSection"
-import ContactSection from "@/components/sections/ContactSection"
+import TestimonialsSection from "@/components/sections/TestimonialsSection"
+import LatestNewsSection from "@/components/sections/LatestNewsSection"
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
 
@@ -15,8 +16,8 @@ export default function HomePage() {
         <PartnersSection />
         <ServicesSection />
         <TransfersSection />
-        {/* TODO: CyberSecSection */}
-        <ContactSection />
+        <TestimonialsSection />
+        <LatestNewsSection />
       </main>
       <Footer />
     </>

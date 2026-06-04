@@ -16,13 +16,15 @@ export default function TransfersSection() {
   return (
     <section style={{
       position: "relative",
-      background: "linear-gradient(160deg, #0F1E4A 0%, #1A3A8F 50%, #0F1E4A 100%)",
+      background: "linear-gradient(160deg, #000000 0%, #030612 30%, #050B20 60%, #080F2A 100%)",
       padding: "100px 0 0",
       overflow: "hidden",
     }}>
+      {/* Grille */}
+      <div style={{ position:"absolute", inset:0, backgroundImage:"linear-gradient(rgba(255,255,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.018) 1px,transparent 1px)", backgroundSize:"80px 80px", pointerEvents:"none" }} />
       {/* Décors */}
-      <div style={{ position:"absolute", top:"-80px", right:"-80px", width:"400px", height:"400px", borderRadius:"50%", background:"radial-gradient(circle,rgba(30,159,232,0.1) 0%,transparent 70%)", pointerEvents:"none" }} />
-      <div style={{ position:"absolute", bottom:"80px", left:"-60px", width:"300px", height:"300px", borderRadius:"50%", background:"radial-gradient(circle,rgba(251,191,36,0.06) 0%,transparent 70%)", pointerEvents:"none" }} />
+      <div style={{ position:"absolute", top:"-80px", right:"-80px", width:"500px", height:"500px", borderRadius:"50%", background:"radial-gradient(circle,rgba(251,191,36,0.07) 0%,transparent 65%)", animation:"float 9s ease-in-out infinite", pointerEvents:"none" }} />
+      <div style={{ position:"absolute", bottom:"80px", left:"-60px", width:"380px", height:"380px", borderRadius:"50%", background:"radial-gradient(circle,rgba(30,159,232,0.08) 0%,transparent 65%)", animation:"float 11s ease-in-out infinite reverse", pointerEvents:"none" }} />
 
       <div style={{ padding: "0 5%", position: "relative", zIndex: 1 }}>
 
@@ -65,7 +67,7 @@ export default function TransfersSection() {
           <motion.div
             initial={{ opacity:0, x:-24 }} whileInView={{ opacity:1, x:0 }}
             viewport={{ once:true }} transition={{ duration:0.55 }}
-            style={{ background:"rgba(255,255,255,0.05)", border:"1px solid rgba(30,159,232,0.2)", borderRadius:"20px", padding:"36px 32px" }}
+            style={{ background:"rgba(255,255,255,0.04)", border:"1px solid rgba(30,159,232,0.22)", borderRadius:"20px", padding:"36px 32px", backdropFilter:"blur(8px)" }}
           >
             <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"24px" }}>
               <div style={{ width:"44px", height:"44px", borderRadius:"12px", background:"rgba(30,159,232,0.15)", display:"flex", alignItems:"center", justifyContent:"center" }}>
@@ -104,7 +106,7 @@ export default function TransfersSection() {
           <motion.div
             initial={{ opacity:0, x:24 }} whileInView={{ opacity:1, x:0 }}
             viewport={{ once:true }} transition={{ duration:0.55, delay:0.1 }}
-            style={{ background:"rgba(255,255,255,0.05)", border:"1px solid rgba(251,191,36,0.25)", borderRadius:"20px", padding:"36px 32px" }}
+            style={{ background:"rgba(255,255,255,0.04)", border:"1px solid rgba(251,191,36,0.28)", borderRadius:"20px", padding:"36px 32px", backdropFilter:"blur(8px)" }}
           >
             <div style={{ display:"flex", alignItems:"center", gap:"12px", marginBottom:"24px" }}>
               <div style={{ width:"44px", height:"44px", borderRadius:"12px", background:"rgba(251,191,36,0.12)", display:"flex", alignItems:"center", justifyContent:"center" }}>
@@ -183,12 +185,12 @@ export default function TransfersSection() {
           </div>
           <Link href="/transferts" style={{
             display:"inline-flex", alignItems:"center", gap:"10px",
-            background:"linear-gradient(135deg,#1E9FE8,#1A3A8F)",
-            color:"#fff", fontWeight:700, fontSize:"0.95rem",
-            padding:"14px 28px", borderRadius:"12px", textDecoration:"none",
-            boxShadow:"0 8px 24px rgba(30,159,232,0.35)",
+            background:"linear-gradient(135deg,#FBBF24,#F59E0B)",
+            color:"#0A0A0A", fontWeight:800, fontSize:"0.95rem",
+            padding:"14px 32px", borderRadius:"12px", textDecoration:"none",
+            boxShadow:"0 8px 32px rgba(251,191,36,0.35), 0 0 0 1px rgba(251,191,36,0.2)",
           }}>
-            En savoir plus <ArrowUpRight size={16} />
+            Voir tous les transferts <ArrowUpRight size={16} />
           </Link>
         </div>
       </div>

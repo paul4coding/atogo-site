@@ -21,6 +21,10 @@ export default function PartnersSection() {
   return (
     <section style={{ background: "#fff", padding: "56px 0", overflow: "hidden", borderTop: "1px solid #F1F5F9", borderBottom: "1px solid #F1F5F9" }}>
 
+      {/* Keyframe injecté (impossible en inline) — le reste du style est inline pour fiabilité totale */}
+      <style>{`@keyframes partnersScroll{from{transform:translate3d(0,0,0)}to{transform:translate3d(-33.3333%,0,0)}}`}</style>
+
+
       {/* Label centré */}
       <motion.p
         initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
@@ -36,11 +40,14 @@ export default function PartnersSection() {
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "140px", background: "linear-gradient(to right, #fff, transparent)", zIndex: 2, pointerEvents: "none" }} />
         <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "140px", background: "linear-gradient(to left, #fff, transparent)", zIndex: 2, pointerEvents: "none" }} />
 
-        <motion.div
-          animate={{ x: ["0%", "-33.33%"] }}
-          transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-          style={{ display: "flex", gap: "24px", width: "max-content", alignItems: "center" }}
-        >
+        <div style={{
+          display: "flex",
+          gap: "24px",
+          width: "max-content",
+          alignItems: "center",
+          willChange: "transform",
+          animation: "partnersScroll 28s linear infinite",
+        }}>
           {TRACK.map((p, i) => (
             <div key={`${p.name}-${i}`} style={{
               background: "#F8FAFC",
@@ -67,7 +74,7 @@ export default function PartnersSection() {
               />
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

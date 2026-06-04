@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uipro init *)",
+      "Bash(python3 .claude/skills/ui-ux-pro-max/scripts/search.py \"fintech IT services contact page Africa\" --design-system -p \"@TOGO Contact\")",
+      "Bash(python3 .claude/skills/ui-ux-pro-max/scripts/search.py \"contact form professional trust\" --domain ux)",
+      "Bash(ls -la \"C:\\\\Users\\\\tcheo\\\\OneDrive - IPNET INSTITUTE OF TECHNOLOGY\\\\Bureau\\\\AROBASE_PROJECT\\\\image\" 2>&1 | head -60)",
+      "Read(//c/Users/tcheo/OneDrive - IPNET INSTITUTE OF TECHNOLOGY/Bureau/AROBASE_PROJECT/**)"
+    ]
+  }
+}

@@ -98,7 +98,7 @@ export default function ServicesSection() {
 
                 <div style={{ padding:"40px 36px", position:"relative", zIndex:2, flex:1, display:"flex", flexDirection:"column" }}>
                   {s.badge && (
-                    <span style={{ alignSelf:"flex-start", fontSize:"10px", fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", padding:"5px 12px", borderRadius:"999px", background: isActive ? "rgba(255,255,255,0.2)" : s.lightBg, color: isActive ? "#fff" : s.accent, marginBottom:"24px", transition:"all 0.3s" }}>⭐ {s.badge}</span>
+                    <span style={{ alignSelf:"flex-start", fontSize:"10px", fontWeight:700, letterSpacing:"0.1em", textTransform:"uppercase", padding:"5px 12px", borderRadius:"999px", background: isActive ? "rgba(255,255,255,0.2)" : s.lightBg, color: isActive ? "#fff" : s.accent, marginBottom:"24px", transition:"all 0.3s" }}>{s.badge}</span>
                   )}
                   <div style={{ width:"56px", height:"56px", borderRadius:"14px", background: isActive ? "rgba(255,255,255,0.2)" : s.iconBg, display:"flex", alignItems:"center", justifyContent:"center", marginBottom:"20px", boxShadow:`0 8px 24px ${s.accent}40`, transition:"background 0.3s" }}>
                     <Icon size={26} color="#fff" />

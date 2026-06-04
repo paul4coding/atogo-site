@@ -205,9 +205,9 @@ export default function Footer() {
           </p>
           <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             {[
-              { Icon: MapPin, text: "Lomé, Togo — Quartier Administratif" },
-              { Icon: Mail,   text: "contact@atogo.tg" },
-              { Icon: Phone,  text: "+228 XX XX XX XX" },
+              { Icon: MapPin, text: "Ago BKS1, Imm. D&D, Bvd Faure GNASSINGBE — Lomé, Togo" },
+              { Icon: Mail,   text: "contact@arobase.tg" },
+              { Icon: Phone,  text: "+228 93 17 01 01" },
             ].map(({ Icon, text }) => (
               <div key={text} style={{ display: "flex", alignItems: "flex-start", gap: "10px" }}>
                 <Icon size={15} style={{ color: "#1E9FE8", flexShrink: 0, marginTop: "2px" }} />

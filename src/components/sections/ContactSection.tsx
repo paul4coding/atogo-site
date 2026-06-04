@@ -26,9 +26,9 @@ const inputStyle: React.CSSProperties = {
 }
 
 const INFOS = [
-  { Icon: MapPin, title: "Adresse",    value: "Lomé, Togo — Quartier Administratif" },
-  { Icon: Mail,   title: "Email",      value: "contact@atogo.tg"                    },
-  { Icon: Phone,  title: "Téléphone",  value: "+228 XX XX XX XX"                    },
+  { Icon: MapPin, title: "Adresse",    value: "Ago BKS1, Imm. D&D, Bvd Faure GNASSINGBE — Lomé, Togo" },
+  { Icon: Mail,   title: "Email",      value: "contact@arobase.tg"                                     },
+  { Icon: Phone,  title: "Téléphone",  value: "+228 93 17 01 01"                                        },
 ]
 
 export default function ContactSection() {
