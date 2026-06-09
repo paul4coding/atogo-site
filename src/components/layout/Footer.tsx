@@ -7,7 +7,7 @@ import { NAV_ITEMS } from "@/constants/data"
 import { Mail, MapPin, Phone, ArrowUpRight, Zap, Shield, Globe } from "lucide-react"
 
 const SERVICES = [
-  { label: "Fintech & DanayaCash", href: "/danayacash" },
+  { label: "Transferts d'argent", href: "/transferts" },
   { label: "Solutions Informatiques", href: "/services" },
   { label: "Marketing Digital", href: "/services" },
   { label: "Cybersécurité", href: "/services" },
@@ -216,19 +216,19 @@ export default function Footer() {
             ))}
           </div>
 
-          {/* Badge DanayaCash */}
+          {/* Badge transferts */}
           <div style={{
             marginTop: "24px",
             padding: "14px 16px",
             borderRadius: "10px",
-            background: "rgba(13,122,78,0.18)",
-            border: "1px solid rgba(16,185,129,0.25)",
+            background: "rgba(30,159,232,0.15)",
+            border: "1px solid rgba(30,159,232,0.25)",
           }}>
-            <p style={{ fontSize: "0.78rem", fontWeight: 700, color: "#10B981", margin: "0 0 4px", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-              DanayaCash
+            <p style={{ fontSize: "0.78rem", fontWeight: 700, color: "#60C8FF", margin: "0 0 4px", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              Transferts d&apos;argent
             </p>
             <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.6)", margin: 0, lineHeight: 1.5 }}>
-              Transfert mobile rapide · 8 pays · 2M+ transactions/mois
+              Western Union · MoneyGram · RIA · Flooz · MixBy Yas
             </p>
           </div>
         </div>

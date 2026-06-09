@@ -7,7 +7,6 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Actualités", href: "/actualites" },
   { label: "Carrière",   href: "/carriere"   },
   { label: "À propos",   href: "/about"      },
-  { label: "Contact",    href: "/contact"    },
 ]
 
 export const STATS: Stat[] = [

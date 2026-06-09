@@ -5,7 +5,28 @@
       "Bash(python3 .claude/skills/ui-ux-pro-max/scripts/search.py \"fintech IT services contact page Africa\" --design-system -p \"@TOGO Contact\")",
       "Bash(python3 .claude/skills/ui-ux-pro-max/scripts/search.py \"contact form professional trust\" --domain ux)",
       "Bash(ls -la \"C:\\\\Users\\\\tcheo\\\\OneDrive - IPNET INSTITUTE OF TECHNOLOGY\\\\Bureau\\\\AROBASE_PROJECT\\\\image\" 2>&1 | head -60)",
-      "Read(//c/Users/tcheo/OneDrive - IPNET INSTITUTE OF TECHNOLOGY/Bureau/AROBASE_PROJECT/**)"
+      "Read(//c/Users/tcheo/OneDrive - IPNET INSTITUTE OF TECHNOLOGY/Bureau/AROBASE_PROJECT/**)",
+      "Bash(node -e \"try{require\\('sharp'\\);console.log\\('sharp OK'\\)}catch\\(e\\){console.log\\('no sharp'\\)}\")",
+      "Bash(node -e \"const fs=require\\('fs'\\);const b=fs.readFileSync\\('public/images/logo.png'\\);const w=b.readUInt32BE\\(16\\);const h=b.readUInt32BE\\(20\\);console.log\\('width:',w,'height:',h\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('packageManager:', p.packageManager||'none'\\); console.log\\('scripts:', JSON.stringify\\(p.scripts,null,2\\)\\); console.log\\('next:', p.dependencies.next\\)\")",
+      "Bash(pnpm --version)",
+      "Bash(docker --version)",
+      "Bash(docker compose *)",
+      "Bash(docker info *)",
+      "Bash(DOCKER_BUILDKIT=1 docker compose build --progress=plain)",
+      "Bash(awk '/Creating an optimized/,/failed to solve/')",
+      "Bash(pnpm build *)",
+      "Bash(grep -vE \"^\\\\s*$\")",
+      "Bash(grep -vE \"^\\\\s*$|WARN.*GET|retry\")",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('ssr:', p.dependencies['@supabase/ssr']||'ABSENT'\\); console.log\\('supabase-js:', p.dependencies['@supabase/supabase-js']||'ABSENT'\\)\")",
+      "Bash(node -e \"const p=require\\('./package.json'\\); process.exit\\(p.dependencies['@supabase/ssr']?0:1\\)\")",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('ssr:', p.dependencies['@supabase/ssr']\\); console.log\\('supabase-js:', p.dependencies['@supabase/supabase-js']\\)\")",
+      "Bash(pnpm install *)",
+      "Bash(docker rm *)",
+      "Bash(docker run *)",
+      "Bash(curl -s -o /dev/null http://localhost:3001/)",
+      "Bash(git check-ignore *)"
     ]
   }
 }

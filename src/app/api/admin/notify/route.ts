@@ -1,12 +1,20 @@
 import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 type Status = "pending" | "reviewed" | "accepted" | "rejected"
 
+// Échappe les caractères HTML pour éviter toute injection dans l'email
+function esc(s: string): string {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
+}
+
 function emailContent(status: Status, name: string, jobTitle: string | null) {
-  const poste = jobTitle ? `<strong>${jobTitle}</strong>` : "votre candidature spontanée"
+  const poste = jobTitle ? `<strong>${esc(jobTitle)}</strong>` : "votre candidature spontanée"
   const date = new Date().toLocaleDateString("fr-FR", { weekday:"long", day:"numeric", month:"long", year:"numeric" })
 
   const configs: Record<Status, { subject: string; badge: string; badgeBg: string; heading: string; body: string }> = {
@@ -69,7 +77,7 @@ function emailContent(status: Status, name: string, jobTitle: string | null) {
         <tr><td style="background:#fff;padding:24px 40px 32px;">
           <p style="font-size:14px;color:#94A3B8;margin:0 0 20px;">Le ${date}</p>
           <h1 style="font-size:22px;font-weight:800;color:#1A3A8F;margin:0 0 16px;line-height:1.25;">${c.heading}</h1>
-          <p style="font-size:15px;color:#475569;line-height:1.8;margin:0 0 20px;">Bonjour <strong>${name}</strong>,</p>
+          <p style="font-size:15px;color:#475569;line-height:1.8;margin:0 0 20px;">Bonjour <strong>${esc(name)}</strong>,</p>
           <p style="font-size:15px;color:#475569;line-height:1.8;margin:0 0 28px;">${c.body}</p>
 
           <div style="background:#F8FAFC;border-left:4px solid #1E9FE8;border-radius:0 8px 8px 0;padding:16px 20px;margin-bottom:28px;">
@@ -96,14 +104,26 @@ function emailContent(status: Status, name: string, jobTitle: string | null) {
   }
 }
 
+const VALID_STATUS: Status[] = ["pending", "reviewed", "accepted", "rejected"]
+
 export async function POST(req: NextRequest) {
   const { name, email, status, jobTitle } = await req.json()
 
+  // Validation stricte des entrées
   if (!name || !email || !status) {
     return NextResponse.json({ error: "Paramètres manquants" }, { status: 400 })
   }
+  if (!VALID_STATUS.includes(status)) {
+    return NextResponse.json({ error: "Statut invalide" }, { status: 400 })
+  }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(email))) {
+    return NextResponse.json({ error: "Email invalide" }, { status: 400 })
+  }
 
   const { subject, html } = emailContent(status as Status, name, jobTitle ?? null)
+
+  // Instancié au runtime (la clé n'est pas dispo au build)
+  const resend = new Resend(process.env.RESEND_API_KEY)
 
   const { error } = await resend.emails.send({
     from: "Carrière @TOGO <onboarding@resend.dev>",

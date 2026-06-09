@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 export async function POST(req: NextRequest) {
+  // Instancié au runtime (la clé n'est pas dispo au build)
+  const resend = new Resend(process.env.RESEND_API_KEY)
+
   const { type, offerTitle, offerRef, name, company, email, phone, message } = await req.json()
 
   const isAO = type === "appel-offre"

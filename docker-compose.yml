@@ -1,0 +1,31 @@
+# =============================================================================
+#  @TOGO — Docker Compose
+#  Lancer :   docker compose up -d --build
+#  Arrêter :  docker compose down
+#  Les variables sont lues depuis le fichier .env (voir .env.example)
+# =============================================================================
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Variables publiques nécessaires AU BUILD (préfixe NEXT_PUBLIC_)
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+    image: atogo-site:latest
+    container_name: atogo-site
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # Variables serveur (runtime) — secrets jamais exposés au client
+      NODE_ENV: production
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      # Re-déclarées au runtime (utilisées aussi côté serveur)
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}

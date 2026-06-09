@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { openPrivateFile } from "@/lib/supabase/signed-url"
 import type { TenderResponse } from "@/types/database"
 import { Loader2, FileDown, ChevronDown, ChevronUp } from "lucide-react"
 
@@ -42,9 +43,9 @@ export default function AdminReponsesAO() {
                   </div>
                   <div style={{ display:"flex", gap:"8px", alignItems:"center" }}>
                     {item.document_url && (
-                      <a href={item.document_url} target="_blank" rel="noopener noreferrer" style={{ padding:"6px 12px", borderRadius:"7px", background:"#F8FAFC", border:"1px solid #E2E8F0", color:"#64748B", fontSize:"0.78rem", fontWeight:600, textDecoration:"none", display:"flex", alignItems:"center", gap:"5px" }}>
+                      <button onClick={e => { e.stopPropagation(); openPrivateFile(item.document_url) }} style={{ padding:"6px 12px", borderRadius:"7px", background:"#F8FAFC", border:"1px solid #E2E8F0", color:"#64748B", fontSize:"0.78rem", fontWeight:600, cursor:"pointer", display:"flex", alignItems:"center", gap:"5px", fontFamily:"inherit" }}>
                         <FileDown size={13}/> Proforma
-                      </a>
+                      </button>
                     )}
                     {open===item.id ? <ChevronUp size={16} color="#94A3B8"/> : <ChevronDown size={16} color="#94A3B8"/>}
                   </div>

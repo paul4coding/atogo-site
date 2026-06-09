@@ -51,7 +51,7 @@ export default function ServicesSection() {
   const [active, setActive] = useState<string | null>(null)
 
   return (
-    <section style={{ background: "#f8fafc", padding: "100px 0" }}>
+    <section style={{ background: "var(--surface-alt)", padding: "100px 0" }}>
       <div style={{ padding: "0 5%" }}>
 
         {/* En-tête */}
@@ -85,7 +85,7 @@ export default function ServicesSection() {
               <motion.div key={service.id}
                 initial={{ opacity:0, x:-24 }} whileInView={{ opacity:1, x:0 }} viewport={{ once:true }} transition={{ duration:0.6 }}
                 onMouseEnter={() => setActive(service.id)} onMouseLeave={() => setActive(null)}
-                style={{ position:"relative", borderRadius:"24px", overflow:"hidden", background:"#fff", cursor:"default", boxShadow:"0 4px 24px rgba(0,0,0,0.08)", display:"flex", flexDirection:"column", minHeight:"420px" }}
+                style={{ position:"relative", borderRadius:"24px", overflow:"hidden", background:"var(--surface)", cursor:"default", boxShadow:"0 4px 24px rgba(0,0,0,0.08)", display:"flex", flexDirection:"column", minHeight:"420px" }}
               >
                 <AnimatePresence>
                   {isActive && (
@@ -133,7 +133,7 @@ export default function ServicesSection() {
                 <motion.div key={service.id}
                   initial={{ opacity:0, y:24 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.5, delay:i*0.08 }}
                   onMouseEnter={() => setActive(service.id)} onMouseLeave={() => setActive(null)}
-                  style={{ position:"relative", borderRadius:"20px", overflow:"hidden", background:"#fff", cursor:"default", boxShadow:"0 2px 12px rgba(0,0,0,0.06)", padding:"28px 24px", display:"flex", flexDirection:"column" }}
+                  style={{ position:"relative", borderRadius:"20px", overflow:"hidden", background:"var(--surface)", cursor:"default", boxShadow:"0 2px 12px rgba(0,0,0,0.06)", padding:"28px 24px", display:"flex", flexDirection:"column" }}
                 >
                   <AnimatePresence>
                     {isActive && (

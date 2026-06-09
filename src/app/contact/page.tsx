@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import {
   MapPin, Mail, Phone, Send, CheckCircle, Clock,
   MessageSquare, ChevronDown, ChevronUp, Shield,
-  Users, Star, Globe, ArrowRight, Zap,
+  Users, Star, Building2, ArrowRight, Zap,
 } from "lucide-react"
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
@@ -193,10 +193,10 @@ export default function ContactPage() {
                 {/* Métriques de confiance */}
                 <div style={{ background:"#fff", padding:"22px 28px", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"16px", borderTop:"1px solid #E2E8F0" }}>
                   {[
-                    { Icon:Users, val:"50 000+", label:"Clients actifs",    color:"#1E9FE8" },
-                    { Icon:Globe, val:"8 pays",  label:"Présence Afrique",  color:"#10B981" },
-                    { Icon:Star,  val:"5 ans",   label:"D'expérience",      color:"#F59E0B" },
-                    { Icon:Zap,   val:"24h",     label:"Délai de réponse",  color:"#7C3AED" },
+                    { Icon:Users,     val:"50 000+", label:"Clients actifs",    color:"#1E9FE8" },
+                    { Icon:Building2, val:"OSEOR",   label:"Filiale du groupe", color:"#10B981" },
+                    { Icon:Star,      val:"5 ans",   label:"D'expérience",      color:"#F59E0B" },
+                    { Icon:Zap,       val:"24h",     label:"Délai de réponse",  color:"#7C3AED" },
                   ].map(({ Icon, val, label, color }) => (
                     <div key={label} style={{ display:"flex", alignItems:"center", gap:"10px", padding:"10px 12px", borderRadius:"12px", background:"#F8FAFC", border:"1px solid #F1F5F9" }}>
                       <div style={{ width:"32px", height:"32px", borderRadius:"8px", background:`${color}12`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
@@ -274,13 +274,13 @@ export default function ContactPage() {
                         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"14px" }} className="contact-form-row">
                           <InputField>
                             <FieldLabel required>Nom complet</FieldLabel>
-                            <input {...register("name")} placeholder="Jean Dupont" style={inputBase}
+                            <input {...register("name")} placeholder="paul kossi" style={inputBase}
                               onFocus={focusStyle} onBlur={blurStyle} />
                             {errors.name && <p style={{ fontSize:"0.72rem", color:"#EF4444", margin:0 }}>{errors.name.message}</p>}
                           </InputField>
                           <InputField>
                             <FieldLabel required>Email</FieldLabel>
-                            <input {...register("email")} type="email" placeholder="jean@exemple.com" style={inputBase}
+                            <input {...register("email")} type="email" placeholder="paulkossi@exemple.com" style={inputBase}
                               onFocus={focusStyle} onBlur={blurStyle} />
                             {errors.email && <p style={{ fontSize:"0.72rem", color:"#EF4444", margin:0 }}>{errors.email.message}</p>}
                           </InputField>

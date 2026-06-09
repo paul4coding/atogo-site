@@ -67,9 +67,9 @@ function TestimonialCard({ position, item, handleMove, cardSize }: CardProps) {
         borderWidth: "2px", borderStyle: "solid",
         transition: "all 0.5s cubic-bezier(0.4,0,0.2,1)",
         zIndex: isCenter ? 10 : 0,
-        background: isCenter ? "linear-gradient(150deg,#0F1E4A 0%,#1A3A8F 55%,#1E9FE8 100%)" : "#fff",
-        color: isCenter ? "#fff" : "#1A3A8F",
-        borderColor: isCenter ? "#1E9FE8" : "#E2E8F0",
+        background: isCenter ? "linear-gradient(150deg,#0F1E4A 0%,#1A3A8F 55%,#1E9FE8 100%)" : "var(--surface)",
+        color: isCenter ? "#fff" : "var(--color-text-heading)",
+        borderColor: isCenter ? "#1E9FE8" : "var(--surface-border)",
         clipPath: "polygon(50px 0%, calc(100% - 50px) 0%, 100% 50px, 100% 100%, calc(100% - 50px) 100%, 50px 100%, 0 100%, 0 0)",
         transform: `translate(-50%,-50%) translateX(${(cardSize / 1.5) * position}px) translateY(${isCenter ? -65 : position % 2 ? 15 : -15}px) rotate(${isCenter ? 0 : position % 2 ? 2.5 : -2.5}deg)`,
         boxShadow: isCenter ? "0px 8px 0px 4px rgba(15,30,74,0.15)" : "0 4px 24px rgba(0,0,0,0.06)",
@@ -80,7 +80,7 @@ function TestimonialCard({ position, item, handleMove, cardSize }: CardProps) {
         position: "absolute", display: "block", transformOrigin: "top right",
         transform: "rotate(45deg)", right: -2, top: 48,
         width: SQRT_5000, height: 2,
-        background: isCenter ? "rgba(255,255,255,0.25)" : "#E2E8F0",
+        background: isCenter ? "rgba(255,255,255,0.25)" : "var(--surface-border)",
       }} />
 
       {/* Guillemet filigrane */}
@@ -101,7 +101,7 @@ function TestimonialCard({ position, item, handleMove, cardSize }: CardProps) {
       {/* Texte */}
       <h3 style={{
         fontSize: cardSize < 320 ? "0.95rem" : "1.15rem", fontWeight: 600, lineHeight: 1.5, margin: 0,
-        color: isCenter ? "#fff" : "#1A3A8F",
+        color: isCenter ? "#fff" : "var(--color-text-heading)",
       }}>
         « {item.testimonial} »
       </h3>
@@ -110,7 +110,7 @@ function TestimonialCard({ position, item, handleMove, cardSize }: CardProps) {
       <p style={{
         position: "absolute", bottom: 32, left: 32, right: 32, marginTop: 8,
         fontSize: "0.85rem", fontStyle: "italic", lineHeight: 1.4,
-        color: isCenter ? "rgba(255,255,255,0.82)" : "#64748B",
+        color: isCenter ? "rgba(255,255,255,0.82)" : "var(--color-text-body)",
       }}>
         — {item.by}, <span style={{ fontStyle: "normal", fontWeight: 600 }}>{item.role}</span>
       </p>
@@ -158,7 +158,7 @@ export default function TestimonialsSection() {
   }, [list])
 
   return (
-    <section style={{ background: "#F8FAFC", padding: "88px 5% 72px", position: "relative", overflow: "hidden" }}>
+    <section style={{ background: "var(--surface-alt)", padding: "88px 5% 72px", position: "relative", overflow: "hidden" }}>
       {/* Décor */}
       <div style={{ position: "absolute", top: "8%", right: "-100px", width: "400px", height: "400px", borderRadius: "50%", background: "radial-gradient(circle,rgba(30,159,232,0.05) 0%,transparent 70%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: "0", left: "-80px", width: "320px", height: "320px", borderRadius: "50%", background: "radial-gradient(circle,rgba(16,185,129,0.04) 0%,transparent 70%)", pointerEvents: "none" }} />
@@ -169,10 +169,10 @@ export default function TestimonialsSection() {
         <span style={{ display: "inline-block", fontSize: "10px", fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", padding: "6px 16px", borderRadius: "999px", background: "#EFF6FF", color: "#1E9FE8", border: "1px solid #BFDBFE", marginBottom: "16px" }}>
           Ils nous font confiance
         </span>
-        <h2 style={{ fontSize: "clamp(1.8rem,3.5vw,2.6rem)", fontWeight: 900, color: "#1A3A8F", margin: "0 0 12px", letterSpacing: "-0.02em" }}>
+        <h2 style={{ fontSize: "clamp(1.8rem,3.5vw,2.6rem)", fontWeight: 900, color: "var(--color-text-heading)", margin: "0 0 12px", letterSpacing: "-0.02em" }}>
           Ce que disent nos clients
         </h2>
-        <p style={{ fontSize: "1rem", color: "#64748B", margin: 0, lineHeight: 1.7 }}>
+        <p style={{ fontSize: "1rem", color: "var(--color-text-body)", margin: 0, lineHeight: 1.7 }}>
           Plus de 50 000 clients nous font confiance à Lomé et en Afrique de l&apos;Ouest.
         </p>
       </motion.div>
@@ -201,9 +201,9 @@ export default function TestimonialsSection() {
             { dir: 1, Icon: ChevronRight, label: "Suivant" },
           ].map(({ dir, Icon, label }) => (
             <button key={label} onClick={() => handleMove(dir)} aria-label={label}
-              style={{ width: 52, height: 52, display: "flex", alignItems: "center", justifyContent: "center", background: "#fff", border: "2px solid #E2E8F0", color: "#1A3A8F", cursor: "pointer", transition: "all 0.2s" }}
+              style={{ width: 52, height: 52, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--surface)", border: "2px solid var(--surface-border)", color: "var(--color-text-heading)", cursor: "pointer", transition: "all 0.2s" }}
               onMouseEnter={e => { const el = e.currentTarget; el.style.background = "linear-gradient(135deg,#1A3A8F,#1E9FE8)"; el.style.color = "#fff"; el.style.borderColor = "#1E9FE8" }}
-              onMouseLeave={e => { const el = e.currentTarget; el.style.background = "#fff"; el.style.color = "#1A3A8F"; el.style.borderColor = "#E2E8F0" }}>
+              onMouseLeave={e => { const el = e.currentTarget; el.style.background = "var(--surface)"; el.style.color = "var(--color-text-heading)"; el.style.borderColor = "var(--surface-border)" }}>
               <Icon size={22} />
             </button>
           ))}

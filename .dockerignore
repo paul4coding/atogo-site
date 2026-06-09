@@ -1,0 +1,35 @@
+# Dépendances et builds (régénérés dans l'image)
+node_modules
+.next
+out
+build
+dist
+
+# Environnement et secrets (jamais dans l'image)
+.env
+.env.*
+!.env.example
+
+# Git et CI
+.git
+.gitignore
+.github
+
+# IDE / OS
+.vscode
+.idea
+.DS_Store
+*.log
+
+# Claude / outils
+.claude
+CLAUDE.md
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Docs / SQL (non nécessaires au runtime)
+*.md
+SUPABASE_SETUP.sql

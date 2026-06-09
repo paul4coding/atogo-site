@@ -13,6 +13,8 @@
     "@hookform/resolvers": "^5.4.0",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
+    "@supabase/ssr": "^0.10.3",
+    "@supabase/supabase-js": "^2.107.0",
     "@tsparticles/engine": "^4.1.1",
     "@tsparticles/react": "^4.1.1",
     "@tsparticles/slim": "^4.1.1",

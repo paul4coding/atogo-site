@@ -65,14 +65,28 @@ export interface TenderResponse {
   tenders?: { title: string; ref: string } | null
 }
 
+export interface Domain {
+  id: string
+  label: string
+  color: string
+  active: boolean
+  sort_order: number
+  created_at: string
+}
+
 export interface Database {
   public: {
     Tables: {
-      job_offers: { Row: JobOffer; Insert: Omit<JobOffer, "id" | "created_at" | "updated_at">; Update: Partial<Omit<JobOffer, "id">> }
-      applications: { Row: Application; Insert: Omit<Application, "id" | "created_at" | "status">; Update: Partial<Omit<Application, "id">> }
-      news: { Row: News; Insert: Omit<News, "id" | "created_at">; Update: Partial<Omit<News, "id">> }
-      tenders: { Row: Tender; Insert: Omit<Tender, "id" | "created_at">; Update: Partial<Omit<Tender, "id">> }
-      tender_responses: { Row: TenderResponse; Insert: Omit<TenderResponse, "id" | "created_at">; Update: Partial<Omit<TenderResponse, "id">> }
+      domains: { Row: Domain; Insert: Omit<Domain, "id" | "created_at">; Update: Partial<Omit<Domain, "id">>; Relationships: [] }
+      job_offers: { Row: JobOffer; Insert: Omit<JobOffer, "id" | "created_at" | "updated_at">; Update: Partial<Omit<JobOffer, "id">>; Relationships: [] }
+      applications: { Row: Application; Insert: Omit<Application, "id" | "created_at" | "status">; Update: Partial<Omit<Application, "id">>; Relationships: [] }
+      news: { Row: News; Insert: Omit<News, "id" | "created_at">; Update: Partial<Omit<News, "id">>; Relationships: [] }
+      tenders: { Row: Tender; Insert: Omit<Tender, "id" | "created_at">; Update: Partial<Omit<Tender, "id">>; Relationships: [] }
+      tender_responses: { Row: TenderResponse; Insert: Omit<TenderResponse, "id" | "created_at">; Update: Partial<Omit<TenderResponse, "id">>; Relationships: [] }
     }
+    Views: Record<string, never>
+    Functions: Record<string, never>
+    Enums: Record<string, never>
+    CompositeTypes: Record<string, never>
   }
 }

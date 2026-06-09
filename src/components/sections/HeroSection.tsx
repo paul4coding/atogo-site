@@ -26,7 +26,7 @@ function SplitTitle() {
     <h1 style={{
       fontSize: "clamp(2.6rem, 5vw, 3.75rem)",
       fontWeight: 600, lineHeight: 1.3,
-      color: "var(--color-brand-dark)",
+      color: "var(--color-text-heading)",
       margin: 0, display: "flex", flexWrap: "wrap",
       columnGap: "0.3em", rowGap: "0.1em",
     }}>
@@ -80,7 +80,7 @@ export default function HeroSection() {
         position: "relative",
         minHeight: "100vh",
         paddingTop: "68px",
-        background: "linear-gradient(150deg, #EBF5FF 0%, #ffffff 40%, #F8FAFF 100%)",
+        background: "var(--hero-light-bg)",
       }}
     >
       <ParticlesBg />
@@ -168,9 +168,9 @@ export default function HeroSection() {
               href="/transferts"
               style={{
                 padding: "15px 32px", borderRadius: "10px",
-                border: "1.5px solid #CBD5E1",
-                color: "var(--color-brand-dark)", fontWeight: 600, fontSize: "1rem",
-                textDecoration: "none", background: "#fff",
+                border: "1.5px solid var(--surface-border)",
+                color: "var(--color-text-heading)", fontWeight: 600, fontSize: "1rem",
+                textDecoration: "none", background: "var(--surface)",
                 transition: "border-color 0.2s, box-shadow 0.2s",
                 display: "inline-flex", alignItems: "center", gap: "8px",
                 boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
@@ -185,7 +185,7 @@ export default function HeroSection() {
           {/* Stats — 4 métriques clés */}
           <motion.div
             custom={4} variants={fadeUp} initial="hidden" animate="visible"
-            style={{ display: "flex", gap: "0", paddingTop: "8px", flexWrap: "wrap", border: "1px solid #E2E8F0", borderRadius: "14px", background: "#fff", overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", alignSelf: "flex-start" }}
+            style={{ display: "flex", gap: "0", paddingTop: "8px", flexWrap: "wrap", border: "1px solid var(--surface-border)", borderRadius: "14px", background: "var(--surface)", overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.05)", alignSelf: "flex-start" }}
           >
             {[
               { val: "50 000+", label: "Clients" },
@@ -193,8 +193,8 @@ export default function HeroSection() {
               { val: "5 ans",   label: "Expérience" },
               { val: "6",       label: "Services" },
             ].map(({ val, label }, i) => (
-              <div key={label} style={{ padding: "16px 22px", borderRight: i < 3 ? "1px solid #E2E8F0" : "none", textAlign: "center", minWidth: "90px" }}>
-                <p style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--color-brand-dark)", margin: "0 0 2px", letterSpacing: "-0.02em" }}>{val}</p>
+              <div key={label} style={{ padding: "16px 22px", borderRight: i < 3 ? "1px solid var(--surface-border)" : "none", textAlign: "center", minWidth: "90px" }}>
+                <p style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--color-text-heading)", margin: "0 0 2px", letterSpacing: "-0.02em" }}>{val}</p>
                 <p style={{ fontSize: "0.7rem", color: "var(--color-text-muted)", margin: 0, fontWeight: 500 }}>{label}</p>
               </div>
             ))}
@@ -229,7 +229,7 @@ export default function HeroSection() {
       {/* Vague de séparation */}
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, lineHeight: 0 }}>
         <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" style={{ display: "block", width: "100%" }}>
-          <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#ffffff" />
+          <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="var(--surface)" />
         </svg>
       </div>
     </section>

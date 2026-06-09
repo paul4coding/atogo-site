@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   ArrowLeftRight, Server, Smartphone, TrendingUp, Shield, FileText,
-  ArrowRight, Check, Star, Clock, Users, Award,
+  ArrowRight, Check, Star, Clock, Users, Award, Sparkles,
+  BatteryFull, ShieldCheck, Building2, Package, Headphones, BadgeCheck,
 } from "lucide-react"
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
@@ -130,9 +131,39 @@ const WHY_US = [
   { Icon: Award, title: "Résultats prouvés",   desc: "50 000+ clients satisfaits et 5 ans d'expérience en Afrique." },
 ]
 
+// Marques téléphones — détails enrichis (angle B2B)
+const PHONE_DETAIL = [
+  { name: "Blackview", logo: "/images/blackview.png", tagline: "Robustesse militaire", spec: "Norme IP68/IP69K — résistants à l'eau, la poussière et les chocs", Icon: ShieldCheck, color: "#1E9FE8" },
+  { name: "Oukitel",   logo: "/images/oukitel2.jpg",  tagline: "Autonomie extrême",     spec: "Batteries jusqu'à 15 000 mAh — plusieurs jours sans recharge",     Icon: BatteryFull, color: "#10B981" },
+  { name: "Doogee",    logo: "/images/doogee2.png",   tagline: "Fiable & abordable",    spec: "Le meilleur rapport qualité-prix pour équiper vos équipes",        Icon: Smartphone,  color: "#F59E0B" },
+]
+
+const PHONE_B2B = [
+  { Icon: Package,     title: "Commandes en volume",   desc: "Tarifs dégressifs pour l'équipement de flottes et grandes quantités." },
+  { Icon: BadgeCheck,  title: "Revendeur agréé",       desc: "Distributeur officiel Blackview, Oukitel et Doogee au Togo." },
+  { Icon: ShieldCheck, title: "Garantie constructeur", desc: "Tous nos appareils sont couverts par la garantie d'origine." },
+  { Icon: Headphones,  title: "SAV dédié entreprises", desc: "Un interlocuteur unique et un support après-vente réactif." },
+]
+
 export default function ServicesPage() {
   const [active, setActive] = useState("transferts")
   const current = SERVICES_DETAIL.find(s => s.id === active)!
+  const h1Ref = useRef<HTMLSpanElement>(null)
+
+  useEffect(() => {
+    if (!h1Ref.current) return
+    import("animejs").then(({ animate, stagger, splitText }) => {
+      if (!h1Ref.current) return
+      const { chars } = splitText(h1Ref.current, { words: false, chars: true })
+      animate(chars, {
+        y:       [{ to: "-2.5rem", ease:"outExpo", duration:500 }, { to:0, ease:"outBounce", duration:700, delay:100 }],
+        rotate:  { from: "-0.5turn", delay: 0 },
+        opacity: { from: 0, to: 1, duration: 80 },
+        delay:   stagger(40),
+        ease:    "inOutCirc",
+      })
+    })
+  }, [])
 
   return (
     <>
@@ -140,48 +171,67 @@ export default function ServicesPage() {
       <main>
 
         {/* ── Hero ──────────────────────────────────────────────────────── */}
-        <div style={{ background:"linear-gradient(160deg,#0F1E4A 0%,#1A3A8F 60%,#0F1E4A 100%)", paddingTop:"68px", position:"relative", overflow:"hidden" }}>
-          <div style={{ position:"absolute", top:"-60px", right:"-60px", width:"400px", height:"400px", borderRadius:"50%", background:"radial-gradient(circle,rgba(30,159,232,0.1) 0%,transparent 70%)", pointerEvents:"none" }} />
-          <div style={{ padding:"72px 5% 56px", position:"relative", zIndex:1 }}>
-            <div style={{ maxWidth:"700px", margin:"0 auto", textAlign:"center" }}>
-              <motion.span initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.4 }}
-                style={{ display:"inline-block", fontSize:"11px", fontWeight:700, letterSpacing:"0.14em", textTransform:"uppercase", padding:"7px 18px", borderRadius:"999px", background:"rgba(30,159,232,0.15)", color:"#60C8FF", border:"1px solid rgba(30,159,232,0.25)", marginBottom:"20px" }}
-              >Ce que nous faisons</motion.span>
+        <div style={{ background:"linear-gradient(160deg,#040B1E 0%,#070F2B 35%,#0F1E4A 70%,#1A3A8F 100%)", paddingTop:"68px", position:"relative", overflow:"hidden", minHeight:"480px" }}>
+          {/* Grille décorative */}
+          <div style={{ position:"absolute", inset:0, backgroundImage:"linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px)", backgroundSize:"60px 60px", pointerEvents:"none" }} />
 
-              <motion.h1 initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.55, delay:0.1 }}
-                style={{ fontSize:"clamp(2rem,4vw,3.2rem)", fontWeight:700, color:"#fff", margin:"0 0 16px" }}
-              >
-                6 expertises au service<br />
-                <span style={{ color:"#1E9FE8" }}>de votre réussite</span>
-              </motion.h1>
+          {/* Orbes */}
+          <div style={{ position:"absolute", top:"-110px", right:"-90px", width:"580px", height:"580px", borderRadius:"50%", background:"radial-gradient(circle,rgba(30,159,232,0.13) 0%,transparent 65%)", animation:"float 7s ease-in-out infinite", pointerEvents:"none" }} />
+          <div style={{ position:"absolute", bottom:"-70px", left:"-70px", width:"420px", height:"420px", borderRadius:"50%", background:"radial-gradient(circle,rgba(124,58,237,0.08) 0%,transparent 65%)", animation:"float 9s ease-in-out infinite reverse", pointerEvents:"none" }} />
+          <div style={{ position:"absolute", top:"40%", left:"42%", width:"280px", height:"280px", borderRadius:"50%", background:"radial-gradient(circle,rgba(16,185,129,0.06) 0%,transparent 70%)", animation:"float 6s ease-in-out infinite 1.5s", pointerEvents:"none" }} />
 
-              <motion.p initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.4, delay:0.2 }}
-                style={{ fontSize:"1.05rem", color:"rgba(255,255,255,0.65)", lineHeight:1.7, marginBottom:"40px" }}
-              >
+          <div style={{ padding:"80px 5% 0", position:"relative", zIndex:1 }}>
+            <div style={{ maxWidth:"820px", margin:"0 auto", textAlign:"center" }}>
+
+              {/* Badge */}
+              <motion.div initial={{ opacity:0, y:14 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.4 }} style={{ marginBottom:"26px", display:"flex", justifyContent:"center", gap:"10px", flexWrap:"wrap" }}>
+                <span style={{ display:"inline-flex", alignItems:"center", gap:"8px", fontSize:"11px", fontWeight:700, letterSpacing:"0.16em", textTransform:"uppercase", padding:"8px 20px", borderRadius:"999px", background:"rgba(30,159,232,0.12)", color:"#60C8FF", border:"1px solid rgba(30,159,232,0.25)", backdropFilter:"blur(8px)" }}>
+                  <Sparkles size={12} color="#60C8FF" /> Ce que nous faisons
+                </span>
+              </motion.div>
+
+              {/* H1 splitText */}
+              <h1 style={{ fontSize:"clamp(2.4rem,5vw,3.8rem)", fontWeight:900, color:"#fff", margin:"0 0 8px", lineHeight:1.02, letterSpacing:"-0.03em", overflow:"visible" }}>
+                <span ref={h1Ref} style={{ display:"block" }}>6 expertises au service</span>
+                <span style={{ background:"linear-gradient(135deg,#1E9FE8 0%,#10B981 60%,#6EE7B7 100%)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text", display:"block" }}>
+                  de votre réussite
+                </span>
+              </h1>
+
+              <motion.p initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.5, delay:0.7 }}
+                style={{ fontSize:"1.08rem", color:"rgba(255,255,255,0.6)", lineHeight:1.8, maxWidth:"560px", margin:"22px auto 40px" }}>
                 Transferts, informatique, téléphones, marketing, cybersécurité et contenus — tout pour votre digital au Togo.
               </motion.p>
 
-              {/* Pills */}
-              <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.4, delay:0.3 }}
-                style={{ display:"flex", flexWrap:"wrap", gap:"10px", justifyContent:"center" }}
-              >
-                {SERVICES_DETAIL.map(s => (
-                  <button key={s.id} onClick={() => setActive(s.id)} style={{
-                    padding:"9px 18px", borderRadius:"999px", cursor:"pointer",
-                    fontWeight:600, fontSize:"0.82rem", border:"none",
-                    transition:"all 0.25s",
-                    background: active === s.id ? s.color : "rgba(255,255,255,0.1)",
-                    color: active === s.id ? "#fff" : "rgba(255,255,255,0.7)",
-                    boxShadow: active === s.id ? `0 4px 16px ${s.color}60` : "none",
-                    transform: active === s.id ? "scale(1.05)" : "scale(1)",
-                  }}>{s.title}</button>
-                ))}
+              {/* Pills avec icônes */}
+              <motion.div initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.4, delay:0.85 }}
+                style={{ display:"flex", flexWrap:"wrap", gap:"10px", justifyContent:"center", paddingBottom:"56px" }}>
+                {SERVICES_DETAIL.map(s => {
+                  const isActive = active === s.id
+                  return (
+                    <button key={s.id} onClick={() => setActive(s.id)} style={{
+                      display:"inline-flex", alignItems:"center", gap:"8px",
+                      padding:"10px 18px", borderRadius:"999px", cursor:"pointer",
+                      fontWeight:600, fontSize:"0.82rem", fontFamily:"inherit",
+                      transition:"all 0.25s",
+                      background: isActive ? s.color : "rgba(255,255,255,0.06)",
+                      color: isActive ? "#fff" : "rgba(255,255,255,0.7)",
+                      border: isActive ? `1px solid ${s.color}` : "1px solid rgba(255,255,255,0.12)",
+                      boxShadow: isActive ? `0 6px 20px ${s.color}55` : "none",
+                      backdropFilter:"blur(8px)",
+                    }}>
+                      <s.Icon size={14} color={isActive ? "#fff" : "rgba(255,255,255,0.6)"} />
+                      {s.title}
+                    </button>
+                  )
+                })}
               </motion.div>
             </div>
           </div>
+
           <div style={{ lineHeight:0 }}>
-            <svg viewBox="0 0 1440 48" xmlns="http://www.w3.org/2000/svg" style={{ display:"block", width:"100%" }}>
-              <path d="M0,24 C360,48 1080,0 1440,24 L1440,48 L0,48 Z" fill="#f8fafc" />
+            <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" style={{ display:"block", width:"100%" }}>
+              <path d="M0,30 C480,60 960,0 1440,30 L1440,60 L0,60 Z" fill="#f8fafc" />
             </svg>
           </div>
         </div>
@@ -226,10 +276,10 @@ export default function ServicesPage() {
                   </div>
                 )}
                 {current.id === "phones" && (
-                  <div style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
+                  <div style={{ display:"flex", flexWrap:"wrap", gap:"10px" }}>
                     {PHONE_BRANDS.map(b => (
-                      <div key={b.name} style={{ background:"rgba(255,255,255,0.12)", borderRadius:"8px", padding:"8px 14px" }}>
-                        <Image src={b.logo} alt={b.name} width={80} height={28} unoptimized style={{ height:"20px", width:"auto", objectFit:"contain", filter:"brightness(0) invert(1)" }} />
+                      <div key={b.name} style={{ background:"#fff", borderRadius:"10px", padding:"10px 16px", display:"inline-flex", alignItems:"center", justifyContent:"center", boxShadow:"0 4px 14px rgba(0,0,0,0.2)" }}>
+                        <Image src={b.logo} alt={b.name} width={90} height={30} unoptimized style={{ height:"24px", width:"auto", objectFit:"contain" }} />
                       </div>
                     ))}
                   </div>
@@ -273,63 +323,86 @@ export default function ServicesPage() {
           </AnimatePresence>
         </div>
 
-        {/* ── Marques téléphones — 3 cards premium ─────────────────────── */}
-        <div style={{ background:"#0F1E4A", padding:"72px 5%", position:"relative", overflow:"hidden" }}>
+        {/* ── Téléphones — Fournisseur B2B entreprises ─────────────────── */}
+        <div style={{ background:"linear-gradient(160deg,#040B1E 0%,#0F1E4A 60%,#0F1E4A 100%)", padding:"88px 5%", position:"relative", overflow:"hidden" }}>
           {/* Déco */}
-          <div style={{ position:"absolute", top:"-60px", left:"50%", transform:"translateX(-50%)", width:"700px", height:"350px", background:"radial-gradient(ellipse,rgba(30,159,232,0.07) 0%,transparent 70%)", pointerEvents:"none" }} />
+          <div style={{ position:"absolute", top:"-80px", left:"50%", transform:"translateX(-50%)", width:"800px", height:"400px", background:"radial-gradient(ellipse,rgba(30,159,232,0.08) 0%,transparent 70%)", pointerEvents:"none" }} />
+          <div style={{ position:"absolute", inset:0, backgroundImage:"linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)", backgroundSize:"60px 60px", pointerEvents:"none" }} />
 
-          {/* En-tête */}
-          <div style={{ textAlign:"center", marginBottom:"48px", position:"relative", zIndex:1 }}>
-            <motion.span initial={{ opacity:0, y:12 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.4 }}
-              style={{ display:"inline-block", fontSize:"11px", fontWeight:700, letterSpacing:"0.14em", textTransform:"uppercase", padding:"7px 18px", borderRadius:"999px", background:"rgba(30,159,232,0.15)", color:"#60C8FF", border:"1px solid rgba(30,159,232,0.25)", marginBottom:"16px" }}
-            >Revendeur agréé</motion.span>
-            <motion.h2 initial={{ opacity:0, y:16 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.5, delay:0.1 }}
-              style={{ fontSize:"clamp(1.6rem,3vw,2.2rem)", fontWeight:700, color:"#fff", margin:"0 0 12px" }}
-            >Nos marques de téléphones</motion.h2>
-            <motion.p initial={{ opacity:0, y:10 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.4, delay:0.2 }}
-              style={{ fontSize:"0.95rem", color:"rgba(255,255,255,0.5)", margin:0 }}
-            >Smartphones robustes, grandes batteries, adaptés aux conditions africaines</motion.p>
-          </div>
+          <div style={{ maxWidth:"1100px", margin:"0 auto", position:"relative", zIndex:1 }}>
+            {/* En-tête */}
+            <div style={{ textAlign:"center", maxWidth:"640px", margin:"0 auto 52px" }}>
+              <motion.span initial={{ opacity:0, y:12 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.4 }}
+                style={{ display:"inline-flex", alignItems:"center", gap:"8px", fontSize:"10px", fontWeight:800, letterSpacing:"0.16em", textTransform:"uppercase", padding:"7px 16px", borderRadius:"999px", background:"rgba(30,159,232,0.12)", color:"#60C8FF", border:"1px solid rgba(30,159,232,0.25)", marginBottom:"18px" }}>
+                <Building2 size={12}/> Fournisseur agréé · Entreprises
+              </motion.span>
+              <motion.h2 initial={{ opacity:0, y:16 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.5, delay:0.1 }}
+                style={{ fontSize:"clamp(1.8rem,3.5vw,2.6rem)", fontWeight:900, color:"#fff", margin:"0 0 14px", lineHeight:1.15, letterSpacing:"-0.02em" }}>
+                Nous équipons les entreprises en{" "}
+                <span style={{ background:"linear-gradient(135deg,#60C8FF,#10B981)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>smartphones robustes</span>
+              </motion.h2>
+              <motion.p initial={{ opacity:0, y:10 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.4, delay:0.2 }}
+                style={{ fontSize:"1rem", color:"rgba(255,255,255,0.55)", margin:0, lineHeight:1.75 }}>
+                Distributeur officiel Blackview, Oukitel et Doogee — nous fournissons les grandes sociétés en téléphones professionnels pour équipes terrain, logistique et métiers exigeants.
+              </motion.p>
+            </div>
 
-          {/* 3 cards côte à côte */}
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"24px", maxWidth:"900px", margin:"0 auto", position:"relative", zIndex:1 }} className="phones-grid">
-            {PHONE_BRANDS.map((b, i) => (
-              <motion.div key={b.name}
-                initial={{ opacity:0, y:32 }} whileInView={{ opacity:1, y:0 }}
-                viewport={{ once:true }} transition={{ duration:0.55, delay:i*0.12 }}
-                whileHover={{ y:-8, transition:{ duration:0.2 } }}
-                style={{
-                  background:"rgba(255,255,255,0.05)",
-                  border:"1px solid rgba(255,255,255,0.1)",
-                  borderRadius:"20px", padding:"40px 28px",
-                  textAlign:"center", cursor:"default",
-                  backdropFilter:"blur(8px)",
-                  position:"relative", overflow:"hidden",
-                  transition:"box-shadow 0.2s",
-                }}
-                onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "0 20px 60px rgba(30,159,232,0.2)"}
-                onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "none"}
-              >
-                {/* Numéro déco */}
-                <span style={{ position:"absolute", top:"-12px", right:"16px", fontSize:"5rem", fontWeight:900, color:"rgba(255,255,255,0.04)", lineHeight:1, userSelect:"none" }}>0{i+1}</span>
+            {/* 3 cards marques enrichies */}
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"20px", marginBottom:"40px" }} className="phones-grid">
+              {PHONE_DETAIL.map((b, i) => (
+                <motion.div key={b.name}
+                  initial={{ opacity:0, y:32 }} whileInView={{ opacity:1, y:0 }}
+                  viewport={{ once:true }} transition={{ duration:0.55, delay:i*0.1 }}
+                  style={{ background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:"22px", overflow:"hidden", backdropFilter:"blur(8px)", transition:"transform 0.25s, box-shadow 0.25s, border-color 0.25s" }}
+                  onMouseEnter={e => { const el = e.currentTarget as HTMLDivElement; el.style.transform="translateY(-6px)"; el.style.boxShadow=`0 20px 56px ${b.color}33`; el.style.borderColor=`${b.color}80` }}
+                  onMouseLeave={e => { const el = e.currentTarget as HTMLDivElement; el.style.transform="translateY(0)"; el.style.boxShadow="none"; el.style.borderColor="rgba(255,255,255,0.1)" }}>
 
-                {/* Logo sur fond blanc */}
-                <div style={{ background:"#fff", borderRadius:"14px", padding:"16px 24px", display:"inline-flex", alignItems:"center", justifyContent:"center", marginBottom:"24px", boxShadow:"0 4px 20px rgba(0,0,0,0.2)", minWidth:"140px", height:"64px" }}>
-                  <Image src={b.logo} alt={b.name} width={130} height={48} unoptimized
-                    style={{ maxHeight:"42px", width:"auto", objectFit:"contain" }}
-                  />
+                  <div style={{ height:"4px", background:`linear-gradient(90deg,${b.color},${b.color}66)` }} />
+                  <div style={{ padding:"28px 26px" }}>
+                    <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:"20px" }}>
+                      {/* Logo fond blanc */}
+                      <div style={{ background:"#fff", borderRadius:"12px", padding:"10px 16px", display:"inline-flex", alignItems:"center", boxShadow:"0 4px 16px rgba(0,0,0,0.25)" }}>
+                        <Image src={b.logo} alt={b.name} width={100} height={32} unoptimized style={{ height:"26px", width:"auto", objectFit:"contain" }} />
+                      </div>
+                      <div style={{ width:"42px", height:"42px", borderRadius:"12px", background:`${b.color}1f`, border:`1px solid ${b.color}40`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                        <b.Icon size={20} color={b.color} />
+                      </div>
+                    </div>
+                    <p style={{ fontSize:"1.15rem", fontWeight:800, color:"#fff", margin:"0 0 4px" }}>{b.name}</p>
+                    <p style={{ fontSize:"0.78rem", fontWeight:700, color:b.color, margin:"0 0 12px", textTransform:"uppercase", letterSpacing:"0.04em" }}>{b.tagline}</p>
+                    <p style={{ fontSize:"0.86rem", color:"rgba(255,255,255,0.6)", lineHeight:1.7, margin:0 }}>{b.spec}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Atouts B2B + CTA */}
+            <motion.div initial={{ opacity:0, y:24 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ duration:0.55 }}
+              style={{ borderRadius:"24px", background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.1)", padding:"36px 36px", backdropFilter:"blur(8px)" }}>
+              <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:"20px", marginBottom:"32px" }} className="phones-b2b-grid">
+                {PHONE_B2B.map(({ Icon, title, desc }) => (
+                  <div key={title} style={{ display:"flex", flexDirection:"column", gap:"8px" }}>
+                    <div style={{ width:"44px", height:"44px", borderRadius:"12px", background:"rgba(30,159,232,0.15)", border:"1px solid rgba(30,159,232,0.25)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                      <Icon size={20} color="#60C8FF" />
+                    </div>
+                    <p style={{ fontSize:"0.92rem", fontWeight:700, color:"#fff", margin:"6px 0 0" }}>{title}</p>
+                    <p style={{ fontSize:"0.8rem", color:"rgba(255,255,255,0.55)", lineHeight:1.6, margin:0 }}>{desc}</p>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:"20px", flexWrap:"wrap", paddingTop:"28px", borderTop:"1px solid rgba(255,255,255,0.1)" }}>
+                <div>
+                  <p style={{ fontSize:"1.1rem", fontWeight:800, color:"#fff", margin:"0 0 4px" }}>Un projet d&apos;équipement pour votre société ?</p>
+                  <p style={{ fontSize:"0.86rem", color:"rgba(255,255,255,0.55)", margin:0 }}>Recevez un devis entreprise personnalisé sous 24h.</p>
                 </div>
-
-                {/* Nom + desc */}
-                <p style={{ fontSize:"1rem", fontWeight:700, color:"#fff", margin:"0 0 8px" }}>{b.name}</p>
-                <p style={{ fontSize:"0.82rem", color:"rgba(255,255,255,0.5)", margin:"0 0 20px", lineHeight:1.5 }}>{b.desc}</p>
-
-                {/* Badge "Agréé" */}
-                <span style={{ display:"inline-flex", alignItems:"center", gap:"6px", fontSize:"0.72rem", fontWeight:700, color:"#60C8FF", background:"rgba(30,159,232,0.12)", border:"1px solid rgba(30,159,232,0.2)", padding:"5px 12px", borderRadius:"999px" }}>
-                  ✓ Revendeur agréé
-                </span>
-              </motion.div>
-            ))}
+                <Link href="/contact"
+                  style={{ display:"inline-flex", alignItems:"center", gap:"9px", padding:"14px 30px", borderRadius:"12px", background:"#fff", color:"#1A3A8F", fontWeight:800, fontSize:"0.92rem", textDecoration:"none", boxShadow:"0 8px 28px rgba(0,0,0,0.25)", transition:"transform 0.2s", flexShrink:0 }}
+                  onMouseEnter={e => (e.currentTarget.style.transform="translateY(-2px)")}
+                  onMouseLeave={e => (e.currentTarget.style.transform="translateY(0)")}>
+                  Demander un devis entreprise <ArrowRight size={16}/>
+                </Link>
+              </div>
+            </motion.div>
           </div>
         </div>
 

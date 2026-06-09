@@ -54,8 +54,51 @@
   --radius-lg: 12px;
   --radius-xl: 16px;
   --radius-full: 9999px;
+
+  /* Châssis (navbar / footer / boutons de contrôle) */
+  --nav-bg: rgba(255,255,255,0.85);
+  --nav-text: #475569;
+  --nav-border: #E2E8F0;
+  --surface: #ffffff;
+  --surface-alt: #F8FAFC;
+  --surface-border: #E2E8F0;
+
+  /* Hero clair de la homepage */
+  --hero-light-bg: linear-gradient(150deg, #EBF5FF 0%, #ffffff 40%, #F8FAFF 100%);
 }
 
+/* ─── MODE SOMBRE ─────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --background: #0A0F1E;
+  --foreground: #E2E8F0;
+
+  --color-text-body: #94A3B8;
+  --color-text-heading: #E2E8F0;
+  --color-text-muted: #64748B;
+
+  --color-bg-main: #0F1629;
+  --color-bg-alt: #0A0F1E;
+  --color-brand-light: rgba(30,159,232,0.12);
+
+  --nav-bg: rgba(10,15,30,0.85);
+  --nav-text: #CBD5E1;
+  --nav-border: rgba(255,255,255,0.12);
+  --surface: #0F1629;
+  --surface-alt: #131C32;
+  --surface-border: rgba(255,255,255,0.1);
+
+  --hero-light-bg: linear-gradient(150deg, #0A0F1E 0%, #0F1629 45%, #0A0F1E 100%);
+}
+
+[data-theme="dark"] body {
+  background: var(--background);
+  color: var(--color-text-body);
+}
+
+/* Transition douce lors du basculement de thème */
+html { transition: background 0.3s ease; }
+
+/* Conserve les anciennes règles .dark pour compat */
 .dark {
   --background: #0A0A0A;
   --foreground: #ededed;
@@ -303,6 +346,15 @@ main {
 }
 @media (max-width: 600px) {
   .news-home-grid { grid-template-columns: 1fr !important; }
+}
+
+/* Homepage — section téléphones (B2B) */
+@media (max-width: 860px) {
+  .phones-brands-grid { grid-template-columns: 1fr !important; }
+  .phones-b2b-grid    { grid-template-columns: repeat(2,1fr) !important; }
+}
+@media (max-width: 480px) {
+  .phones-b2b-grid    { grid-template-columns: 1fr !important; }
 }
 
 /* DanayaCash page */

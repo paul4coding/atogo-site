@@ -5,6 +5,8 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
 import { NAV_ITEMS } from "@/constants/data"
+import LanguageToggle from "./LanguageToggle"
+import ThemeToggle from "./ThemeToggle"
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -20,9 +22,9 @@ export default function Navbar() {
     <header style={{
       position: "fixed", top: 0, width: "100%", zIndex: 50, height: "68px",
       transition: "all 0.3s ease",
-      background: scrolled ? "rgba(255,255,255,0.85)" : "transparent",
+      background: scrolled ? "var(--nav-bg)" : "transparent",
       backdropFilter: scrolled ? "blur(12px)" : "none",
-      borderBottom: scrolled ? "1px solid rgba(0,0,0,0.06)" : "none",
+      borderBottom: scrolled ? "1px solid var(--nav-border)" : "none",
       boxShadow: scrolled ? "0 1px 20px rgba(0,0,0,0.06)" : "none",
     }}>
       <nav style={{
@@ -39,7 +41,7 @@ export default function Navbar() {
             height={46}
             priority
             unoptimized
-            style={{ height: "52px", width: "auto" }}
+            style={{ height: "52px", width: "auto", animation: "float 3.5s ease-in-out infinite" }}
           />
         </Link>
 
@@ -54,11 +56,11 @@ export default function Navbar() {
             <li key={item.href}>
               <Link href={item.href} style={{
                 fontSize: "0.9rem", fontWeight: 500,
-                color: "#475569", textDecoration: "none",
+                color: "var(--nav-text)", textDecoration: "none",
                 transition: "color 0.2s",
               }}
                 onMouseEnter={e => (e.currentTarget.style.color = "var(--color-brand-primary)")}
-                onMouseLeave={e => (e.currentTarget.style.color = "#475569")}
+                onMouseLeave={e => (e.currentTarget.style.color = "var(--nav-text)")}
               >
                 {item.label}
               </Link>
@@ -66,8 +68,10 @@ export default function Navbar() {
           ))}
         </ul>
 
-        {/* CTA desktop */}
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }} className="nav-cta">
+        {/* CTA desktop + contrôles */}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }} className="nav-cta">
+          <LanguageToggle />
+          <ThemeToggle />
           <Link href="/contact" style={{
             fontSize: "0.88rem", fontWeight: 600,
             padding: "9px 20px", borderRadius: "8px",
@@ -87,6 +91,7 @@ export default function Navbar() {
           style={{
             display: "none", padding: "8px",
             background: "none", border: "none", cursor: "pointer",
+            color: "var(--nav-text)",
           }}
           className="nav-mobile-btn"
           onClick={() => setOpen(!open)}
@@ -99,19 +104,24 @@ export default function Navbar() {
       {/* Mobile menu */}
       {open && (
         <div style={{
-          background: "#fff",
-          borderTop: "1px solid rgba(0,0,0,0.06)",
+          background: "var(--surface)",
+          borderTop: "1px solid var(--nav-border)",
           padding: "16px 24px",
           display: "flex", flexDirection: "column", gap: "16px",
         }}>
           {NAV_ITEMS.map((item) => (
             <Link key={item.href} href={item.href}
-              style={{ fontSize: "0.95rem", fontWeight: 500, color: "#334155", textDecoration: "none" }}
+              style={{ fontSize: "0.95rem", fontWeight: 500, color: "var(--nav-text)", textDecoration: "none" }}
               onClick={() => setOpen(false)}
             >
               {item.label}
             </Link>
           ))}
+          {/* Contrôles langue + thème */}
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", paddingTop: "4px" }}>
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
           <Link href="/contact" style={{
             padding: "10px 20px", borderRadius: "8px", textAlign: "center",
             background: "var(--color-brand-primary)", color: "#fff",

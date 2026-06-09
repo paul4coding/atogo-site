@@ -22,7 +22,7 @@ export default function LatestNewsSection() {
   if (!loading && news.length === 0) return null
 
   return (
-    <section style={{ background: "#fff", padding: "96px 5%", position: "relative" }}>
+    <section style={{ background: "var(--surface)", padding: "96px 5%", position: "relative" }}>
       <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
 
         {/* En-tête */}
@@ -31,15 +31,15 @@ export default function LatestNewsSection() {
             <span style={{ display: "inline-flex", alignItems: "center", gap: "7px", fontSize: "10px", fontWeight: 800, letterSpacing: "0.16em", textTransform: "uppercase", padding: "6px 16px", borderRadius: "999px", background: "#ECFDF5", color: "#059669", border: "1px solid #A7F3D0", marginBottom: "16px" }}>
               <Newspaper size={11} /> Actualités
             </span>
-            <h2 style={{ fontSize: "clamp(1.8rem,3.5vw,2.6rem)", fontWeight: 900, color: "#1A3A8F", margin: 0, letterSpacing: "-0.02em" }}>
+            <h2 style={{ fontSize: "clamp(1.8rem,3.5vw,2.6rem)", fontWeight: 900, color: "var(--color-text-heading)", margin: 0, letterSpacing: "-0.02em" }}>
               Les dernières nouvelles
             </h2>
           </motion.div>
 
           <Link href="/actualites"
-            style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "11px 22px", borderRadius: "12px", background: "#F8FAFC", border: "1.5px solid #E2E8F0", color: "#1A3A8F", fontWeight: 700, fontSize: "0.88rem", textDecoration: "none", transition: "all 0.2s" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "11px 22px", borderRadius: "12px", background: "var(--surface-alt)", border: "1.5px solid var(--surface-border)", color: "var(--color-text-heading)", fontWeight: 700, fontSize: "0.88rem", textDecoration: "none", transition: "all 0.2s" }}
             onMouseEnter={e => { const el = e.currentTarget; el.style.background = "#EFF6FF"; el.style.borderColor = "#1E9FE8" }}
-            onMouseLeave={e => { const el = e.currentTarget; el.style.background = "#F8FAFC"; el.style.borderColor = "#E2E8F0" }}>
+            onMouseLeave={e => { const el = e.currentTarget; el.style.background = "var(--surface-alt)"; el.style.borderColor = "var(--surface-border)" }}>
             Toutes les actualités <ArrowRight size={15} />
           </Link>
         </div>
@@ -62,9 +62,9 @@ export default function LatestNewsSection() {
                   initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: idx * 0.08 }}>
                   <Link href="/actualites" style={{ textDecoration: "none", display: "block", height: "100%" }}>
-                    <div style={{ background: "#fff", borderRadius: "20px", overflow: "hidden", border: "1.5px solid #E2E8F0", boxShadow: "0 2px 16px rgba(0,0,0,0.05)", height: "100%", display: "flex", flexDirection: "column", transition: "transform 0.25s, box-shadow 0.25s, border-color 0.25s", cursor: "pointer" }}
+                    <div style={{ background: "var(--surface)", borderRadius: "20px", overflow: "hidden", border: "1.5px solid var(--surface-border)", boxShadow: "0 2px 16px rgba(0,0,0,0.05)", height: "100%", display: "flex", flexDirection: "column", transition: "transform 0.25s, box-shadow 0.25s, border-color 0.25s", cursor: "pointer" }}
                       onMouseEnter={e => { const el = e.currentTarget; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 16px 48px rgba(26,58,143,0.1)"; el.style.borderColor = "#BFDBFE" }}
-                      onMouseLeave={e => { const el = e.currentTarget; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 16px rgba(0,0,0,0.05)"; el.style.borderColor = "#E2E8F0" }}>
+                      onMouseLeave={e => { const el = e.currentTarget; el.style.transform = "translateY(0)"; el.style.boxShadow = "0 2px 16px rgba(0,0,0,0.05)"; el.style.borderColor = "var(--surface-border)" }}>
 
                       {item.image_url ? (
                         <div style={{ height: "170px", overflow: "hidden" }}>
@@ -80,8 +80,8 @@ export default function LatestNewsSection() {
                             <Calendar size={10} />{date}
                           </p>
                         )}
-                        <h3 style={{ fontSize: "0.98rem", fontWeight: 800, color: "#1A3A8F", margin: 0, lineHeight: 1.35, letterSpacing: "-0.01em" }}>{item.title}</h3>
-                        <p style={{ fontSize: "0.84rem", color: "#64748B", lineHeight: 1.7, margin: 0, flex: 1 }}>
+                        <h3 style={{ fontSize: "0.98rem", fontWeight: 800, color: "var(--color-text-heading)", margin: 0, lineHeight: 1.35, letterSpacing: "-0.01em" }}>{item.title}</h3>
+                        <p style={{ fontSize: "0.84rem", color: "var(--color-text-body)", lineHeight: 1.7, margin: 0, flex: 1 }}>
                           {item.excerpt.length > 110 ? item.excerpt.slice(0, 110) + "…" : item.excerpt}
                         </p>
                         <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "0.8rem", color: "#1E9FE8", fontWeight: 700, marginTop: "4px" }}>

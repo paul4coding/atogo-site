@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono, Inter } from "next/font/google"
 import "./globals.css"
+import CookieConsent from "@/components/layout/CookieConsent"
+import GoogleTranslate from "@/components/layout/GoogleTranslate"
 
 const inter = Inter({
   variable: "--font-inter",
@@ -47,10 +49,21 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
+      suppressHydrationWarning
       className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white text-[var(--color-text-body)]">
+      <head>
+        {/* Applique le thème avant le rendu pour éviter le flash blanc */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('atogo-theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col text-[var(--color-text-body)]">
         {children}
+        <CookieConsent />
+        <GoogleTranslate />
       </body>
     </html>
   )

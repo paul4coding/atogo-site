@@ -51,12 +51,11 @@ function TenderResponseModal({ tender, onClose }: { tender: Tender; onClose: () 
         <div style={{ height:"5px", background:"#1A3A8F" }} />
         <div style={{ padding:"32px 32px 28px" }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:"24px" }}>
-            <div>
-              <span style={{ fontSize:"10px", fontWeight:800, textTransform:"uppercase", letterSpacing:"0.12em", padding:"4px 10px", borderRadius:"999px", background:"#EEF2FF", color:"#1A3A8F" }}>{tender.ref}</span>
-              <h3 style={{ fontSize:"1.05rem", fontWeight:700, color:"var(--color-text-heading)", margin:"10px 0 2px" }}>Répondre à l&apos;appel d&apos;offres</h3>
+            <div style={{ flex:1, minWidth:0 }}>
+              <h3 style={{ fontSize:"1.05rem", fontWeight:700, color:"var(--color-text-heading)", margin:"0 0 4px" }}>Répondre à l&apos;appel d&apos;offres</h3>
               <p style={{ fontSize:"0.82rem", color:"var(--color-text-muted)", margin:0 }}>{tender.title}</p>
             </div>
-            <button onClick={onClose} style={{ flexShrink:0, width:"34px", height:"34px", borderRadius:"8px", border:"1px solid #E2E8F0", background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", color:"#94A3B8" }}><X size={15}/></button>
+            <button onClick={onClose} style={{ flexShrink:0, width:"34px", height:"34px", borderRadius:"8px", border:"1px solid #E2E8F0", background:"transparent", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", color:"#94A3B8", marginLeft:"12px" }}><X size={15}/></button>
           </div>
 
           {status === "success" ? (
@@ -268,7 +267,7 @@ function TenderCard({ tender, idx, onRespond }: { tender: Tender; idx: number; o
                 {String(idx+1).padStart(2,"0")}
               </span>
               <span style={{ fontSize:"10px", fontWeight:800, letterSpacing:"0.14em", textTransform:"uppercase", padding:"5px 12px", borderRadius:"999px", background:"#F1F5F9", color:"#64748B", border:"1px solid #E2E8F0" }}>
-                {tender.ref}
+                Appel d&apos;offres
               </span>
             </div>
             <h3 style={{ fontSize:"1.08rem", fontWeight:800, color:"#1A3A8F", margin:0, lineHeight:1.3, letterSpacing:"-0.01em" }}>

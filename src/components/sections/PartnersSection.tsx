@@ -19,7 +19,7 @@ const TRACK = [...PARTNERS, ...PARTNERS, ...PARTNERS]
 
 export default function PartnersSection() {
   return (
-    <section style={{ background: "#fff", padding: "56px 0", overflow: "hidden", borderTop: "1px solid #F1F5F9", borderBottom: "1px solid #F1F5F9" }}>
+    <section style={{ background: "var(--surface)", padding: "56px 0", overflow: "hidden", borderTop: "1px solid var(--surface-border)", borderBottom: "1px solid var(--surface-border)" }}>
 
       {/* Keyframe injecté (impossible en inline) — le reste du style est inline pour fiabilité totale */}
       <style>{`@keyframes partnersScroll{from{transform:translate3d(0,0,0)}to{transform:translate3d(-33.3333%,0,0)}}`}</style>
@@ -37,8 +37,8 @@ export default function PartnersSection() {
       {/* Bandeau défilant */}
       <div style={{ position: "relative", overflow: "hidden" }}>
         {/* Dégradés bords */}
-        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "140px", background: "linear-gradient(to right, #fff, transparent)", zIndex: 2, pointerEvents: "none" }} />
-        <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "140px", background: "linear-gradient(to left, #fff, transparent)", zIndex: 2, pointerEvents: "none" }} />
+        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "140px", background: "linear-gradient(to right, var(--surface), transparent)", zIndex: 2, pointerEvents: "none" }} />
+        <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "140px", background: "linear-gradient(to left, var(--surface), transparent)", zIndex: 2, pointerEvents: "none" }} />
 
         <div style={{
           display: "flex",
@@ -50,8 +50,8 @@ export default function PartnersSection() {
         }}>
           {TRACK.map((p, i) => (
             <div key={`${p.name}-${i}`} style={{
-              background: "#F8FAFC",
-              border: "1.5px solid #E2E8F0",
+              background: "var(--surface-alt)",
+              border: "1.5px solid var(--surface-border)",
               borderRadius: "14px",
               padding: "14px 28px",
               display: "flex", alignItems: "center", justifyContent: "center",

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, Fragment } from "react"
 import {
   Target, Eye, Heart, ArrowRight,
   Globe, Users, Zap, Shield,
@@ -229,8 +229,8 @@ export default function AboutPage() {
                 { Icon:Eye,    color:"#10B981", num:"02", title:"Notre vision",  text:"Devenir la référence des services numériques et financiers en Afrique de l'Ouest, en plaçant le client au centre de tout." },
                 { Icon:Heart,  color:"#A78BFA", num:"03", title:"Nos valeurs",  text:"Innovation, confiance, proximité et impact social — les piliers qui guident chaque décision et chaque service que nous offrons." },
               ].map(({ Icon, color, num, title, text }, i) => (
-                <>
-                  <motion.div key={title}
+                <Fragment key={title}>
+                  <motion.div
                     initial={{ opacity:0, y:32 }} whileInView={{ opacity:1, y:0 }}
                     viewport={{ once:true }} transition={{ duration:0.6, delay:i*0.15 }}
                     style={{ padding:"0 48px", textAlign:"center" }}
@@ -245,8 +245,8 @@ export default function AboutPage() {
                     <p style={{ fontSize:"0.85rem", color:"rgba(255,255,255,0.5)", lineHeight:1.8, margin:0 }}>{text}</p>
                   </motion.div>
                   {/* Séparateur vertical */}
-                  {i < 2 && <div key={`sep-${i}`} style={{ background:"rgba(255,255,255,0.08)", width:"1px", margin:"0" }} />}
-                </>
+                  {i < 2 && <div style={{ background:"rgba(255,255,255,0.08)", width:"1px", margin:"0" }} />}
+                </Fragment>
               ))}
             </div>
           </div>
