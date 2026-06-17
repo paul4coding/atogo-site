@@ -12,6 +12,7 @@ import {
 } from "lucide-react"
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
+import SuccessAnimation from "@/components/ui/SuccessAnimation"
 import type { ContactFormData } from "@/types"
 
 const schema = z.object({
@@ -93,8 +94,11 @@ export default function ContactPage() {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
-    if (res.ok) { setSent(true); reset() }
+    if (res.ok) { handleSuccess(); reset() }
   }
+
+  const [showSuccess, setShowSuccess] = useState(false)
+  const handleSuccess = () => { setSent(true); setShowSuccess(true) }
 
   function focusStyle(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
     e.target.style.borderColor = "#1E9FE8"
@@ -109,6 +113,12 @@ export default function ContactPage() {
 
   return (
     <>
+      <SuccessAnimation
+        visible={showSuccess}
+        title="Message envoyé !"
+        subtitle="Notre équipe à Lomé vous répondra sous 24h ouvrées."
+        onClose={() => setShowSuccess(false)}
+      />
       <Navbar />
       <main>
 
