@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   Newspaper, FileText, Calendar, Download, X,
-  Loader2, Send, CheckCircle, Upload, Paperclip, ExternalLink,
+  Loader2, Send, CheckCircle, Upload, Paperclip, ExternalLink, Archive,
 } from "lucide-react"
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
@@ -16,20 +16,34 @@ type Tab = "actualites" | "appels-offres"
 // ── Modal réponse appel d'offres ──────────────────────────────
 function TenderResponseModal({ tender, onClose }: { tender: Tender; onClose: () => void }) {
   const [form, setForm] = useState({ company_name:"", contact_name:"", email:"", phone:"", message:"" })
-  const [docFile, setDocFile] = useState<File | null>(null)
-  const [status, setStatus] = useState<"idle"|"loading"|"success"|"error">("idle")
-  const [errMsg, setErrMsg] = useState("")
+  const [zipFile,  setZipFile]  = useState<File | null>(null)
+  const [docFile,  setDocFile]  = useState<File | null>(null)
+  const [zipErr,   setZipErr]   = useState("")
+  const [status,   setStatus]   = useState<"idle"|"loading"|"success"|"error">("idle")
+  const [errMsg,   setErrMsg]   = useState("")
+  const zipRef = useRef<HTMLInputElement>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
 
+  function handleZipPick(f: File | null) {
+    if (f && !f.name.toLowerCase().endsWith(".zip")) {
+      setZipErr("Seuls les fichiers .zip sont acceptés.")
+      return
+    }
+    setZipErr(""); setZipFile(f)
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault()
-    setStatus("loading")
+    if (!zipFile) { setErrMsg("Le dossier compressé .zip est obligatoire."); return }
+    if (!zipFile.name.toLowerCase().endsWith(".zip")) { setErrMsg("Seuls les fichiers .zip sont acceptés."); return }
+    setStatus("loading"); setErrMsg("")
     const fd = new FormData()
     fd.append("tender_id", tender.id)
     Object.entries(form).forEach(([k, v]) => fd.append(k, v))
+    fd.append("dossier_zip", zipFile)
     if (docFile) fd.append("document", docFile)
 
     const res = await fetch("/api/tender-response", { method:"POST", body:fd })
@@ -79,14 +93,47 @@ function TenderResponseModal({ tender, onClose }: { tender: Tender; onClose: () 
               </div>
               <textarea placeholder="Message (optionnel)" value={form.message} onChange={set("message")} rows={3}
                 style={{ padding:"11px 14px", borderRadius:"10px", border:"1.5px solid #E2E8F0", fontSize:"0.88rem", fontFamily:"inherit", outline:"none", resize:"vertical" }} />
+
+              {/* Encart info ZIP */}
+              <div style={{ background:"#FEF3C7", borderRadius:"10px", padding:"12px 14px", display:"flex", gap:"10px", alignItems:"flex-start" }}>
+                <Archive size={16} color="#D97706" style={{ flexShrink:0, marginTop:"2px" }} />
+                <div>
+                  <p style={{ fontSize:"0.8rem", fontWeight:700, color:"#92400E", margin:"0 0 3px" }}>Dossier compressé obligatoire</p>
+                  <p style={{ fontSize:"0.75rem", color:"#B45309", margin:0, lineHeight:1.55 }}>
+                    Regroupez tous vos documents (devis, attestations, références, fiches techniques…) dans un seul fichier <strong>.zip</strong>. Les PDF seuls ne sont <strong>pas acceptés</strong>.
+                  </p>
+                </div>
+              </div>
+
+              {/* Champ ZIP obligatoire */}
+              <div onClick={() => zipRef.current?.click()}
+                style={{ display:"flex", alignItems:"center", gap:"10px", padding:"13px 14px", borderRadius:"10px", cursor:"pointer", border:`1.5px ${zipFile ? "solid #10B981" : "dashed #D97706"}`, background: zipFile ? "#F0FDF4" : "#FFFBEB", transition:"all 0.2s" }}>
+                {zipFile ? <CheckCircle size={16} color="#10B981" style={{ flexShrink:0 }} /> : <Archive size={16} color="#D97706" style={{ flexShrink:0 }} />}
+                <span style={{ fontSize:"0.84rem", color: zipFile ? "#10B981" : "#92400E", fontWeight: zipFile ? 600 : 500, flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+                  {zipFile ? zipFile.name : "Sélectionner votre dossier complet (.zip) *"}
+                </span>
+                {zipFile && (
+                  <button type="button" onClick={e => { e.stopPropagation(); if(zipRef.current) zipRef.current.value=""; setZipFile(null) }}
+                    style={{ background:"none", border:"none", cursor:"pointer", color:"#94A3B8", padding:0, display:"flex" }}><X size={13}/></button>
+                )}
+                <input ref={zipRef} type="file" accept=".zip" style={{ display:"none" }} onChange={e => handleZipPick(e.target.files?.[0] ?? null)} />
+              </div>
+              {zipErr && <p style={{ fontSize:"0.8rem", color:"#DC2626", margin:"-6px 0 0" }}>{zipErr}</p>}
+
+              {/* Document optionnel (proforma PDF) */}
               <div onClick={() => fileRef.current?.click()}
                 style={{ display:"flex", alignItems:"center", gap:"10px", padding:"12px 14px", borderRadius:"10px", border:"1.5px dashed #CBD5E1", cursor:"pointer", background:"#F8FAFC" }}>
-                <Upload size={16} color="#64748B" />
-                <span style={{ fontSize:"0.85rem", color: docFile ? "#1A3A8F" : "#94A3B8" }}>
-                  {docFile ? <><Paperclip size={13} style={{ display:"inline", marginRight:4 }}/>{docFile.name}</> : "Joindre votre proforma / devis (PDF recommandé)"}
+                <Upload size={15} color="#94A3B8" style={{ flexShrink:0 }} />
+                <span style={{ fontSize:"0.83rem", color: docFile ? "#1A3A8F" : "#94A3B8" }}>
+                  {docFile ? <><Paperclip size={12} style={{ display:"inline", marginRight:4 }}/>{docFile.name}</> : "Proforma / devis séparé (PDF — optionnel)"}
                 </span>
+                {docFile && (
+                  <button type="button" onClick={e => { e.stopPropagation(); if(fileRef.current) fileRef.current.value=""; setDocFile(null) }}
+                    style={{ background:"none", border:"none", cursor:"pointer", color:"#94A3B8", padding:0, display:"flex" }}><X size={13}/></button>
+                )}
                 <input ref={fileRef} type="file" accept=".pdf,.doc,.docx,.xls,.xlsx" style={{ display:"none" }} onChange={e => setDocFile(e.target.files?.[0] ?? null)} />
               </div>
+
               {status === "error" && <p style={{ fontSize:"0.82rem", color:"#DC2626", margin:0 }}>{errMsg}</p>}
               <button type="submit" disabled={status === "loading"}
                 style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:"8px", padding:"13px", borderRadius:"10px", background:"#1A3A8F", color:"#fff", fontWeight:700, fontSize:"0.9rem", border:"none", cursor: status === "loading" ? "not-allowed" : "pointer", opacity: status === "loading" ? 0.75 : 1 }}>

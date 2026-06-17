@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createAdminClient } from "@/lib/supabase/server"
-import { validateFile, safeFilename, DOC_TYPES } from "@/lib/validate-file"
+import { validateFile, safeFilename, DOC_TYPES, ZIP_TYPES, MAX_ZIP_SIZE } from "@/lib/validate-file"
 import { rateLimit, getClientIp } from "@/lib/rate-limit"
 
 export async function POST(req: NextRequest) {
@@ -19,25 +19,46 @@ export async function POST(req: NextRequest) {
   const email = (formData.get("email") as string || "").trim()
   const phone = formData.get("phone") as string | null
   const message = formData.get("message") as string | null
-  const docFile = formData.get("document") as File | null
+  const docFile  = formData.get("document") as File | null
+  const zipFile  = formData.get("dossier_zip") as File | null
 
   if (!tender_id || company_name.length < 2 || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
     return NextResponse.json({ error: "Champs invalides." }, { status: 400 })
   }
 
-  let document_url: string | null = null
+  // Dossier ZIP obligatoire
+  if (!zipFile || zipFile.size === 0) {
+    return NextResponse.json({ error: "Le dossier compressé (.zip) est obligatoire." }, { status: 400 })
+  }
+  if (!zipFile.name.toLowerCase().endsWith(".zip")) {
+    return NextResponse.json({ error: "Seuls les fichiers .zip sont acceptés pour le dossier complet." }, { status: 400 })
+  }
+  const zipErr = validateFile(zipFile, ZIP_TYPES, MAX_ZIP_SIZE)
+  if (zipErr) return NextResponse.json({ error: zipErr }, { status: 400 })
 
+  let document_url: string | null = null
+  let dossier_zip_url: string | null = null
+
+  // Upload dossier ZIP → bucket privé
+  const zipPath = `ao-${tender_id}-${Date.now()}-${safeFilename(company_name)}.zip`
+  const { error: zipUploadError } = await supabase.storage
+    .from("cvs")
+    .upload(zipPath, zipFile, { contentType: "application/zip" })
+  if (zipUploadError) {
+    return NextResponse.json({ error: "Erreur upload dossier zip: " + zipUploadError.message }, { status: 500 })
+  }
+  dossier_zip_url = zipPath
+
+  // Document optionnel (proforma PDF, devis…)
   if (docFile && docFile.size > 0) {
     const err = validateFile(docFile, DOC_TYPES)
     if (err) return NextResponse.json({ error: err }, { status: 400 })
 
-    // Proforma confidentielle → bucket privé `cvs`, on stocke le CHEMIN
     const ext = docFile.name.split(".").pop()?.toLowerCase() ?? "bin"
     const path = `proforma-${tender_id}-${Date.now()}-${safeFilename(company_name)}.${ext}`
     const { error: uploadError } = await supabase.storage
       .from("cvs")
       .upload(path, docFile, { contentType: docFile.type })
-
     if (uploadError) {
       return NextResponse.json({ error: "Erreur upload document: " + uploadError.message }, { status: 500 })
     }
@@ -52,6 +73,7 @@ export async function POST(req: NextRequest) {
     phone: phone || null,
     message: message || null,
     document_url,
+    dossier_zip_url,
   })
 
   if (error) {
