@@ -366,6 +366,7 @@ function AoCard({ offer, onSubmit }: { offer: typeof APPELS_OFFRES[0]; onSubmit:
 function SpontaneousForm({ onSuccess }: { onSuccess: () => void }) {
   const [form, setForm] = useState({ name:"", email:"", phone:"", message:"" })
   const [cv, setCv] = useState<File|null>(null)
+  const [motivation, setMotivation] = useState<File|null>(null)
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState("")
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm(f => ({ ...f, [k]: e.target.value }))
@@ -373,6 +374,7 @@ function SpontaneousForm({ onSuccess }: { onSuccess: () => void }) {
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     if (!cv) { setErr("Votre CV est obligatoire."); return }
+    if (!motivation) { setErr("La lettre de motivation est obligatoire."); return }
     setLoading(true); setErr("")
     await new Promise(r => setTimeout(r, 1200))
     setLoading(false); onSuccess()
@@ -390,7 +392,9 @@ function SpontaneousForm({ onSuccess }: { onSuccess: () => void }) {
         style={{ padding:"12px 14px", borderRadius:"10px", border:"1.5px solid #E2E8F0", fontSize:"0.88rem", fontFamily:"inherit", outline:"none" }} />
       <textarea required placeholder="Présentez-vous et décrivez le poste souhaité… *" value={form.message} onChange={set("message")} rows={4}
         style={{ padding:"12px 14px", borderRadius:"10px", border:"1.5px solid #E2E8F0", fontSize:"0.88rem", fontFamily:"inherit", outline:"none", resize:"vertical" }} />
-      <FileField label="CV (PDF ou Word)" file={cv} onPick={setCv} accept=".pdf,.doc,.docx" hint="Joindre votre CV" required color="#1E9FE8" />
+      <p style={{ fontSize:"0.72rem", fontWeight:700, color:"#64748B", margin:"2px 0 -4px", textTransform:"uppercase", letterSpacing:"0.08em" }}>Documents obligatoires (PDF ou Word)</p>
+      <FileField label="CV" file={cv} onPick={setCv} accept=".pdf,.doc,.docx" hint="Joindre votre CV" required color="#1E9FE8" />
+      <FileField label="Lettre de motivation" file={motivation} onPick={setMotivation} accept=".pdf,.doc,.docx" hint="Joindre votre lettre de motivation" required color="#1E9FE8" />
       {err && <p style={{ fontSize:"0.82rem", color:"#DC2626", margin:0 }}>{err}</p>}
       <button type="submit" disabled={loading}
         style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:"8px", padding:"13px 24px", borderRadius:"10px", background: loading ? "#94A3B8" : "#1E9FE8", color:"#fff", fontWeight:700, fontSize:"0.9rem", border:"none", cursor: loading ? "default" : "pointer" }}
