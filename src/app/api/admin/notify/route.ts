@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
+import { requireAdmin } from "@/lib/api"
+
+export const runtime = "nodejs"
 
 type Status = "pending" | "reviewed" | "accepted" | "rejected"
 
@@ -107,6 +110,11 @@ function emailContent(status: Status, name: string, jobTitle: string | null) {
 const VALID_STATUS: Status[] = ["pending", "reviewed", "accepted", "rejected"]
 
 export async function POST(req: NextRequest) {
+  // Route d'envoi d'email déclenchée depuis l'espace admin : sans cette garde,
+  // n'importe qui pourrait la marteler pour envoyer des mails en notre nom.
+  const auth = await requireAdmin(req)
+  if ("response" in auth) return auth.response
+
   const { name, email, status, jobTitle } = await req.json()
 
   // Validation stricte des entrées

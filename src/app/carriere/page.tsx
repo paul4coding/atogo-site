@@ -9,7 +9,7 @@ import {
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
 import SuccessAnimation from "@/components/ui/SuccessAnimation"
-import { createClient } from "@/lib/supabase/client"
+import { fetchPublishedJobOffers } from "@/lib/api-client"
 import type { JobOffer } from "@/types/database"
 
 // Couleur par type de contrat
@@ -263,16 +263,10 @@ export default function CarrierePage() {
   }
 
   useEffect(() => {
-    const supabase = createClient()
-    supabase
-      .from("job_offers")
-      .select("*")
-      .eq("status", "published")
-      .order("created_at", { ascending: false })
-      .then(({ data }) => {
-        setOffers(data ?? [])
-        setLoading(false)
-      })
+    fetchPublishedJobOffers()
+      .then(setOffers)
+      .catch(() => setOffers([]))
+      .finally(() => setLoading(false))
   }, [])
 
   return (

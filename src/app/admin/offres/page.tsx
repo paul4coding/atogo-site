@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { createJobOffer, deleteJobOffer, fetchJobOffers, updateJobOffer } from "@/lib/api-client"
 import type { JobOffer } from "@/types/database"
 import { Plus, Pencil, Trash2, Eye, EyeOff, Loader2, X, Save } from "lucide-react"
 
@@ -17,11 +17,10 @@ export default function AdminOffres() {
   const [showForm, setShowForm] = useState(false)
   const [saving, setSaving]   = useState(false)
   const [reqInput, setReqInput] = useState("")
-  const supabase = createClient()
 
   async function load() {
-    const { data } = await supabase.from("job_offers").select("*").order("created_at",{ascending:false})
-    setOffers(data ?? []); setLoading(false)
+    try { setOffers(await fetchJobOffers()) } catch { setOffers([]) }
+    setLoading(false)
   }
   useEffect(() => { load() }, [])
 
@@ -30,22 +29,31 @@ export default function AdminOffres() {
 
   async function save() {
     setSaving(true)
-    if (editId) {
-      await supabase.from("job_offers").update({ ...form, updated_at: new Date().toISOString() }).eq("id", editId)
-    } else {
-      await supabase.from("job_offers").insert(form)
+    try {
+      // `updated_at` est désormais posé par le serveur (now()), pas par le client.
+      if (editId) await updateJobOffer(editId, form)
+      else        await createJobOffer(form)
+      await load()
+      setShowForm(false)
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Enregistrement impossible.")
     }
-    await load(); setSaving(false); setShowForm(false)
+    setSaving(false)
   }
 
   async function toggleStatus(o: JobOffer) {
-    await supabase.from("job_offers").update({ status: o.status==="published" ? "draft" : "published", updated_at: new Date().toISOString() }).eq("id",o.id)
-    await load()
+    try {
+      await updateJobOffer(o.id, { status: o.status==="published" ? "draft" : "published" })
+      await load()
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Changement de statut impossible.")
+    }
   }
 
   async function del(id: string) {
     if (!confirm("Supprimer cette offre ?")) return
-    await supabase.from("job_offers").delete().eq("id",id); await load()
+    try { await deleteJobOffer(id); await load() }
+    catch (err) { alert(err instanceof Error ? err.message : "Suppression impossible.") }
   }
 
   function addReq() {

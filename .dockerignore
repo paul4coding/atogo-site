@@ -30,6 +30,8 @@ Dockerfile
 .dockerignore
 docker-compose.yml
 
-# Docs / SQL (non nécessaires au runtime)
+# Docs (non nécessaires au runtime)
 *.md
-SUPABASE_SETUP.sql
+
+# Fichiers uploadés en local : ne jamais les embarquer dans l'image
+storage

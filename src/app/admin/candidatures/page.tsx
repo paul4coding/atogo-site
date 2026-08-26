@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/lib/supabase/client"
-import { openPrivateFile } from "@/lib/supabase/signed-url"
+import { fetchApplications, updateApplicationStatus } from "@/lib/api-client"
+import { openPrivateFile } from "@/lib/open-file"
 import type { Application } from "@/types/database"
 import { Loader2, FileDown, ChevronDown, ChevronUp } from "lucide-react"
 
@@ -16,7 +16,6 @@ export default function AdminCandidatures() {
   const [open, setOpen]       = useState<string|null>(null)
   const [filter, setFilter]   = useState<"all"|"application"|"spontaneous">("all")
   const [toast, setToast]     = useState<{msg:string; ok:boolean} | null>(null)
-  const supabase = createClient()
 
   function showToast(msg: string, ok = true) {
     setToast({ msg, ok })
@@ -24,17 +23,20 @@ export default function AdminCandidatures() {
   }
 
   async function load() {
-    const { data } = await supabase
-      .from("applications")
-      .select("*, job_offers(title)")
-      .order("created_at",{ascending:false})
-    setItems(data as Application[] ?? [])
+    // Le titre de l'offre visée est joint côté serveur et rendu sous la même
+    // forme `job_offers: { title }` qu'avec Supabase.
+    try { setItems(await fetchApplications()) } catch { setItems([]) }
     setLoading(false)
   }
   useEffect(() => { load() }, [])
 
   async function updateStatus(id: string, status: Application["status"], item: Application) {
-    await supabase.from("applications").update({ status }).eq("id", id)
+    try {
+      await updateApplicationStatus(id, status)
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : "Mise à jour impossible.", false)
+      return
+    }
     await load()
 
     // Envoyer l'email de notification

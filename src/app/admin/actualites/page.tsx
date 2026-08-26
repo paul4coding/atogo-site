@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { createNews, deleteNews, fetchNews, updateNews, uploadFile } from "@/lib/api-client"
 import type { News } from "@/types/database"
 import { Plus, Pencil, Trash2, Eye, EyeOff, Loader2, X, Save, Upload, ImageIcon } from "lucide-react"
 
@@ -17,11 +17,10 @@ export default function AdminActualites() {
   const [imgFile, setImgFile]   = useState<File|null>(null)
   const [preview, setPreview]   = useState<string|null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
-  const supabase = createClient()
 
   async function load() {
-    const { data } = await supabase.from("news").select("*").order("created_at",{ascending:false})
-    setItems(data ?? []); setLoading(false)
+    try { setItems(await fetchNews()) } catch { setItems([]) }
+    setLoading(false)
   }
   useEffect(() => { load() }, [])
 
@@ -38,32 +37,41 @@ export default function AdminActualites() {
 
   async function save() {
     setSaving(true)
-    let image_url = form.image_url
+    try {
+      let image_url = form.image_url
 
-    if (imgFile) {
-      const ext = imgFile.name.split(".").pop()
-      const filename = `news-${Date.now()}.${ext}`
-      const { error } = await supabase.storage.from("news-images").upload(filename, imgFile, { contentType: imgFile.type })
-      if (!error) {
-        const { data } = supabase.storage.from("news-images").getPublicUrl(filename)
-        image_url = data.publicUrl
-      }
+      // L'upload passe par /api/admin/upload, qui écrit dans le bucket
+      // `news-images` et renvoie l'URL de lecture (/api/files/...).
+      if (imgFile) image_url = await uploadFile("news-images", imgFile)
+
+      const data = { ...form, image_url, published_at: form.status==="published" && !form.published_at ? new Date().toISOString() : form.published_at }
+      if (editId) await updateNews(editId, data)
+      else        await createNews(data)
+
+      await load()
+      setShowForm(false)
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Enregistrement impossible.")
     }
-
-    const data = { ...form, image_url, published_at: form.status==="published" && !form.published_at ? new Date().toISOString() : form.published_at }
-    if (editId) await supabase.from("news").update(data).eq("id",editId)
-    else        await supabase.from("news").insert(data)
-    await load(); setSaving(false); setShowForm(false)
+    setSaving(false)
   }
 
   async function toggleStatus(n: News) {
-    await supabase.from("news").update({ status: n.status==="published"?"draft":"published", published_at: n.status==="draft" ? new Date().toISOString() : n.published_at }).eq("id",n.id)
-    await load()
+    try {
+      await updateNews(n.id, {
+        status: n.status==="published" ? "draft" : "published",
+        published_at: n.status==="draft" ? new Date().toISOString() : n.published_at,
+      })
+      await load()
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Changement de statut impossible.")
+    }
   }
 
   async function del(id: string) {
     if (!confirm("Supprimer cet article ?")) return
-    await supabase.from("news").delete().eq("id",id); await load()
+    try { await deleteNews(id); await load() }
+    catch (err) { alert(err instanceof Error ? err.message : "Suppression impossible.") }
   }
 
   return (

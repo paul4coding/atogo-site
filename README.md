@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# @TOGO — Site vitrine
 
-## Getting Started
+Site institutionnel de **@TOGO** (Lomé, Togo) — Next.js 16 (App Router),
+React 19, TypeScript, Tailwind CSS v4, PostgreSQL.
 
-First, run the development server:
+Production : [atogo.tg](https://atogo.tg)
+
+## Stack
+
+| Couche | Techno |
+|---|---|
+| Framework | Next.js 16 (App Router) — SSR + routes API |
+| Base de données | PostgreSQL 15+ (via `pg`) |
+| Auth admin | Session JWT maison (`jose`) + mots de passe scrypt |
+| Fichiers | Disque local (`STORAGE_DIR`), servi par des routes API |
+| Email | Resend |
+| UI | Tailwind CSS v4, Framer Motion, Three.js / R3F, Lucide |
+| Formulaires | React Hook Form + Zod |
+| Paquets | pnpm 11 |
+
+## Démarrage rapide
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Renseigner au minimum `DATABASE_URL` et `SESSION_SECRET` dans `.env.local`
+(`openssl rand -base64 48` pour la clé), puis :
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+psql "$DATABASE_URL" -f postgres/schema.sql   # créer les tables
+pnpm admin:create admin@atogo.tg 'MOT_DE_PASSE_FORT'
+pnpm dev                                       # → http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+L'espace d'administration est sur [/admin](http://localhost:3000/admin).
 
-## Learn More
+Avec Docker (l'application **et** la base) :
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+cp .env.example .env    # remplir POSTGRES_PASSWORD, SESSION_SECRET, RESEND_API_KEY
+docker compose up -d --build
+docker compose exec web node scripts/create-admin.mjs admin@atogo.tg 'MOT_DE_PASSE_FORT'
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Commandes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev           # serveur de développement
+pnpm build         # build production
+pnpm start         # servir la build
+pnpm lint          # ESLint
+pnpm typecheck     # tsc --noEmit
+pnpm db:init       # jouer postgres/schema.sql sur $DATABASE_URL
+pnpm admin:create  # créer / réinitialiser un compte admin
+```
 
-## Deploy on Vercel
+## Architecture
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Le navigateur ne parle **jamais** à la base de données. Toutes les lectures et
+écritures passent par des routes API, qui sont le seul endroit où vivent les
+identifiants et le contrôle d'accès.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/
+│   ├── (pages publiques)      /  /services  /transferts  /danayacash
+│   │                          /about  /actualites  /carriere  /contact
+│   ├── admin/                 espace d'administration (protégé)
+│   └── api/
+│       ├── auth/              login · logout · me · account
+│       ├── public/            lectures publiques (contenu publié uniquement)
+│       ├── admin/             CRUD admin — chaque route exige une session
+│       ├── files/[bucket]/    fichiers publics (images, cahiers des charges)
+│       ├── apply/             candidature (upload CV + lettre)
+│       ├── tender-response/   réponse à un appel d'offres (dossier .zip)
+│       └── contact/           formulaire de contact (Resend)
+├── lib/
+│   ├── db.ts                  pool PostgreSQL + helpers de requête
+│   ├── auth.ts                hachage scrypt + accès aux comptes admin
+│   ├── session.ts             JWT de session (compatible runtime Edge)
+│   ├── storage.ts             stockage disque (buckets cvs / tender-docs / news-images)
+│   ├── api.ts                 garde `requireAdmin` + validation (serveur)
+│   └── api-client.ts          appels HTTP typés (navigateur)
+├── middleware.ts              protège /admin/* avant rendu
+└── types/database.ts          types des tables
+```
+
+### Sécurité
+
+- Les routes `/api/admin/*` vérifient la session à chaque appel. Le middleware
+  ne protège que l'**affichage** des pages ; les données sont protégées côté
+  route (c'est ce qui remplace les politiques RLS de Supabase).
+- Le bucket `cvs` (CV, lettres, dossiers AO) n'est accessible que par
+  `/api/admin/files/<nom>`, sous session admin.
+- Toutes les requêtes SQL sont paramétrées (`$1, $2…`) ; les colonnes
+  modifiables passent par une liste blanche explicite.
+- Le cookie de session est `httpOnly` et `secure` en production — **le site doit
+  être servi en HTTPS** pour que la connexion admin fonctionne.
+
+## Base de données
+
+Le schéma complet est dans [`postgres/schema.sql`](postgres/schema.sql) :
+`admin_users`, `job_offers`, `applications`, `news`, `tenders`,
+`tender_responses`, `domains`.
+
+## Déploiement
+
+Voir [DEPLOY.md](DEPLOY.md) — Docker Compose, sauvegardes, et la note sur
+Vercel (le stockage de fichiers sur disque impose l'auto-hébergement, ou un
+stockage objet à brancher dans `src/lib/storage.ts`).

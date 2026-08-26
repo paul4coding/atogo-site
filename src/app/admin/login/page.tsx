@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
-import { createClient } from "@/lib/supabase/client"
+import { login } from "@/lib/api-client"
 import { Loader2, Lock } from "lucide-react"
 
 export default function AdminLogin() {
@@ -12,14 +12,20 @@ export default function AdminLogin() {
   const [error, setError]       = useState("")
   const [loading, setLoading]   = useState(false)
   const router = useRouter()
-  const supabase = createClient()
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true); setError("")
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error) { setError("Email ou mot de passe incorrect"); setLoading(false) }
-    else router.replace("/admin")
+    try {
+      await login(email, password)
+      // `refresh()` force le middleware à relire le cookie tout juste posé,
+      // sinon la redirection peut retomber sur la page de login.
+      router.replace("/admin")
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Email ou mot de passe incorrect")
+      setLoading(false)
+    }
   }
 
   return (

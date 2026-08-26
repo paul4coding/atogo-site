@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { createDomain, deleteDomain, fetchDomains, updateDomain } from "@/lib/api-client"
 import { Plus, Trash2, GripVertical, Loader2, Save, X, ToggleLeft, ToggleRight } from "lucide-react"
 
 interface Domain {
@@ -23,47 +23,50 @@ export default function AdminDomaines() {
   const [newLabel, setNewLabel] = useState("")
   const [newColor, setNewColor] = useState("#1E9FE8")
   const [adding, setAdding]     = useState(false)
-  const supabase = createClient()
 
   async function load() {
-    const { data } = await supabase.from("domains").select("*").order("sort_order")
-    setItems(data ?? [])
+    try { setItems(await fetchDomains()) } catch { setItems([]) }
     setLoading(false)
   }
   useEffect(() => { load() }, [])
 
   async function toggleActive(d: Domain) {
     setSaving(d.id)
-    await supabase.from("domains").update({ active: !d.active }).eq("id", d.id)
-    await load()
+    try { await updateDomain(d.id, { active: !d.active }); await load() }
+    catch (err) { alert(err instanceof Error ? err.message : "Mise à jour impossible.") }
     setSaving(null)
   }
 
   async function del(d: Domain) {
     if (!confirm(`Supprimer "${d.label}" ?`)) return
     setSaving(d.id)
-    await supabase.from("domains").delete().eq("id", d.id)
-    await load()
+    try { await deleteDomain(d.id); await load() }
+    catch (err) { alert(err instanceof Error ? err.message : "Suppression impossible.") }
     setSaving(null)
   }
 
   async function add() {
     if (!newLabel.trim()) return
     setAdding(true)
-    await supabase.from("domains").insert({
-      label: newLabel.trim(),
-      color: newColor,
-      active: true,
-      sort_order: items.length + 1,
-    })
-    setNewLabel(""); setNewColor("#1E9FE8"); setShowAdd(false)
-    await load()
+    try {
+      await createDomain({
+        label: newLabel.trim(),
+        color: newColor,
+        active: true,
+        sort_order: items.length + 1,
+      })
+      setNewLabel(""); setNewColor("#1E9FE8"); setShowAdd(false)
+      await load()
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Création impossible.")
+    }
     setAdding(false)
   }
 
   async function updateColor(id: string, color: string) {
-    await supabase.from("domains").update({ color }).eq("id", id)
+    // Optimiste : la pastille change tout de suite, la requête suit.
     setItems(prev => prev.map(d => d.id === id ? { ...d, color } : d))
+    await updateDomain(id, { color }).catch(() => load())
   }
 
   return (

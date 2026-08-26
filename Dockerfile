@@ -29,12 +29,10 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# Variables publiques nécessaires au build (injectées via --build-arg)
-ARG NEXT_PUBLIC_SUPABASE_URL
-ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+# Seule variable publique restante : l'URL du site. Les identifiants de base et
+# la clé de session sont lus AU RUNTIME — ils n'ont plus à être présents au
+# build, contrairement aux anciennes clés NEXT_PUBLIC_SUPABASE_*.
 ARG NEXT_PUBLIC_SITE_URL
-ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
-ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm build
@@ -53,6 +51,16 @@ RUN addgroup --system --gid 1001 nodejs \
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Script de création du compte admin (pnpm admin:create dans le conteneur)
+COPY --from=builder --chown=nextjs:nodejs /app/scripts ./scripts
+
+# Dossier des fichiers uploadés — monté sur un volume par docker compose.
+# Créé et donné à `nextjs` ici pour que l'app puisse y écrire même si le
+# volume est vide au premier démarrage.
+RUN mkdir -p /app/storage && chown -R nextjs:nodejs /app/storage
+ENV STORAGE_DIR=/app/storage
+VOLUME ["/app/storage"]
 
 USER nextjs
 EXPOSE 3000

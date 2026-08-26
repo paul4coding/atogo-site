@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/lib/supabase/client"
-import { openPrivateFile } from "@/lib/supabase/signed-url"
+import { fetchTenderResponses } from "@/lib/api-client"
+import { openPrivateFile } from "@/lib/open-file"
 import type { TenderResponse } from "@/types/database"
 import { Loader2, FileDown, ChevronDown, ChevronUp } from "lucide-react"
 
@@ -10,11 +10,12 @@ export default function AdminReponsesAO() {
   const [items, setItems]     = useState<TenderResponse[]>([])
   const [loading, setLoading] = useState(true)
   const [open, setOpen]       = useState<string|null>(null)
-  const supabase = createClient()
 
   useEffect(() => {
-    supabase.from("tender_responses").select("*, tenders(title, ref)").order("created_at",{ascending:false})
-      .then(({ data }) => { setItems(data as TenderResponse[] ?? []); setLoading(false) })
+    fetchTenderResponses()
+      .then(setItems)
+      .catch(() => setItems([]))
+      .finally(() => setLoading(false))
   }, [])
 
   return (

@@ -1,12 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { me, updateAccountEmail, updateAccountPassword } from "@/lib/api-client"
 import { Save, Loader2, CheckCircle, Mail, Lock, Eye, EyeOff, ShieldCheck } from "lucide-react"
 
 export default function AdminParametres() {
   const [userEmail, setUserEmail]     = useState("")
   const [newEmail, setNewEmail]       = useState("")
+  // Le changement d'email exige lui aussi le mot de passe actuel : le cookie
+  // de session seul ne doit pas suffire à détourner un compte admin.
+  const [emailPwd, setEmailPwd]       = useState("")
   const [currentPwd, setCurrentPwd]  = useState("")
   const [newPwd, setNewPwd]           = useState("")
   const [confirmPwd, setConfirmPwd]  = useState("")
@@ -16,11 +19,10 @@ export default function AdminParametres() {
   const [pwdStatus, setPwdStatus]     = useState<"idle"|"loading"|"success"|"error">("idle")
   const [emailMsg, setEmailMsg]       = useState("")
   const [pwdMsg, setPwdMsg]           = useState("")
-  const supabase = createClient()
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user?.email) { setUserEmail(data.user.email); setNewEmail(data.user.email) }
+    me().then(session => {
+      if (session?.email) { setUserEmail(session.email); setNewEmail(session.email) }
     })
   }, [])
 
@@ -28,22 +30,28 @@ export default function AdminParametres() {
     e.preventDefault()
     if (newEmail === userEmail) { setEmailMsg("L'adresse est déjà la même."); setEmailStatus("error"); return }
     setEmailStatus("loading"); setEmailMsg("")
-    const { error } = await supabase.auth.updateUser({ email: newEmail })
-    if (error) { setEmailMsg(error.message); setEmailStatus("error") }
-    else { setEmailMsg("Email mis à jour. Vérifiez votre boîte pour confirmer."); setEmailStatus("success") }
+    try {
+      const { email } = await updateAccountEmail(emailPwd, newEmail)
+      setUserEmail(email); setEmailPwd("")
+      setEmailMsg("Email mis à jour."); setEmailStatus("success")
+    } catch (err) {
+      setEmailMsg(err instanceof Error ? err.message : "Mise à jour impossible."); setEmailStatus("error")
+    }
   }
 
   async function updatePassword(e: React.FormEvent) {
     e.preventDefault()
     if (newPwd !== confirmPwd) { setPwdMsg("Les mots de passe ne correspondent pas."); setPwdStatus("error"); return }
-    if (newPwd.length < 6) { setPwdMsg("Minimum 6 caractères requis."); setPwdStatus("error"); return }
+    if (newPwd.length < 8) { setPwdMsg("Minimum 8 caractères requis."); setPwdStatus("error"); return }
     setPwdStatus("loading"); setPwdMsg("")
-    // Re-authentification puis changement
-    const { error: signInErr } = await supabase.auth.signInWithPassword({ email: userEmail, password: currentPwd })
-    if (signInErr) { setPwdMsg("Mot de passe actuel incorrect."); setPwdStatus("error"); return }
-    const { error } = await supabase.auth.updateUser({ password: newPwd })
-    if (error) { setPwdMsg(error.message); setPwdStatus("error") }
-    else { setPwdMsg("Mot de passe mis à jour avec succès."); setPwdStatus("success"); setCurrentPwd(""); setNewPwd(""); setConfirmPwd("") }
+    try {
+      // Le serveur revérifie le mot de passe actuel avant d'appliquer le changement.
+      await updateAccountPassword(currentPwd, newPwd)
+      setPwdMsg("Mot de passe mis à jour avec succès."); setPwdStatus("success")
+      setCurrentPwd(""); setNewPwd(""); setConfirmPwd("")
+    } catch (err) {
+      setPwdMsg(err instanceof Error ? err.message : "Mise à jour impossible."); setPwdStatus("error")
+    }
   }
 
   const inputStyle: React.CSSProperties = {
@@ -81,13 +89,17 @@ export default function AdminParametres() {
           </div>
           <div>
             <p style={{ fontSize:"0.95rem", fontWeight:700, color:"#1A3A8F", margin:0 }}>Adresse email</p>
-            <p style={{ fontSize:"0.78rem", color:"#94A3B8", margin:0 }}>Un email de confirmation sera envoyé</p>
+            <p style={{ fontSize:"0.78rem", color:"#94A3B8", margin:0 }}>Confirmée par votre mot de passe actuel</p>
           </div>
         </div>
         <form onSubmit={updateEmail} style={{ padding:"22px 24px", display:"flex", flexDirection:"column", gap:"14px" }}>
           <div>
             <label style={{ fontSize:"0.78rem", fontWeight:600, color:"#64748B", display:"block", marginBottom:"6px" }}>Nouvelle adresse email</label>
             <input type="email" required value={newEmail} onChange={e => setNewEmail(e.target.value)} style={inputStyle} />
+          </div>
+          <div>
+            <label style={{ fontSize:"0.78rem", fontWeight:600, color:"#64748B", display:"block", marginBottom:"6px" }}>Mot de passe actuel</label>
+            <input type="password" required value={emailPwd} onChange={e => setEmailPwd(e.target.value)} style={inputStyle} />
           </div>
           {emailMsg && (
             <div style={{ display:"flex", alignItems:"center", gap:"8px", padding:"10px 14px", borderRadius:"10px", background: emailStatus==="success" ? "#ECFDF5" : "#FEF2F2", border:`1px solid ${emailStatus==="success" ? "#6EE7B7" : "#FCA5A5"}` }}>
@@ -110,7 +122,7 @@ export default function AdminParametres() {
           </div>
           <div>
             <p style={{ fontSize:"0.95rem", fontWeight:700, color:"#1A3A8F", margin:0 }}>Mot de passe</p>
-            <p style={{ fontSize:"0.78rem", color:"#94A3B8", margin:0 }}>Minimum 6 caractères</p>
+            <p style={{ fontSize:"0.78rem", color:"#94A3B8", margin:0 }}>Minimum 8 caractères</p>
           </div>
         </div>
         <form onSubmit={updatePassword} style={{ padding:"22px 24px", display:"flex", flexDirection:"column", gap:"14px" }}>
@@ -142,11 +154,11 @@ export default function AdminParametres() {
               <div style={{ marginTop:"8px" }}>
                 <div style={{ height:"4px", borderRadius:"2px", background:"#E2E8F0", overflow:"hidden" }}>
                   <div style={{ height:"100%", borderRadius:"2px", transition:"width 0.3s, background 0.3s",
-                    width: newPwd.length < 6 ? "25%" : newPwd.length < 10 ? "60%" : "100%",
-                    background: newPwd.length < 6 ? "#EF4444" : newPwd.length < 10 ? "#F59E0B" : "#10B981" }} />
+                    width: newPwd.length < 8 ? "25%" : newPwd.length < 12 ? "60%" : "100%",
+                    background: newPwd.length < 8 ? "#EF4444" : newPwd.length < 12 ? "#F59E0B" : "#10B981" }} />
                 </div>
-                <p style={{ fontSize:"0.72rem", color: newPwd.length < 6 ? "#EF4444" : newPwd.length < 10 ? "#F59E0B" : "#10B981", margin:"4px 0 0" }}>
-                  {newPwd.length < 6 ? "Trop court" : newPwd.length < 10 ? "Moyen" : "Fort"}
+                <p style={{ fontSize:"0.72rem", color: newPwd.length < 8 ? "#EF4444" : newPwd.length < 12 ? "#F59E0B" : "#10B981", margin:"4px 0 0" }}>
+                  {newPwd.length < 8 ? "Trop court" : newPwd.length < 12 ? "Moyen" : "Fort"}
                 </p>
               </div>
             )}

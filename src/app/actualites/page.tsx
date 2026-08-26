@@ -8,7 +8,7 @@ import {
 } from "lucide-react"
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
-import { createClient } from "@/lib/supabase/client"
+import { fetchPublishedNews, fetchPublishedTenders } from "@/lib/api-client"
 import type { News, Tender } from "@/types/database"
 
 type Tab = "actualites" | "appels-offres"
@@ -384,15 +384,10 @@ export default function ActualitesPage() {
   const h1Ref = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
-    const supabase = createClient()
-    Promise.all([
-      supabase.from("news").select("*").eq("status","published").order("published_at",{ascending:false}),
-      supabase.from("tenders").select("*").eq("status","published").order("created_at",{ascending:false}),
-    ]).then(([{ data: n }, { data: t }]) => {
-      setNews(n ?? [])
-      setTenders(t ?? [])
-      setLoading(false)
-    })
+    Promise.all([fetchPublishedNews(), fetchPublishedTenders()])
+      .then(([n, t]) => { setNews(n); setTenders(t) })
+      .catch(() => { setNews([]); setTenders([]) })
+      .finally(() => setLoading(false))
   }, [])
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import Image from "next/image"
-import { createClient } from "@/lib/supabase/client"
+import { logout, me } from "@/lib/api-client"
 import {
   LayoutDashboard, Briefcase, Users, Newspaper,
   FileText, MessageSquare, LogOut, Tags, Settings,
@@ -25,17 +25,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
-  const supabase = createClient()
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // Double sécurité avec le middleware : si le cookie a expiré pendant que
+    // l'onglet était ouvert, on renvoie vers le login sans attendre un clic.
+    me().then(session => {
       if (!session && pathname !== "/admin/login") router.replace("/admin/login")
       setChecking(false)
     })
-  }, [pathname])
+  }, [pathname, router])
 
   async function signOut() {
-    await supabase.auth.signOut()
+    await logout().catch(() => {})
     router.replace("/admin/login")
   }
 

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { fetchStats } from "@/lib/api-client"
 import { Briefcase, Users, Newspaper, FileText, MessageSquare, TrendingUp } from "lucide-react"
 import Link from "next/link"
 
@@ -10,17 +10,12 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const supabase = createClient()
-    Promise.all([
-      supabase.from("job_offers").select("id", { count:"exact", head:true }),
-      supabase.from("applications").select("id", { count:"exact", head:true }),
-      supabase.from("news").select("id", { count:"exact", head:true }),
-      supabase.from("tenders").select("id", { count:"exact", head:true }),
-      supabase.from("tender_responses").select("id", { count:"exact", head:true }),
-    ]).then(([o, a, n, t, r]) => {
-      setStats({ offers: o.count??0, applications: a.count??0, news: n.count??0, tenders: t.count??0, responses: r.count??0 })
-      setLoading(false)
-    })
+    // Les cinq compteurs arrivent en une seule requête (/api/admin/stats)
+    // au lieu des cinq appels `head:true` de la version Supabase.
+    fetchStats()
+      .then(setStats)
+      .catch(() => {})
+      .finally(() => setLoading(false))
   }, [])
 
   const cards = [

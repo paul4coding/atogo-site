@@ -10,8 +10,13 @@ Site vitrine **new gen 2025-2026** pour la société **@TOGO**, basée à Lomé,
 Activités : Fintech (DanayaCash), IT, Marketing Digital, Cybersécurité, Développement de contenus.
 
 **URL cible** : https://atogo.tg  
-**Déploiement** : Vercel  
+**Déploiement** : Docker (app + PostgreSQL) — voir `DEPLOY.md`  
 **Dev** : `pnpm dev` → http://localhost:3000
+
+> ⚠ Le projet n'utilise **plus Supabase**. Base PostgreSQL standard, auth admin
+> maison (cookie de session signé), fichiers sur disque (`STORAGE_DIR`).
+> Vercel n'est plus adapté en l'état : son FS est éphémère et les uploads
+> seraient perdus à chaque déploiement (détails dans `DEPLOY.md`).
 
 ---
 
@@ -26,6 +31,9 @@ Activités : Fintech (DanayaCash), IT, Marketing Digital, Cybersécurité, Déve
 | 3D / WebGL | Three.js + React Three Fiber + Drei | |
 | Particules | Canvas custom (`ParticlesBg.tsx`) | tsparticles v4 incompatible |
 | Formulaires | React Hook Form + Zod | |
+| Base de données | **PostgreSQL** (`pg`) | Schéma dans `postgres/schema.sql` — jamais appelée depuis le navigateur |
+| Auth admin | JWT maison (`jose`) + scrypt | Table `admin_users` · `pnpm admin:create` |
+| Fichiers | Disque (`STORAGE_DIR`) | Buckets `cvs` (privé) · `tender-docs` · `news-images` |
 | Email | Resend | Route `/api/contact` |
 | i18n | next-intl | FR/EN — pas encore configuré |
 | Package manager | **pnpm v11** | |
@@ -211,8 +219,24 @@ style={{
 pnpm dev          # Démarrer le serveur dev → localhost:3000
 pnpm build        # Build production
 pnpm lint         # ESLint
+pnpm typecheck    # tsc --noEmit
+pnpm db:init      # Jouer postgres/schema.sql sur $DATABASE_URL
+pnpm admin:create # Créer / réinitialiser un compte admin
 git log --oneline # Historique commits
 ```
+
+### Règle base de données
+
+Le navigateur ne parle **jamais** à PostgreSQL. Toute lecture/écriture passe par
+une route `/api/*`. Les routes `/api/admin/*` doivent **toutes** commencer par :
+
+```ts
+const auth = await requireAdmin(req)
+if ("response" in auth) return auth.response
+```
+
+C'est ce qui remplace les politiques RLS de Supabase — le middleware ne protège
+que l'affichage des pages, pas les données.
 
 ---
 
@@ -231,7 +255,8 @@ git log --oneline # Historique commits
 - [ ] Dark mode
 - [ ] i18n FR/EN (next-intl)
 - [ ] shadcn/ui setup
-- [ ] Déploiement Vercel
+- [x] Migration Supabase → PostgreSQL
+- [ ] Déploiement Docker en production
 
 ---
 

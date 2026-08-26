@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Calendar, ArrowRight, Newspaper } from "lucide-react"
-import { createClient } from "@/lib/supabase/client"
+import { fetchPublishedNews } from "@/lib/api-client"
 import type { News } from "@/types/database"
 
 export default function LatestNewsSection() {
@@ -12,10 +12,10 @@ export default function LatestNewsSection() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const supabase = createClient()
-    supabase.from("news").select("*").eq("status", "published")
-      .order("published_at", { ascending: false }).limit(3)
-      .then(({ data }) => { setNews(data ?? []); setLoading(false) })
+    fetchPublishedNews(3)
+      .then(setNews)
+      .catch(() => setNews([]))
+      .finally(() => setLoading(false))
   }, [])
 
   // Ne rien afficher s'il n'y a aucune actualité

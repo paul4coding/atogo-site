@@ -1,52 +1,37 @@
-import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
+import { SESSION_COOKIE, verifySessionToken } from "@/lib/session"
 
 /**
  * Protection serveur des routes /admin.
- * Vérifie la session Supabase (via cookies) AVANT de servir la page.
- * Couplé aux politiques RLS, l'espace admin est protégé en profondeur.
+ * Vérifie le JWT de session (cookie httpOnly) AVANT de servir la page.
+ *
+ * Le middleware tourne dans le runtime Edge : il ne peut pas ouvrir de
+ * connexion PostgreSQL. La vérification est donc purement cryptographique
+ * (signature + expiration), ce qui suffit à décider d'un affichage. Les
+ * DONNÉES, elles, restent protégées par `requireAdmin()` dans chaque route
+ * `/api/admin/*` — c'est là que se joue le contrôle d'accès réel, à la place
+ * des anciennes politiques RLS de Supabase.
  */
 export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({ request })
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll()
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-          response = NextResponse.next({ request })
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options)
-          )
-        },
-      },
-    }
-  )
-
-  const { data: { user } } = await supabase.auth.getUser()
+  const session = await verifySessionToken(request.cookies.get(SESSION_COOKIE)?.value)
   const path = request.nextUrl.pathname
   const isLogin = path === "/admin/login"
 
   // Pas connecté + page admin (hors login) → redirige vers login
-  if (!user && !isLogin) {
+  if (!session && !isLogin) {
     const url = request.nextUrl.clone()
     url.pathname = "/admin/login"
     return NextResponse.redirect(url)
   }
 
   // Déjà connecté + sur la page login → redirige vers le dashboard
-  if (user && isLogin) {
+  if (session && isLogin) {
     const url = request.nextUrl.clone()
     url.pathname = "/admin"
     return NextResponse.redirect(url)
   }
 
-  return response
+  return NextResponse.next()
 }
 
 export const config = {

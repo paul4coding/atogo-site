@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { createClient } from "@/lib/supabase/client"
+import { createTender, deleteTender, fetchTenders, updateTender, uploadFile } from "@/lib/api-client"
 import type { Tender } from "@/types/database"
 import { Plus, Pencil, Trash2, Eye, EyeOff, Loader2, X, Save, Upload, Paperclip } from "lucide-react"
 
@@ -17,11 +17,10 @@ export default function AdminAppelsOffres() {
   const [saveError, setSaveError] = useState("")
   const [docFile, setDocFile]   = useState<File|null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
-  const supabase = createClient()
 
   async function load() {
-    const { data } = await supabase.from("tenders").select("*").order("created_at",{ascending:false})
-    setItems(data ?? []); setLoading(false)
+    try { setItems(await fetchTenders()) } catch { setItems([]) }
+    setLoading(false)
   }
   useEffect(() => { load() }, [])
 
@@ -44,24 +43,21 @@ export default function AdminAppelsOffres() {
     let document_url = form.document_url
 
     if (docFile) {
-      const ext = docFile.name.split(".").pop()
-      const filename = `ao-${Date.now()}.${ext}`
-      const { error: upErr } = await supabase.storage.from("tender-docs").upload(filename, docFile, { contentType: docFile.type })
-      if (upErr) {
-        setSaveError("Erreur upload : " + upErr.message)
+      try {
+        document_url = await uploadFile("tender-docs", docFile)
+      } catch (err) {
+        setSaveError("Erreur upload : " + (err instanceof Error ? err.message : "échec"))
         setSaving(false)
         return
       }
-      document_url = supabase.storage.from("tender-docs").getPublicUrl(filename).data.publicUrl
     }
 
     const payload = { ...form, document_url }
-    const { error: dbErr } = editId
-      ? await supabase.from("tenders").update(payload).eq("id", editId)
-      : await supabase.from("tenders").insert(payload)
-
-    if (dbErr) {
-      setSaveError("Erreur base de données : " + dbErr.message)
+    try {
+      if (editId) await updateTender(editId, payload)
+      else        await createTender(payload)
+    } catch (err) {
+      setSaveError("Erreur base de données : " + (err instanceof Error ? err.message : "échec"))
       setSaving(false)
       return
     }
@@ -72,13 +68,18 @@ export default function AdminAppelsOffres() {
   }
 
   async function toggleStatus(t: Tender) {
-    await supabase.from("tenders").update({ status: t.status==="published"?"draft":"published" }).eq("id",t.id)
-    await load()
+    try {
+      await updateTender(t.id, { status: t.status==="published" ? "draft" : "published" })
+      await load()
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Changement de statut impossible.")
+    }
   }
 
   async function del(id: string) {
     if (!confirm("Supprimer cet appel d'offres ?")) return
-    await supabase.from("tenders").delete().eq("id",id); await load()
+    try { await deleteTender(id); await load() }
+    catch (err) { alert(err instanceof Error ? err.message : "Suppression impossible.") }
   }
 
   return (

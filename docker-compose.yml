@@ -1,31 +1,64 @@
 # =============================================================================
-#  @TOGO — Docker Compose
+#  @TOGO — Docker Compose (application + PostgreSQL)
 #  Lancer :   docker compose up -d --build
-#  Arrêter :  docker compose down
+#  Arrêter :  docker compose down          (les données sont conservées)
+#  Purger  :  docker compose down -v       (⚠ SUPPRIME base et fichiers)
 #  Les variables sont lues depuis le fichier .env (voir .env.example)
 # =============================================================================
 
 services:
+  db:
+    image: postgres:17-alpine
+    container_name: atogo-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-atogo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}
+      POSTGRES_DB: ${POSTGRES_DB:-atogo}
+    volumes:
+      - atogo-db:/var/lib/postgresql/data
+      # Joué automatiquement au TOUT PREMIER démarrage (base vide uniquement).
+      # Pour rejouer le schéma ensuite : pnpm db:init
+      - ./postgres/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+    # La base n'est PAS exposée sur l'hôte : seul le service `web` y accède,
+    # via le réseau interne de compose. Pour l'inspecter depuis la machine,
+    # décommenter (et n'ouvrir ce port sur aucun serveur public) :
+    # ports:
+    #   - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-atogo} -d ${POSTGRES_DB:-atogo}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   web:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        # Variables publiques nécessaires AU BUILD (préfixe NEXT_PUBLIC_)
-        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
-        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+        # Seule variable publique nécessaire AU BUILD
         NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
     image: atogo-site:latest
     container_name: atogo-site
     restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "3000:3000"
     environment:
-      # Variables serveur (runtime) — secrets jamais exposés au client
       NODE_ENV: production
-      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      # `db` est le nom du service ci-dessus : la résolution DNS est interne.
+      DATABASE_URL: postgresql://${POSTGRES_USER:-atogo}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-atogo}
+      SESSION_SECRET: ${SESSION_SECRET:?SESSION_SECRET est obligatoire (48 caracteres recommandes)}
+      STORAGE_DIR: /app/storage
       RESEND_API_KEY: ${RESEND_API_KEY}
-      # Re-déclarées au runtime (utilisées aussi côté serveur)
-      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+    volumes:
+      # CV, lettres, dossiers AO, images d'actualités.
+      # Sans ce volume, tout upload disparaît au redémarrage du conteneur.
+      - atogo-storage:/app/storage
+
+volumes:
+  atogo-db:
+  atogo-storage:

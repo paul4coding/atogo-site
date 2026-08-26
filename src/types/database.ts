@@ -2,6 +2,10 @@ export type JobStatus = "draft" | "published"
 export type ApplicationStatus = "pending" | "reviewed" | "accepted" | "rejected"
 export type ApplicationType = "application" | "spontaneous"
 
+export const JOB_STATUSES: readonly JobStatus[] = ["draft", "published"]
+export const APPLICATION_STATUSES: readonly ApplicationStatus[] = ["pending", "reviewed", "accepted", "rejected"]
+export const APPLICATION_TYPES: readonly ApplicationType[] = ["application", "spontaneous"]
+
 export interface JobOffer {
   id: string
   title: string
@@ -27,6 +31,7 @@ export interface Application {
   motivation_url: string | null
   status: ApplicationStatus
   created_at: string
+  /** Titre de l'offre visée, joint par la route API (null si spontanée). */
   job_offers?: { title: string } | null
 }
 
@@ -61,7 +66,9 @@ export interface TenderResponse {
   phone: string | null
   message: string | null
   document_url: string | null
+  dossier_zip_url: string | null
   created_at: string
+  /** Appel d'offres concerné, joint par la route API. */
   tenders?: { title: string; ref: string } | null
 }
 
@@ -74,19 +81,11 @@ export interface Domain {
   created_at: string
 }
 
-export interface Database {
-  public: {
-    Tables: {
-      domains: { Row: Domain; Insert: Omit<Domain, "id" | "created_at">; Update: Partial<Omit<Domain, "id">>; Relationships: [] }
-      job_offers: { Row: JobOffer; Insert: Omit<JobOffer, "id" | "created_at" | "updated_at">; Update: Partial<Omit<JobOffer, "id">>; Relationships: [] }
-      applications: { Row: Application; Insert: Omit<Application, "id" | "created_at" | "status">; Update: Partial<Omit<Application, "id">>; Relationships: [] }
-      news: { Row: News; Insert: Omit<News, "id" | "created_at">; Update: Partial<Omit<News, "id">>; Relationships: [] }
-      tenders: { Row: Tender; Insert: Omit<Tender, "id" | "created_at">; Update: Partial<Omit<Tender, "id">>; Relationships: [] }
-      tender_responses: { Row: TenderResponse; Insert: Omit<TenderResponse, "id" | "created_at">; Update: Partial<Omit<TenderResponse, "id">>; Relationships: [] }
-    }
-    Views: Record<string, never>
-    Functions: Record<string, never>
-    Enums: Record<string, never>
-    CompositeTypes: Record<string, never>
-  }
+/** Compteurs du tableau de bord admin. */
+export interface AdminStats {
+  offers: number
+  applications: number
+  news: number
+  tenders: number
+  responses: number
 }
